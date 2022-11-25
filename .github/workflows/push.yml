@@ -5,15 +5,15 @@ on:
     branches: [main]
 
 jobs:
-  test:
+  plugin:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: plugin
     steps:
       - uses: actions/checkout@v3
       - run: npm install --legacy-peer-deps
-        working-directory: plugin
       - run: npm run build
-        working-directory: plugin
       - uses: tobua/release-npm-action@v1
-        working-directory: plugin
         with:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
