@@ -1,0 +1,75 @@
+{
+  "name": "iltio",
+  "description": "Authentication for the Web and Mobile.",
+  "version": "0.0.0-development",
+  "repository": "github:tobua/iltio",
+  "license": "MIT",
+  "author": "Matthias Giger",
+  "scripts": {
+    "app": "node create-native-app.js",
+    "build": "padua build",
+    "start": "padua watch",
+    "test": "vitest run --dir test --environment happy-dom --globals"
+  },
+  "padua": {
+    "tsconfig": {
+      "compilerOptions": {
+        "target": "esnext"
+      }
+    },
+    "entry": [
+      "index.tsx",
+      "native.tsx"
+    ]
+  },
+  "peerDependencies": {
+    "react": ">= 18.0",
+    "react-native": ">= 0.69"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "main": "dist/index.js",
+  "exports": {
+    "default": "./dist/index.js"
+  },
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "authentication",
+    "authorization",
+    "form",
+    "login",
+    "registration",
+    "token"
+  ],
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^14.4.3",
+    "happy-dom": "^7.7.0",
+    "padua": "^0.6.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-native": "^0.70.6",
+    "vitest": "^0.25.3"
+  },
+  "prettier": "padua/configuration/.prettierrc.json",
+  "eslintConfig": {
+    "extends": "./node_modules/padua/configuration/eslint.cjs"
+  },
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        "tsconfig": "./tsconfig.json"
+      }
+    },
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    }
+  },
+  "engines": {
+    "node": ">= 14"
+  }
+}

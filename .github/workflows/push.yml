@@ -1,0 +1,19 @@
+name: push
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm install --legacy-peer-deps
+        working-directory: plugin
+      - run: npm run build
+        working-directory: plugin
+      - uses: tobua/release-npm-action@v1
+        working-directory: plugin
+        with:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
