@@ -8,6 +8,7 @@ import React, {
 } from 'react'
 import { Label } from './label'
 import { Phone, getNumberCountryPrefix } from './phone/Phone'
+import { Components } from './components'
 
 // TODO eslint doesn't seem to be working in this setup, adding root=true will lead to another import error of tsconfig after editor reload.
 
@@ -205,51 +206,7 @@ export function Form({
   style = {},
   variables = defaultVariables,
   submitLabel = 'Submit',
-  components = {
-    button: ({ variables, children, style, ...props }) => (
-      <button
-        style={{
-          backgroundColor: variables.color,
-          border: 'none',
-          color: variables.contrast,
-          padding: 10,
-          cursor: 'pointer',
-          borderRadius: variables.borderRadius,
-          ...style,
-        }}
-        {...props}
-      >
-        {children}
-      </button>
-    ),
-    input: ({ variables, valid, style, ...props }) => (
-      <input
-        style={{
-          borderWidth: 1,
-          borderStyle: 'solid',
-          borderColor: valid ? variables.color : 'red',
-          padding: 9,
-          outline: 'none',
-          borderRadius: variables.borderRadius,
-          ...style,
-        }}
-        {...props}
-      />
-    ),
-    form: ({ style, children, ...props }) => (
-      <form
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 20,
-          ...style,
-        }}
-        {...props}
-      >
-        {children}
-      </form>
-    ),
-  },
+  components = Components,
 }: Props) {
   const [tab, setTab] = useState('mail')
   const [mail, setMail] = useState('')
