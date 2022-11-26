@@ -96,7 +96,7 @@ const App = () => {
 
   return (
     <>
-      <Form style={theme} onSuccess={setName} />
+      <Form variables={theme} onSuccess={setName} />
       <p style={{ margin: 0 }}>
         Enter an email address or phone number above to register or login to the demo application.
         Select a theme to use for the form below.

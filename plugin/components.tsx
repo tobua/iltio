@@ -1,7 +1,46 @@
-import React from 'react'
+import React, {
+  FunctionComponent,
+  CSSProperties,
+  DetailedHTMLProps,
+  ButtonHTMLAttributes,
+  InputHTMLAttributes,
+  FormHTMLAttributes,
+} from 'react'
+import { Variables } from './types'
 
-export const Components = {
-  button: ({ variables, children, style, ...props }) => (
+export type ComponentTypes = {
+  Input?: FunctionComponent<
+    { valid: boolean; style?: CSSProperties; variables?: Variables } & DetailedHTMLProps<
+      InputHTMLAttributes<HTMLInputElement>,
+      HTMLInputElement
+    >
+  >
+  Button?: FunctionComponent<
+    { children: string; style?: CSSProperties; variables?: Variables } & DetailedHTMLProps<
+      ButtonHTMLAttributes<HTMLButtonElement>,
+      HTMLButtonElement
+    >
+  >
+  Form?: FunctionComponent<
+    { style?: CSSProperties; children: JSX.Element | JSX.Element[] } & DetailedHTMLProps<
+      FormHTMLAttributes<HTMLFormElement>,
+      HTMLFormElement
+    >
+  >
+  Tab?: FunctionComponent<
+    {
+      style?: CSSProperties
+      variables?: Variables
+      active: boolean
+      children: string
+    } & DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>
+  >
+}
+
+const test = <span />
+
+export const components: ComponentTypes = {
+  Button: ({ variables, children, style, ...props }) => (
     <button
       style={{
         backgroundColor: variables.color,
@@ -17,7 +56,7 @@ export const Components = {
       {children}
     </button>
   ),
-  input: ({ variables, valid, style, ...props }) => (
+  Input: ({ variables, valid, style, ...props }) => (
     <input
       style={{
         borderWidth: 1,
@@ -31,7 +70,7 @@ export const Components = {
       {...props}
     />
   ),
-  form: ({ style, children, ...props }) => (
+  Form: ({ style, children, ...props }) => (
     <form
       style={{
         display: 'flex',
@@ -43,5 +82,23 @@ export const Components = {
     >
       {children}
     </form>
+  ),
+  Tab: ({ style, variables, active, children, ...props }) => (
+    <button
+      style={{
+        cursor: 'pointer',
+        color: variables.color,
+        background: 'none',
+        border: 'none',
+        outline: 'none',
+        fontSize: '100%',
+        padding: 0,
+        ...(active && { fontWeight: 'bold' }),
+        ...style,
+      }}
+      {...props}
+    >
+      {children}
+    </button>
   ),
 }

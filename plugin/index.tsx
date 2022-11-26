@@ -1,14 +1,8 @@
-import React, {
-  CSSProperties,
-  FormEventHandler,
-  FunctionComponent,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react'
+import React, { FormEventHandler, useCallback, useEffect, useState } from 'react'
 import { Label } from './label'
 import { Phone, getNumberCountryPrefix } from './phone/Phone'
-import { Components } from './components'
+import { components, ComponentTypes } from './components'
+import { Variables, Styles } from './types'
 
 // TODO eslint doesn't seem to be working in this setup, adding root=true will lead to another import error of tsconfig after editor reload.
 
@@ -167,24 +161,6 @@ const validatePhone = (value: string) => {
 
 const defaultVariables = { color: 'black', contrast: 'white', borderRadius: 0 }
 
-type Variables = {
-  color?: string
-  contrast?: string
-  borderRadius?: number
-}
-
-type Styles = {
-  form?: CSSProperties
-  inputMail?: CSSProperties
-  button?: CSSProperties
-}
-
-type Components = {
-  input?: FunctionComponent<{ valid: boolean; style?: CSSProperties; variables?: Variables }>
-  button?: FunctionComponent<{ children: string; style?: CSSProperties; variables?: Variables }>
-  form?: FunctionComponent<{ style?: CSSProperties; children: JSX.Element | JSX.Element[] }>
-}
-
 interface Props {
   theme?: string
   variables?: Variables
@@ -194,7 +170,7 @@ interface Props {
   allowMail?: boolean
   onSuccess?: (name: string, token: string, registration: boolean) => void
   initialCountryCode?: string
-  components?: Components
+  Components?: ComponentTypes
   submitLabel?: string
 }
 
@@ -206,7 +182,7 @@ export function Form({
   style = {},
   variables = defaultVariables,
   submitLabel = 'Submit',
-  components = Components,
+  Components = components,
 }: Props) {
   const [tab, setTab] = useState('mail')
   const [mail, setMail] = useState('')
@@ -220,10 +196,8 @@ export function Form({
   const [registration, setRegistration] = useState(false)
   const [error, setError] = useState('')
   const [codeValid, setCodeValid] = useState(true)
-  const Button = components.button ?? 'button'
-  const Input = components.input ?? 'input'
-  const Form = components.form ?? 'form'
 
+  Components = { ...components, ...Components }
   variables = { ...defaultVariables, ...variables }
 
   const handleSubmit = useCallback<FormEventHandler<HTMLFormElement>>(
@@ -325,38 +299,36 @@ export function Form({
     }
   }, [submitted, registration])
 
+  console.log(style.button)
+
   return (
-    <Form aria-label={Label.form} onSubmit={handleSubmit}>
+    <Components.Form aria-label={Label.form} onSubmit={handleSubmit}>
       {!submitted && (
         <>
           {multipleInputs && (
             <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-              <span
+              <Components.Tab
                 aria-label={Label.tabMail}
-                style={{
-                  cursor: 'pointer',
-                  color: variables.color,
-                  ...(tab === 'mail' && { fontWeight: 'bold' }),
-                }}
+                active={tab === 'mail'}
                 onClick={() => setTab('mail')}
+                variables={variables}
+                style={style.tab}
               >
                 Mail
-              </span>
-              <span
+              </Components.Tab>
+              <Components.Tab
                 aria-label={Label.tabPhone}
-                style={{
-                  cursor: 'pointer',
-                  color: variables.color,
-                  ...(tab === 'phone' && { fontWeight: 'bold' }),
-                }}
+                active={tab === 'phone'}
                 onClick={() => setTab('phone')}
+                variables={variables}
+                style={style.tab}
               >
                 Phone
-              </span>
+              </Components.Tab>
             </div>
           )}
           {allowMail && (!multipleInputs || tab === 'mail') && (
-            <Input
+            <Components.Input
               aria-label={Label.inputMail}
               value={mail}
               onChange={(event) => setMail(event.target.value)}
@@ -379,7 +351,7 @@ export function Form({
             />
           )}
           {error && <p style={{ color: 'red' }}>{error}</p>}
-          <Button
+          <Components.Button
             aria-label={Label.submit}
             // @ts-ignore NOTE form submit not working with testing-library.
             onClick={handleSubmit}
@@ -388,13 +360,13 @@ export function Form({
             variables={variables}
           >
             {loading ? 'Loading...' : submitLabel}
-          </Button>
+          </Components.Button>
         </>
       )}
       {submitted && (
         <>
           {registration && <p>A new account was created for you.</p>}
-          <Input
+          <Components.Input
             onChange={(event) => handleCode(event.target.value)}
             valid={codeValid}
             required
@@ -406,6 +378,6 @@ export function Form({
           />
         </>
       )}
-    </Form>
+    </Components.Form>
   )
 }
