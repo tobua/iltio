@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
-import { Form, Store, configure, authorize, logout, remove } from '../plugin/index'
+import { Form, Store, configure, authorize, logout, remove } from 'iltio'
 
 configure({
-  url: 'http://localhost:3000/api',
   token: 'demo',
   storage: window.localStorage,
 })

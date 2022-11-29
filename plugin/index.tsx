@@ -3,83 +3,11 @@ import { Label } from './label'
 import { Phone, getNumberCountryPrefix } from './phone/Phone'
 import { components, ComponentTypes } from './components'
 import { Variables, Styles } from './types'
+import { Store, app } from './store'
 
 // TODO eslint doesn't seem to be working in this setup, adding root=true will lead to another import error of tsconfig after editor reload.
 
-interface BasicStorage {
-  getItem: (key: string) => string | null
-  setItem: (key: string, value: string) => void
-  removeItem: (key: string) => void
-}
-
-const app = {
-  apiUrl: 'https://iltio.com/api',
-  authenticateUrl: '',
-  apiToken: '',
-  storageKey: 'auth-token',
-  codeTokenStorageKey: 'auth-verify-token',
-  nameStorageKey: 'auth-name',
-  storage: typeof window !== 'undefined' && (window.sessionStorage as BasicStorage),
-  pollInterval: null,
-}
-
-export const configure = ({
-  url,
-  token,
-  storage,
-  authenticateUrl,
-}: {
-  url?: string
-  token?: string
-  storage?: BasicStorage
-  authenticateUrl?: string
-}) => {
-  if (url) {
-    app.apiUrl = url
-  }
-
-  if (token) {
-    app.apiToken = token
-  }
-
-  if (storage) {
-    app.storage = storage
-  }
-
-  if (authenticateUrl) {
-    app.authenticateUrl
-  }
-}
-
-export const Store = {
-  get token() {
-    return app.storage.getItem(app.storageKey) ?? ''
-  },
-  set token(value: string) {
-    app.storage.setItem(app.storageKey, value)
-  },
-  removeToken() {
-    app.storage.removeItem(app.storageKey)
-  },
-  get codeToken() {
-    return app.storage.getItem(app.codeTokenStorageKey) ?? ''
-  },
-  set codeToken(value: string) {
-    app.storage.setItem(app.codeTokenStorageKey, value)
-  },
-  removeCodeToken() {
-    app.storage.removeItem(app.codeTokenStorageKey)
-  },
-  get name() {
-    return app.storage.getItem(app.nameStorageKey) ?? ''
-  },
-  set name(value: string) {
-    app.storage.setItem(app.nameStorageKey, value)
-  },
-  removeName() {
-    app.storage.removeItem(app.nameStorageKey)
-  },
-}
+export { configure, Store } from './store'
 
 export const authenticate = async (name: string) => {
   const baseUrl = app.authenticateUrl || `${app.apiUrl}/authenticate`
@@ -298,8 +226,6 @@ export function Form({
       app.pollInterval = 0
     }
   }, [submitted, registration])
-
-  console.log(style.button)
 
   return (
     <Components.Form aria-label={Label.form} onSubmit={handleSubmit}>
