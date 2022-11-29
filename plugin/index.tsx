@@ -90,7 +90,6 @@ const validatePhone = (value: string) => {
 const defaultVariables = { color: 'black', contrast: 'white', borderRadius: 0 }
 
 interface Props {
-  theme?: string
   variables?: Variables
   style?: Styles
   title?: string
@@ -157,7 +156,7 @@ export function Form({
 
       setLoading(true)
 
-      const { codeToken, error, registration } = await authenticate(name)
+      const { codeToken, error, registration: localRegistration } = await authenticate(name)
 
       if (codeToken) {
         Store.codeToken = codeToken
@@ -171,31 +170,34 @@ export function Form({
         return
       }
 
-      setRegistration(registration)
+      setRegistration(localRegistration)
       setSubmitted(true)
     },
     [mail, phone, allowMail, allowPhone, tab]
   )
 
-  const handleCode = useCallback(async (code: string) => {
-    if (code.length === 4) {
-      const { error, token } = await confirm(code)
+  const handleCode = useCallback(
+    async (code: string) => {
+      if (code.length === 4) {
+        const { error, token } = await confirm(code)
 
-      if (error) {
-        setCodeValid(false)
-        return
-      }
-
-      if (token) {
-        Store.token = token
-        if (onSuccess) {
-          onSuccess(Store.name, token, registration)
+        if (error) {
+          setCodeValid(false)
+          return
         }
+
+        if (token) {
+          Store.token = token
+          if (onSuccess) {
+            onSuccess(Store.name, token, registration)
+          }
+        }
+      } else {
+        setCodeValid(true)
       }
-    } else {
-      setCodeValid(true)
-    }
-  }, [])
+    },
+    [registration]
+  )
 
   useEffect(() => {
     async function checkVerified() {
@@ -293,6 +295,7 @@ export function Form({
         <>
           {registration && <p>A new account was created for you.</p>}
           <Components.Input
+            aria-label={Label.inputNumber}
             onChange={(event) => handleCode(event.target.value)}
             valid={codeValid}
             required
