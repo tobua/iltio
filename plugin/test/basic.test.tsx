@@ -11,6 +11,7 @@ let response: any = { error: true }
 
 const wait = (duration = 10) => new Promise((done) => setTimeout(done, duration))
 
+// @ts-ignore
 window.fetch = vi.fn(
   () =>
     new Promise<{ json: any }>((done) =>

@@ -7,7 +7,7 @@ import { Store, app } from './store'
 
 // TODO eslint doesn't seem to be working in this setup, adding root=true will lead to another import error of tsconfig after editor reload.
 
-export { configure, Store } from './store'
+export { configure, Store, MemoryStorage } from './store'
 
 export const authenticate = async (name: string) => {
   const baseUrl = app.authenticateUrl || `${app.apiUrl}/authenticate`
@@ -45,13 +45,20 @@ export const confirm = async (code: string) => {
 
 export const authorize = async (token = Store.token) => {
   const response = await fetch(`${app.apiUrl}/authorize?token=${token}`)
-  const { name, error } = await response.json()
+  const { error, role, id, name } = await response.json()
 
-  return { name, error }
+  return { error, role, id, name }
 }
 
-export const logout = () => {
+export const logout = async (server = false, token = Store.token) => {
   Store.removeToken()
+
+  if (server) {
+    const response = await fetch(`${app.apiUrl}/logout?token=${token}`)
+    const { error } = await response.json()
+
+    return { error }
+  }
 }
 
 export const remove = async (token = Store.token) => {
@@ -65,6 +72,16 @@ export const remove = async (token = Store.token) => {
   return { error }
 }
 
+const validateEmail = (value: string) => {
+  return /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/.test(
+    value
+  )
+}
+
+const validatePhone = (value: string) => {
+  return /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/.test(value)
+}
+
 export const getNameType = (value: string) => {
   if (validateEmail(value)) {
     return 'mail'
@@ -75,16 +92,6 @@ export const getNameType = (value: string) => {
   }
 
   return false
-}
-
-const validateEmail = (value: string) => {
-  return /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/.test(
-    value
-  )
-}
-
-const validatePhone = (value: string) => {
-  return /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/.test(value)
 }
 
 const defaultVariables = { color: 'black', contrast: 'white', borderRadius: 0 }
@@ -222,7 +229,7 @@ export function Form({
     if (submitted) {
       app.pollInterval = setInterval(() => {
         checkVerified()
-      }, 10000)
+      }, app.pollDuration)
     } else if (app.pollInterval) {
       clearInterval(app.pollInterval)
       app.pollInterval = 0
@@ -230,7 +237,7 @@ export function Form({
   }, [submitted, registration])
 
   return (
-    <Components.Form aria-label={Label.form} onSubmit={handleSubmit}>
+    <Components.Form aria-label={Label.form} onSubmit={handleSubmit} style={style.form}>
       {!submitted && (
         <>
           {multipleInputs && (

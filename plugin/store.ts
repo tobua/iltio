@@ -4,7 +4,7 @@ interface BasicStorage {
   removeItem: (key: string) => void
 }
 
-const MemoryStorage = {
+export const MemoryStorage = {
   data: {},
   getItem: (key) => MemoryStorage.data[key],
   setItem: (key, value) => {
@@ -34,50 +34,41 @@ export const app = {
   apiUrl: 'https://iltio.com/api',
   authenticateUrl: '',
   apiToken: '',
-  storageKey: 'auth-token',
+  tokenStorageKey: 'auth-token',
   codeTokenStorageKey: 'auth-verify-token',
   nameStorageKey: 'auth-name',
   storage: getInitialStorage(),
+  pollDuration: 10000,
   pollInterval: null,
 }
 
 export const configure = ({
   url,
   token,
-  storage,
-  authenticateUrl,
+  ...options
 }: {
   url?: string
-  token?: string
+  token: string
   storage?: BasicStorage
   authenticateUrl?: string
+  tokenStorageKey?: string
+  codeTokenStorageKey?: string
+  nameStorageKey?: string
+  pollDuration?: number
 }) => {
-  if (url) {
-    app.apiUrl = url
-  }
-
-  if (token) {
-    app.apiToken = token
-  }
-
-  if (storage) {
-    app.storage = storage
-  }
-
-  if (authenticateUrl) {
-    app.authenticateUrl
-  }
+  Object.assign({ ...options, apiUrl: url, apiToken: token }, app)
+  Object.assign(app, options)
 }
 
 export const Store = {
   get token() {
-    return app.storage.getItem(app.storageKey) ?? ''
+    return app.storage.getItem(app.tokenStorageKey) ?? ''
   },
   set token(value: string) {
-    app.storage.setItem(app.storageKey, value)
+    app.storage.setItem(app.tokenStorageKey, value)
   },
   removeToken() {
-    app.storage.removeItem(app.storageKey)
+    app.storage.removeItem(app.tokenStorageKey)
   },
   get codeToken() {
     return app.storage.getItem(app.codeTokenStorageKey) ?? ''
