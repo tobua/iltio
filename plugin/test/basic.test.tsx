@@ -6,22 +6,11 @@ import '@testing-library/jest-dom'
 import matchers from '@testing-library/jest-dom/matchers'
 import { authenticate, Form } from '../index'
 import { Label } from '../label'
-
-let response: any = { error: true }
-
-const wait = (duration = 10) => new Promise((done) => setTimeout(done, duration))
-
-// @ts-ignore
-window.fetch = vi.fn(
-  () =>
-    new Promise<{ json: any }>((done) =>
-      done({ json: () => new Promise((done) => done(response)) })
-    )
-)
-
-const fetchMockCalls = (window.fetch as any).mock.calls
+import { mockFetch, wait } from './helper'
 
 expect.extend(matchers)
+
+const { fetchMockCalls, setResponse, getResponse } = mockFetch()
 
 test('Can successfully register with a mail address.', async () => {
   const mailAddress = 'some@person.com'
@@ -44,12 +33,12 @@ test('Can successfully register with a mail address.', async () => {
 
   const codeToken = '123'
 
-  response = {
+  setResponse({
     error: false,
     codeToken,
     registration: true,
     pollLink: 'https://iltio.com/api/verify/poll',
-  }
+  })
 
   await userEvent.click(screen.getByLabelText(Label.submit))
 
@@ -64,10 +53,10 @@ test('Can successfully register with a mail address.', async () => {
   const correctVerificationCode = '4567'
   const userToken = '8910'
 
-  response = {
+  setResponse({
     error: false,
     token: userToken,
-  }
+  })
 
   await userEvent.type(screen.getByLabelText(Label.inputNumber), correctVerificationCode)
 
@@ -86,31 +75,31 @@ test('Can successfully register with a mail address.', async () => {
 })
 
 test('authenticate: Can successfully register and login.', async () => {
-  response = {
+  setResponse({
     error: false,
     codeToken: '123',
     registration: true,
     pollLink: 'https://iltio.com/api/verify/poll',
-  }
+  })
 
   let result = await authenticate('me@me.com')
 
   expect(result.error).toBe(false)
-  expect(result.codeToken).toBe(response.codeToken)
-  expect(result.pollLink).toBe(response.pollLink)
+  expect(result.codeToken).toBe(getResponse().codeToken)
+  expect(result.pollLink).toBe(getResponse().pollLink)
   expect(result.registration).toBe(true)
 
-  response = {
+  setResponse({
     error: false,
     codeToken: '456',
     registration: false,
     pollLink: 'https://iltio.com/api/verify/poll',
-  }
+  })
 
   result = await authenticate('me@me.com')
 
   expect(result.error).toBe(false)
-  expect(result.codeToken).toBe(response.codeToken)
-  expect(result.pollLink).toBe(response.pollLink)
+  expect(result.codeToken).toBe(getResponse().codeToken)
+  expect(result.pollLink).toBe(getResponse().pollLink)
   expect(result.registration).toBe(false)
 })

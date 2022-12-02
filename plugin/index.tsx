@@ -121,7 +121,7 @@ export function Form({
   const [tab, setTab] = useState('mail')
   const [mail, setMail] = useState('')
   const [phone, setPhone] = useState('')
-  const [countryCode, setCountryCode] = useState(initialCountryCode)
+  const [countryCode, setCountryCode] = useState(initialCountryCode.toLowerCase())
   const [mailValid, setMailValid] = useState(true)
   const [phoneValid, setPhoneValid] = useState(true)
   const multipleInputs = allowMail && allowPhone
@@ -265,6 +265,7 @@ export function Form({
           {allowMail && (!multipleInputs || tab === 'mail') && (
             <Components.Input
               aria-label={Label.inputMail}
+              aria-invalid={!mailValid}
               value={mail}
               onChange={(event) => setMail(event.target.value)}
               required

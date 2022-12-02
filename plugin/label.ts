@@ -7,4 +7,6 @@ export const Label = {
   inputPhone: 'authentication-input-phone',
   submit: 'authentication-submit',
   inputNumber: 'authentication-input-number',
+  phoneCountry: 'authentication-phone-country',
+  phonePrefix: 'authentication-phone-prefix',
 }

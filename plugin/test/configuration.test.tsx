@@ -4,28 +4,18 @@ import { expect, test, vi } from 'vitest'
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 import matchers from '@testing-library/jest-dom/matchers'
-import { authenticate, Form, configure } from '../index'
+import { Form, configure } from '../index'
 import { Label } from '../label'
-
-let response: any = { error: true }
-
-const wait = (duration = 10) => new Promise((done) => setTimeout(done, duration))
-
-// @ts-ignore
-window.fetch = vi.fn(
-  () =>
-    new Promise<{ json: any }>((done) =>
-      done({ json: () => new Promise((done) => done(response)) })
-    )
-)
-
-const fetchMockCalls = (window.fetch as any).mock.calls
+import { mockFetch } from './helper'
 
 expect.extend(matchers)
 
-test('Can configure the storage keys.', async () => {
+const { fetchMockCalls, setResponse } = mockFetch()
+
+test('Can configure the token and the storage keys.', async () => {
   const mailAddress = 'some@person.com'
   const codeTokenStorageKey = 'test-key'
+  const appToken = 'test-token'
   const storage = {
     getItem: vi.fn(),
     setItem: vi.fn(),
@@ -33,7 +23,7 @@ test('Can configure the storage keys.', async () => {
   }
 
   configure({
-    token: 'test',
+    token: appToken,
     codeTokenStorageKey,
     storage,
   })
@@ -46,16 +36,18 @@ test('Can configure the storage keys.', async () => {
 
   const codeToken = '123'
 
-  response = {
+  setResponse({
     error: false,
     codeToken,
     registration: true,
     pollLink: 'https://iltio.com/api/verify/poll',
-  }
+  })
 
   await userEvent.click(screen.getByLabelText(Label.submit))
 
   expect(fetchMockCalls.length).toBe(1)
+
+  expect(fetchMockCalls[0][0]).toContain(`token=${appToken}`)
 
   const storageCalls = storage.setItem.mock.calls
 
@@ -65,4 +57,20 @@ test('Can configure the storage keys.', async () => {
   expect(storageCalls[1]).toEqual(['auth-name', mailAddress])
 })
 
-// TODO initial country code fails.
+test('Can configure the initial phone country code.', async () => {
+  const { unmount } = render(<Form />)
+
+  await userEvent.click(screen.getByLabelText(Label.tabPhone))
+
+  expect(screen.getByLabelText(Label.phoneCountry)).toHaveValue('us')
+  expect(screen.getByLabelText(Label.phonePrefix)).toHaveTextContent('+1')
+
+  unmount()
+
+  render(<Form initialCountryCode="ch" />)
+
+  await userEvent.click(screen.getByLabelText(Label.tabPhone))
+
+  expect(screen.getByLabelText(Label.phoneCountry)).toHaveValue('ch')
+  expect(screen.getByLabelText(Label.phonePrefix)).toHaveTextContent('+41')
+})

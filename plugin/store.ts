@@ -6,11 +6,11 @@ interface BasicStorage {
 
 export const MemoryStorage = {
   data: {},
-  getItem: (key) => MemoryStorage.data[key],
-  setItem: (key, value) => {
+  getItem: (key: string) => MemoryStorage.data[key],
+  setItem: (key: string, value: any) => {
     MemoryStorage.data[key] = value
   },
-  removeItem: (key) => {
+  removeItem: (key: string) => {
     delete MemoryStorage.data[key]
   },
 }
@@ -55,10 +55,7 @@ export const configure = ({
   codeTokenStorageKey?: string
   nameStorageKey?: string
   pollDuration?: number
-}) => {
-  Object.assign({ ...options, apiUrl: url, apiToken: token }, app)
-  Object.assign(app, options)
-}
+}) => Object.assign(app, { ...options, apiUrl: url || app.apiUrl, apiToken: token || app.apiToken })
 
 export const Store = {
   get token() {

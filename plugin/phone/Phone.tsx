@@ -55,11 +55,13 @@ export function Phone({ phoneValid, style, countryCode, setCountryCode, phone, s
         <Flag />
       </span>
       <span
+        aria-label={Label.phonePrefix}
         style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', width: 60 }}
       >
         {countries[countryCode].prefix}
       </span>
       <select
+        aria-label={Label.phoneCountry}
         style={{ border: 'none', outline: 'none', background: 'none', width: 20 }}
         value={countryCode}
         onChange={(event) => setCountryCode(event.target.value)}
