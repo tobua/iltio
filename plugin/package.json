@@ -48,11 +48,13 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^14.4.3",
+    "@types/styled-components": "^5.1.26",
     "happy-dom": "^7.7.0",
     "padua": "^0.6.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-native": "^0.70.6",
+    "styled-components": "^5.3.6",
     "vitest": "^0.25.3"
   },
   "prettier": "padua/configuration/.prettierrc.json",

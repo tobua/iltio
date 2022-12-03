@@ -4,73 +4,13 @@ import { Phone, getNumberCountryPrefix } from './phone/Phone'
 import { components, ComponentTypes } from './components'
 import { Variables, Styles } from './types'
 import { Store, app } from './store'
+import { authenticate, confirm, poll } from './route'
 
 // TODO eslint doesn't seem to be working in this setup, adding root=true will lead to another import error of tsconfig after editor reload.
 
 export { configure, Store, MemoryStorage } from './store'
 
-export const authenticate = async (name: string) => {
-  const baseUrl = app.authenticateUrl || `${app.apiUrl}/authenticate`
-  const response = await fetch(
-    `${baseUrl}?name=${encodeURIComponent(name)}${app.apiToken ? `&token=${app.apiToken}` : ''}`
-  )
-
-  return response.json() as Promise<{
-    error: boolean | string
-    pollLink?: string
-    codeToken?: string
-    registration?: boolean
-  }>
-}
-
-export const poll = async () => {
-  const response = await fetch(`${app.apiUrl}/verify/poll?token=${Store.codeToken}`)
-
-  return response.json() as Promise<{
-    error: boolean | string
-    token?: string
-  }>
-}
-
-export const confirm = async (code: string) => {
-  const response = await fetch(
-    `${app.apiUrl}/verify/confirm?code=${encodeURIComponent(code)}&token=${Store.codeToken}`
-  )
-
-  return response.json() as Promise<{
-    error: boolean | string
-    token?: string
-  }>
-}
-
-export const authorize = async (token = Store.token) => {
-  const response = await fetch(`${app.apiUrl}/authorize?token=${token}`)
-  const { error, role, id, name } = await response.json()
-
-  return { error, role, id, name }
-}
-
-export const logout = async (server = false, token = Store.token) => {
-  Store.removeToken()
-
-  if (server) {
-    const response = await fetch(`${app.apiUrl}/logout?token=${token}`)
-    const { error } = await response.json()
-
-    return { error }
-  }
-}
-
-export const remove = async (token = Store.token) => {
-  if (!token) {
-    return console.error('No user logged in or token provided.')
-  }
-
-  const response = await fetch(`${app.apiUrl}/delete?token=${token}`)
-  const { error } = await response.json()
-
-  return { error }
-}
+export * from './route'
 
 const validateEmail = (value: string) => {
   return /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/.test(

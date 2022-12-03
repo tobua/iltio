@@ -10,34 +10,37 @@ import { Variables } from './types'
 
 export type ComponentTypes = {
   Input?: FunctionComponent<
-    { valid: boolean; style?: CSSProperties; variables?: Variables } & DetailedHTMLProps<
-      InputHTMLAttributes<HTMLInputElement>,
-      HTMLInputElement
-    >
-  >
+    | ({ valid: boolean; style: CSSProperties; variables: Variables } & DetailedHTMLProps<
+        InputHTMLAttributes<HTMLInputElement>,
+        HTMLInputElement
+      >)
+    | any
+  > &
+    FunctionComponent
   Button?: FunctionComponent<
-    { children: string; style?: CSSProperties; variables?: Variables } & DetailedHTMLProps<
-      ButtonHTMLAttributes<HTMLButtonElement>,
-      HTMLButtonElement
-    >
+    | ({ children: string; style: CSSProperties; variables: Variables } & DetailedHTMLProps<
+        ButtonHTMLAttributes<HTMLButtonElement>,
+        HTMLButtonElement
+      >)
+    | any
   >
   Form?: FunctionComponent<
-    { style?: CSSProperties; children: JSX.Element | JSX.Element[] } & DetailedHTMLProps<
-      FormHTMLAttributes<HTMLFormElement>,
-      HTMLFormElement
-    >
+    | ({ style: CSSProperties; children: JSX.Element | JSX.Element[] } & DetailedHTMLProps<
+        FormHTMLAttributes<HTMLFormElement>,
+        HTMLFormElement
+      >)
+    | any
   >
   Tab?: FunctionComponent<
-    {
-      style?: CSSProperties
-      variables?: Variables
-      active: boolean
-      children: string
-    } & DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>
+    | ({
+        style: CSSProperties
+        variables: Variables
+        active: boolean
+        children: string
+      } & DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>)
+    | any
   >
 }
-
-const test = <span />
 
 export const components: ComponentTypes = {
   Button: ({ variables, children, style, ...props }) => (

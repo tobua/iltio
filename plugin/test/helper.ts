@@ -1,3 +1,5 @@
+import { vi, Mock } from 'vitest'
+
 export const mockFetch = () => {
   let response: any = { error: true }
 
@@ -9,7 +11,7 @@ export const mockFetch = () => {
       )
   )
 
-  const fetchMockCalls = (window.fetch as any).mock.calls
+  const fetchMockCalls = (window.fetch as Mock).mock.calls
 
   return {
     fetchMockCalls,
@@ -17,6 +19,23 @@ export const mockFetch = () => {
       response = newResponse
     },
     getResponse: () => response,
+    resetFetchMock: () => (window.fetch as Mock).mockRestore(),
+  }
+}
+
+export const mockInterval = () => {
+  const intervals: Function[] = []
+  let lastDuration = 0
+  // @ts-ignore
+  setInterval = (method: Function, duration: number) => {
+    intervals.push(method)
+    lastDuration = duration
+  }
+
+  return {
+    runInterval: () => intervals.forEach((method) => method()),
+    resetIntervalMocks: () => intervals.splice(0, intervals.length),
+    getDuration: () => lastDuration,
   }
 }
 
