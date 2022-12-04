@@ -7,7 +7,7 @@ import matchers from '@testing-library/jest-dom/matchers'
 import styled from 'styled-components'
 import { Form, configure } from '../index'
 import { Label } from '../label'
-import { mockFetch, wait, mockInterval } from './helper'
+import { mockFetch, mockInterval } from './helper'
 
 expect.extend(matchers)
 
@@ -81,11 +81,13 @@ test('Can configure the initial phone country code.', async () => {
 })
 
 test('Can add React components to override default elements.', async () => {
-  const MyButton = ({ ...props }) => (
-    <div {...props} data-hello="world">
-      Hello
-    </div>
-  )
+  function MyButton({ ...props }) {
+    return (
+      <div {...props} data-hello="world">
+        Hello
+      </div>
+    )
+  }
 
   const { unmount } = render(<Form Components={{ Button: MyButton }} />)
 
@@ -95,11 +97,13 @@ test('Can add React components to override default elements.', async () => {
 
   unmount()
 
-  const MyVariablesButton = ({ variables, children, style, ...props }) => (
-    <div {...props} style={{ ...style, backgroundColor: variables.color }}>
-      {children}
-    </div>
-  )
+  function MyVariablesButton({ variables, children, style, ...props }: any) {
+    return (
+      <div {...props} style={{ ...style, backgroundColor: variables.color }}>
+        {children}
+      </div>
+    )
+  }
 
   render(
     <Form

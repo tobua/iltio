@@ -1,5 +1,6 @@
 import React from 'react'
 import { Label } from '../label'
+import { Variables } from '../types'
 import * as flags from './flags'
 
 const countries = {
@@ -37,7 +38,24 @@ const countries = {
 
 export const getNumberCountryPrefix = (countryCode: string) => countries[countryCode].prefix
 
-export function Phone({ phoneValid, style, countryCode, setCountryCode, phone, setPhone }) {
+
+interface Props {
+  phoneValid: boolean
+  variables: Variables
+  countryCode: string
+  setCountryCode: Function
+  phone: string
+  setPhone: Function
+}
+
+export function Phone({
+  phoneValid,
+  variables,
+  countryCode,
+  setCountryCode,
+  phone,
+  setPhone,
+}: Props) {
   const Flag = flags[countryCode.toUpperCase()] ?? (() => <span />)
 
   return (
@@ -46,8 +64,8 @@ export function Phone({ phoneValid, style, countryCode, setCountryCode, phone, s
         display: 'flex',
         borderWidth: 1,
         borderStyle: 'solid',
-        borderColor: phoneValid ? style.color : 'red',
-        borderRadius: style.borderRadius,
+        borderColor: phoneValid ? variables.color : 'red',
+        borderRadius: variables.borderRadius,
         paddingLeft: 10,
       }}
     >

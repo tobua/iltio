@@ -6,21 +6,18 @@ import { Variables, Styles } from './types'
 import { Store, app } from './store'
 import { authenticate, confirm, poll } from './route'
 
-// TODO eslint doesn't seem to be working in this setup, adding root=true will lead to another import error of tsconfig after editor reload.
-
 export { configure, Store, MemoryStorage } from './store'
 
 export * from './route'
 
-const validateEmail = (value: string) => {
-  return /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/.test(
+const validateEmail = (value: string) =>
+  // eslint-disable-next-line no-control-regex
+  /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/.test(
     value
   )
-}
 
-const validatePhone = (value: string) => {
-  return /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/.test(value)
-}
+const validatePhone = (value: string) =>
+  /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/.test(value)
 
 export const getNameType = (value: string) => {
   if (validateEmail(value)) {
@@ -39,7 +36,6 @@ const defaultVariables = { color: 'black', contrast: 'white', borderRadius: 0 }
 interface Props {
   variables?: Variables
   style?: Styles
-  title?: string
   allowPhone?: boolean
   allowMail?: boolean
   onSuccess?: (name: string, token: string, registration: boolean) => void
@@ -71,19 +67,21 @@ export function Form({
   const [error, setError] = useState('')
   const [codeValid, setCodeValid] = useState(true)
 
+  // eslint-disable-next-line no-param-reassign
   Components = { ...components, ...Components }
+  // eslint-disable-next-line no-param-reassign
   variables = { ...defaultVariables, ...variables }
 
   const handleSubmit = useCallback<FormEventHandler<HTMLFormElement>>(
     async (event) => {
       event.preventDefault()
       setError('')
-      let name
+      let name: string
 
       if (tab === 'mail' && allowMail && mail) {
-        const mailValid = validateEmail(mail)
-        setMailValid(mailValid)
-        if (!mailValid) {
+        const currentMailValid = validateEmail(mail)
+        setMailValid(currentMailValid)
+        if (!currentMailValid) {
           return
         }
         name = mail
@@ -93,9 +91,9 @@ export function Form({
         const removeLeadingZeros = String(Number(phone))
         const fullPhone = getNumberCountryPrefix(countryCode) + removeLeadingZeros
 
-        const phoneValid = validatePhone(fullPhone)
-        setPhoneValid(phoneValid)
-        if (!phoneValid) {
+        const currentPhoneValid = validatePhone(fullPhone)
+        setPhoneValid(currentPhoneValid)
+        if (!currentPhoneValid) {
           return
         }
         name = fullPhone
@@ -103,7 +101,11 @@ export function Form({
 
       setLoading(true)
 
-      const { codeToken, error, registration: localRegistration } = await authenticate(name)
+      const {
+        codeToken,
+        error: localError,
+        registration: localRegistration,
+      } = await authenticate(name)
 
       if (codeToken) {
         Store.codeToken = codeToken
@@ -112,8 +114,8 @@ export function Form({
 
       setLoading(false)
 
-      if (error) {
-        setError(error === true ? 'An unknown error occurred.' : error)
+      if (localError) {
+        setError(localError === true ? 'An unknown error occurred.' : localError)
         return
       }
 
@@ -126,9 +128,9 @@ export function Form({
   const handleCode = useCallback(
     async (code: string) => {
       if (code.length === 4) {
-        const { error, token } = await confirm(code)
+        const { error: localError, token } = await confirm(code)
 
-        if (error) {
+        if (localError) {
           setCodeValid(false)
           return
         }
@@ -148,9 +150,9 @@ export function Form({
 
   useEffect(() => {
     async function checkVerified() {
-      const { error, token } = await poll()
+      const { error: localError, token } = await poll()
 
-      if (error) {
+      if (localError) {
         return
       }
 
@@ -218,7 +220,7 @@ export function Form({
           )}
           {allowPhone && (!multipleInputs || tab === 'phone') && (
             <Phone
-              style={style}
+              variables={variables}
               phoneValid={phoneValid}
               countryCode={countryCode}
               setCountryCode={setCountryCode}

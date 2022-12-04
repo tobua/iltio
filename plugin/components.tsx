@@ -8,43 +8,37 @@ import React, {
 } from 'react'
 import { Variables } from './types'
 
+type InputProps = { valid: boolean; style: CSSProperties; variables: Variables }
+type ButtonProps = { children: string; style: CSSProperties; variables: Variables }
+type FormProps = { style: CSSProperties; children: JSX.Element | JSX.Element[] }
+type TabProps = {
+  style: CSSProperties
+  variables: Variables
+  active: boolean
+  children: string
+}
+
 export type ComponentTypes = {
   Input?: FunctionComponent<
-    | ({ valid: boolean; style: CSSProperties; variables: Variables } & DetailedHTMLProps<
-        InputHTMLAttributes<HTMLInputElement>,
-        HTMLInputElement
-      >)
-    | any
+    (InputProps & DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>) | any
   > &
     FunctionComponent
   Button?: FunctionComponent<
-    | ({ children: string; style: CSSProperties; variables: Variables } & DetailedHTMLProps<
-        ButtonHTMLAttributes<HTMLButtonElement>,
-        HTMLButtonElement
-      >)
+    | (ButtonProps & DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>)
     | any
   >
   Form?: FunctionComponent<
-    | ({ style: CSSProperties; children: JSX.Element | JSX.Element[] } & DetailedHTMLProps<
-        FormHTMLAttributes<HTMLFormElement>,
-        HTMLFormElement
-      >)
-    | any
+    (FormProps & DetailedHTMLProps<FormHTMLAttributes<HTMLFormElement>, HTMLFormElement>) | any
   >
   Tab?: FunctionComponent<
-    | ({
-        style: CSSProperties
-        variables: Variables
-        active: boolean
-        children: string
-      } & DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>)
-    | any
+    (TabProps & DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>) | any
   >
 }
 
-export const components: ComponentTypes = {
-  Button: ({ variables, children, style, ...props }) => (
+export const components = {
+  Button: ({ variables, children, style, ...props }: ButtonProps) => (
     <button
+      type="submit"
       style={{
         backgroundColor: variables.color,
         border: 'none',
@@ -59,7 +53,7 @@ export const components: ComponentTypes = {
       {children}
     </button>
   ),
-  Input: ({ variables, valid, style, ...props }) => (
+  Input: ({ variables, valid, style, ...props }: InputProps) => (
     <input
       style={{
         borderWidth: 1,
@@ -73,7 +67,7 @@ export const components: ComponentTypes = {
       {...props}
     />
   ),
-  Form: ({ style, children, ...props }) => (
+  Form: ({ style, children, ...props }: FormProps) => (
     <form
       style={{
         display: 'flex',
@@ -86,8 +80,9 @@ export const components: ComponentTypes = {
       {children}
     </form>
   ),
-  Tab: ({ style, variables, active, children, ...props }) => (
+  Tab: ({ style, variables, active, children, ...props }: TabProps) => (
     <button
+      type="button"
       style={{
         cursor: 'pointer',
         color: variables.color,
@@ -104,4 +99,4 @@ export const components: ComponentTypes = {
       {children}
     </button>
   ),
-}
+} as ComponentTypes

@@ -1,4 +1,5 @@
 // From: https://www.npmjs.com/package/country-flag-icons
+/* eslint-disable */
 var _excluded = ['title'],
   _excluded2 = ['title'],
   _excluded3 = ['title'],

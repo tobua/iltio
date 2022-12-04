@@ -50,10 +50,13 @@ export const logout = async (server = false, token = Store.token) => {
 
     return { error }
   }
+
+  return { error: false }
 }
 
 export const remove = async (token = Store.token) => {
   if (!token) {
+    // eslint-disable-next-line no-console
     return console.error('No user logged in or token provided.')
   }
 
