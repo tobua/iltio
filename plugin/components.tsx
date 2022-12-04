@@ -17,12 +17,12 @@ type TabProps = {
   active: boolean
   children: string
 }
+type ErrorProps = { style: CSSProperties; variables: Variables; children: string }
 
 export type ComponentTypes = {
   Input?: FunctionComponent<
     (InputProps & DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>) | any
-  > &
-    FunctionComponent
+  >
   Button?: FunctionComponent<
     | (ButtonProps & DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>)
     | any
@@ -33,6 +33,7 @@ export type ComponentTypes = {
   Tab?: FunctionComponent<
     (TabProps & DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>) | any
   >
+  Error?: FunctionComponent<ErrorProps & any>
 }
 
 export const components = {
@@ -98,5 +99,10 @@ export const components = {
     >
       {children}
     </button>
+  ),
+  Error: ({ style, variables, children, ...props }: ErrorProps) => (
+    <p style={{ color: 'red', margin: 0 }} {...props}>
+      {children}
+    </p>
   ),
 } as ComponentTypes

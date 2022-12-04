@@ -11,4 +11,11 @@ export type Styles = {
   inputMail?: CSSProperties
   button?: CSSProperties
   tab?: CSSProperties
+  error?: CSSProperties
+}
+
+export type Labels = {
+  submit?: string
+  tabPhone?: string
+  tabMail?: string
 }

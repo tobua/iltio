@@ -2,36 +2,15 @@ import React, { FormEventHandler, useCallback, useEffect, useState } from 'react
 import { Label } from './label'
 import { Phone, getNumberCountryPrefix } from './phone/Phone'
 import { components, ComponentTypes } from './components'
-import { Variables, Styles } from './types'
+import { Variables, Styles, Labels } from './types'
 import { Store, app } from './store'
 import { authenticate, confirm, poll } from './route'
+import { defaultVariables, defaultLabels, validateEmail, validatePhone } from './helper'
 
 export { configure, Store, MemoryStorage } from './store'
 
 export * from './route'
-
-const validateEmail = (value: string) =>
-  // eslint-disable-next-line no-control-regex
-  /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/.test(
-    value
-  )
-
-const validatePhone = (value: string) =>
-  /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/.test(value)
-
-export const getNameType = (value: string) => {
-  if (validateEmail(value)) {
-    return 'mail'
-  }
-
-  if (validatePhone(value)) {
-    return 'phone'
-  }
-
-  return false
-}
-
-const defaultVariables = { color: 'black', contrast: 'white', borderRadius: 0 }
+export { getNameType } from './helper'
 
 interface Props {
   variables?: Variables
@@ -41,7 +20,7 @@ interface Props {
   onSuccess?: (name: string, token: string, registration: boolean) => void
   initialCountryCode?: string
   Components?: ComponentTypes
-  submitLabel?: string
+  labels?: Labels
 }
 
 export function Form({
@@ -51,7 +30,7 @@ export function Form({
   initialCountryCode = 'us',
   style = {},
   variables = defaultVariables,
-  submitLabel = 'Submit',
+  labels = {},
   Components = components,
 }: Props) {
   const [tab, setTab] = useState('mail')
@@ -62,7 +41,7 @@ export function Form({
   const [phoneValid, setPhoneValid] = useState(true)
   const multipleInputs = allowMail && allowPhone
   const [loading, setLoading] = useState(false)
-  const [submitted, setSubmitted] = useState(false)
+  const [submitted, setSubmitted] = useState(Store.codeToken !== '')
   const [registration, setRegistration] = useState(false)
   const [error, setError] = useState('')
   const [codeValid, setCodeValid] = useState(true)
@@ -71,6 +50,8 @@ export function Form({
   Components = { ...components, ...Components }
   // eslint-disable-next-line no-param-reassign
   variables = { ...defaultVariables, ...variables }
+  // eslint-disable-next-line no-param-reassign
+  labels = { ...defaultLabels, ...labels }
 
   const handleSubmit = useCallback<FormEventHandler<HTMLFormElement>>(
     async (event) => {
@@ -82,6 +63,7 @@ export function Form({
         const currentMailValid = validateEmail(mail)
         setMailValid(currentMailValid)
         if (!currentMailValid) {
+          setError('Please enter a valid mail address.')
           return
         }
         name = mail
@@ -94,6 +76,7 @@ export function Form({
         const currentPhoneValid = validatePhone(fullPhone)
         setPhoneValid(currentPhoneValid)
         if (!currentPhoneValid) {
+          setError('Please enter a valid phone number.')
           return
         }
         name = fullPhone
@@ -137,6 +120,7 @@ export function Form({
 
         if (token) {
           Store.token = token
+          Store.removeCodeToken()
           if (onSuccess) {
             onSuccess(Store.name, token, registration)
           }
@@ -191,7 +175,7 @@ export function Form({
                 variables={variables}
                 style={style.tab}
               >
-                Mail
+                {labels.tabMail}
               </Components.Tab>
               <Components.Tab
                 aria-label={Label.tabPhone}
@@ -200,7 +184,7 @@ export function Form({
                 variables={variables}
                 style={style.tab}
               >
-                Phone
+                {labels.tabPhone}
               </Components.Tab>
             </div>
           )}
@@ -228,7 +212,7 @@ export function Form({
               setPhone={setPhone}
             />
           )}
-          {error && <p style={{ color: 'red' }}>{error}</p>}
+          {error && <Components.Error style={style.error}>{error}</Components.Error>}
           <Components.Button
             aria-label={Label.submit}
             // @ts-ignore NOTE form submit not working with testing-library.
@@ -237,7 +221,7 @@ export function Form({
             style={style.button}
             variables={variables}
           >
-            {loading ? 'Loading...' : submitLabel}
+            {loading ? 'Loading...' : labels.submit}
           </Components.Button>
         </>
       )}
@@ -255,6 +239,15 @@ export function Form({
             style={{ textAlign: 'center' }}
             variables={variables}
           />
+          <Components.Button
+            aria-label={Label.resendCode}
+            onClick={() => {}}
+            type="button"
+            style={style.button}
+            variables={variables}
+          >
+            Resend Code
+          </Components.Button>
         </>
       )}
     </Components.Form>

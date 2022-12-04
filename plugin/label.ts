@@ -9,4 +9,5 @@ export const Label = {
   inputNumber: 'authentication-input-number',
   phoneCountry: 'authentication-phone-country',
   phonePrefix: 'authentication-phone-prefix',
+  resendCode: 'authentication-resend-code',
 }

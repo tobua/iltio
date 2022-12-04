@@ -108,7 +108,7 @@ test('Can add React components to override default elements.', async () => {
   render(
     <Form
       variables={{ color: 'blue' }}
-      submitLabel="Submit Button"
+      labels={{ submit: 'Submit Button' }}
       Components={{ Button: MyVariablesButton }}
     />
   )
