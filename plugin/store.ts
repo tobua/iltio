@@ -17,7 +17,7 @@ export const MemoryStorage = {
 
 function getInitialStorage() {
   if (typeof window === 'undefined') {
-    return undefined
+    return MemoryStorage as BasicStorage
   }
 
   try {
