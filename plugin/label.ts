@@ -10,4 +10,5 @@ export const Label = {
   phoneCountry: 'authentication-phone-country',
   phonePrefix: 'authentication-phone-prefix',
   resendCode: 'authentication-resend-code',
+  registration: 'authentication-registration',
 }

@@ -18,4 +18,5 @@ export type Labels = {
   submit?: string
   tabPhone?: string
   tabMail?: string
+  resend?: string
 }

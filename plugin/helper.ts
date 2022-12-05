@@ -19,6 +19,11 @@ export const getNameType = (value: string) => {
   return false
 }
 
-export const defaultLabels = { submit: 'Submit', tabPhone: 'Phone', tabMail: 'Mail' }
+export const defaultLabels = {
+  submit: 'Submit',
+  tabPhone: 'Phone',
+  tabMail: 'Mail',
+  resend: 'Resend Code',
+}
 
 export const defaultVariables = { color: 'black', contrast: 'white', borderRadius: 0 }

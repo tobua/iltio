@@ -6,6 +6,7 @@ import { Variables, Styles, Labels } from './types'
 import { Store, app } from './store'
 import { authenticate, confirm, poll } from './route'
 import { defaultVariables, defaultLabels, validateEmail, validatePhone } from './helper'
+import { Resend } from './resend'
 
 export { configure, Store, MemoryStorage } from './store'
 
@@ -142,25 +143,27 @@ export function Form({
 
       if (token) {
         Store.token = token
+        Store.removeCodeToken()
+
+        if (app.pollInterval) {
+          clearInterval(app.pollInterval)
+          app.pollInterval = 0
+        }
+
         if (onSuccess) {
-          if (app.pollInterval) {
-            clearInterval(app.pollInterval)
-            app.pollInterval = 0
-          }
           onSuccess(Store.name, token, registration)
         }
       }
     }
 
     if (submitted) {
-      app.pollInterval = setInterval(() => {
-        checkVerified()
-      }, app.pollDuration)
+      // Continue polling after page reload in verification stage.
+      app.pollInterval = setInterval(checkVerified, app.pollDuration)
     } else if (app.pollInterval) {
       clearInterval(app.pollInterval)
       app.pollInterval = 0
     }
-  }, [submitted, registration])
+  }, [submitted, registration, Store])
 
   return (
     <Components.Form aria-label={Label.form} onSubmit={handleSubmit} style={style.form}>
@@ -227,7 +230,10 @@ export function Form({
       )}
       {submitted && (
         <>
-          {registration && <p>A new account was created for you.</p>}
+          {registration && (
+            <p aria-label={Label.registration}>A new account was created for you.</p>
+          )}
+          <p>Enter the code received in your mail below or click the attached link.</p>
           <Components.Input
             aria-label={Label.inputNumber}
             onChange={(event) => handleCode(event.target.value)}
@@ -239,15 +245,7 @@ export function Form({
             style={{ textAlign: 'center' }}
             variables={variables}
           />
-          <Components.Button
-            aria-label={Label.resendCode}
-            onClick={() => {}}
-            type="button"
-            style={style.button}
-            variables={variables}
-          >
-            Resend Code
-          </Components.Button>
+          <Resend Components={Components} labels={labels} variables={variables} style={style} />
         </>
       )}
     </Components.Form>

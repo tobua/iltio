@@ -5,16 +5,16 @@ import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 import matchers from '@testing-library/jest-dom/matchers'
 import styled from 'styled-components'
-import { Form, configure } from '../index'
+import { Form, MemoryStorage, configure } from '../index'
 import { Label } from '../label'
-import { mockFetch, mockInterval } from './helper'
+import { mockFetch, mockInterval, wait } from './helper'
 
 expect.extend(matchers)
 
-const { fetchMockCalls, setResponse, resetFetchMock } = mockFetch()
+const { fetchMockCalls, setResponse } = mockFetch()
 
 afterEach(() => {
-  resetFetchMock()
+  vi.restoreAllMocks()
 })
 
 test('Can configure the token and the storage keys.', async () => {
@@ -50,9 +50,9 @@ test('Can configure the token and the storage keys.', async () => {
 
   await userEvent.click(screen.getByLabelText(Label.submit))
 
-  expect(fetchMockCalls.length).toBe(1)
+  expect(fetchMockCalls().length).toBe(1)
 
-  expect(fetchMockCalls[0][0]).toContain(`token=${appToken}`)
+  expect(fetchMockCalls()[0][0]).toContain(`token=${appToken}`)
 
   const storageCalls = storage.setItem.mock.calls
 
@@ -136,10 +136,12 @@ test('Can configure styled-components without type errors.', async () => {
 test('Polling interval can be configured.', async () => {
   const { runInterval, getDuration } = mockInterval()
   const mailAddress = 'some@person.com'
+  const onSuccessMock = vi.fn()
 
-  configure({ pollDuration: 200, token: 'test' }) // Poll every 200ms.
+  // Poll every 200ms, reset previously changed storage.
+  configure({ pollDuration: 200, token: 'test', storage: MemoryStorage })
 
-  render(<Form />)
+  render(<Form onSuccess={onSuccessMock} />)
 
   await userEvent.type(screen.getByLabelText(Label.inputMail), mailAddress)
 
@@ -154,13 +156,35 @@ test('Polling interval can be configured.', async () => {
 
   await userEvent.click(screen.getByLabelText(Label.submit))
 
-  expect(fetchMockCalls.length).toBe(1)
+  expect(fetchMockCalls().length).toBe(1)
+
+  await wait()
 
   expect(() => screen.getByLabelText(Label.submit)).toThrow('Unable to find a label')
 
   expect(getDuration()).toBe(200)
 
-  runInterval()
+  setResponse({
+    error: false,
+  })
 
-  expect(fetchMockCalls.length).toBe(1) // TODO should have made poll call.
+  runInterval()
+  await wait()
+
+  expect(fetchMockCalls().length).toBe(2)
+  expect(fetchMockCalls()[1][0]).toContain('verify/poll')
+  expect(fetchMockCalls()[1][0]).toContain(`token=${codeToken}`)
+
+  setResponse({
+    error: false,
+    token: '789',
+  })
+
+  expect(onSuccessMock.mock.calls.length).toBe(0)
+
+  runInterval()
+  await wait()
+
+  expect(fetchMockCalls().length).toBe(3)
+  expect(onSuccessMock.mock.calls.length).toBe(1)
 })

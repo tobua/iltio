@@ -16,7 +16,7 @@ export const MemoryStorage = {
 }
 
 function getInitialStorage() {
-  if (typeof window === 'undefined') {
+  if (typeof window === 'undefined' || process.env.NODE_ENV === 'test') {
     return MemoryStorage as BasicStorage
   }
 

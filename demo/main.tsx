@@ -83,7 +83,6 @@ const App = () => {
           }}
           onClick={async () => {
             await remove()
-            logout()
             setName('')
           }}
         >

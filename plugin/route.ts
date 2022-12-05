@@ -34,6 +34,17 @@ export const confirm = async (code: string) => {
   }>
 }
 
+export const resend = async () => {
+  const response = await fetch(
+    `${app.apiUrl}/resend-code?name=${encodeURIComponent(Store.name)}&token=${Store.codeToken}`
+  )
+
+  return response.json() as Promise<{
+    error: boolean | string
+    pollLink?: string
+  }>
+}
+
 export const authorize = async (token = Store.token) => {
   const response = await fetch(`${app.apiUrl}/authorize?token=${token}`)
   const { error, role, id, name } = await response.json()
@@ -43,6 +54,7 @@ export const authorize = async (token = Store.token) => {
 
 export const logout = async (server = false, token = Store.token) => {
   Store.removeToken()
+  Store.removeName()
 
   if (server) {
     const response = await fetch(`${app.apiUrl}/logout?token=${token}`)
@@ -62,6 +74,9 @@ export const remove = async (token = Store.token) => {
 
   const response = await fetch(`${app.apiUrl}/delete?token=${token}`)
   const { error } = await response.json()
+
+  Store.removeToken()
+  Store.removeName()
 
   return { error }
 }

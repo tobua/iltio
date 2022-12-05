@@ -7,19 +7,17 @@ export const mockFetch = () => {
   window.fetch = vi.fn(
     () =>
       new Promise<{ json: any }>((done) =>
-        done({ json: () => new Promise((done) => done(response)) })
+        // eslint-disable-next-line no-promise-executor-return
+        done({ json: () => new Promise((innerDone) => innerDone(response)) })
       )
   )
 
-  const fetchMockCalls = (window.fetch as Mock).mock.calls
-
   return {
-    fetchMockCalls,
+    fetchMockCalls: () => (window.fetch as Mock).mock.calls,
     setResponse: (newResponse: any) => {
       response = newResponse
     },
     getResponse: () => response,
-    resetFetchMock: () => (window.fetch as Mock).mockRestore(),
   }
 }
 
@@ -27,6 +25,7 @@ export const mockInterval = () => {
   const intervals: Function[] = []
   let lastDuration = 0
   // @ts-ignore
+  // eslint-disable-next-line no-global-assign
   setInterval = (method: Function, duration: number) => {
     intervals.push(method)
     lastDuration = duration
@@ -39,4 +38,7 @@ export const mockInterval = () => {
   }
 }
 
-export const wait = (duration = 10) => new Promise((done) => setTimeout(done, duration))
+export const wait = (duration = 10) =>
+  new Promise((done) => {
+    setTimeout(done, duration)
+  })
