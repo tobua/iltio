@@ -26,4 +26,12 @@ export const defaultLabels = {
   resend: 'Resend Code',
 }
 
-export const defaultVariables = { color: 'black', contrast: 'white', borderRadius: 0 }
+export const defaultVariables = {
+  color: 'black',
+  contrast: 'white',
+  borderRadius: 0,
+  smallSpace: 10,
+  space: 20,
+  fontSize: 16,
+  fontFamily: 'inherit',
+}

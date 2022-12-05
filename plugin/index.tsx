@@ -166,11 +166,16 @@ export function Form({
   }, [submitted, registration, Store])
 
   return (
-    <Components.Form aria-label={Label.form} onSubmit={handleSubmit} style={style.form}>
+    <Components.Form
+      aria-label={Label.form}
+      onSubmit={handleSubmit}
+      style={style.form}
+      variables={variables}
+    >
       {!submitted && (
         <>
           {multipleInputs && (
-            <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+            <Components.TabWrapper style={style.tabWrapper} variables={variables}>
               <Components.Tab
                 aria-label={Label.tabMail}
                 active={tab === 'mail'}
@@ -189,7 +194,7 @@ export function Form({
               >
                 {labels.tabPhone}
               </Components.Tab>
-            </div>
+            </Components.TabWrapper>
           )}
           {allowMail && (!multipleInputs || tab === 'mail') && (
             <Components.Input
@@ -215,7 +220,11 @@ export function Form({
               setPhone={setPhone}
             />
           )}
-          {error && <Components.Error style={style.error}>{error}</Components.Error>}
+          {error && (
+            <Components.Error style={style.error} variables={variables}>
+              {error}
+            </Components.Error>
+          )}
           <Components.Button
             aria-label={Label.submit}
             // @ts-ignore NOTE form submit not working with testing-library.
@@ -231,9 +240,17 @@ export function Form({
       {submitted && (
         <>
           {registration && (
-            <p aria-label={Label.registration}>A new account was created for you.</p>
+            <Components.Message
+              aria-label={Label.registration}
+              style={style.message}
+              variables={variables}
+            >
+              A new account was created for you.
+            </Components.Message>
           )}
-          <p>Enter the code received in your mail below or click the attached link.</p>
+          <Components.Message style={style.message} variables={variables}>
+            Enter the code received in your mail below or click the attached link.
+          </Components.Message>
           <Components.Input
             aria-label={Label.inputNumber}
             onChange={(event) => handleCode(event.target.value)}

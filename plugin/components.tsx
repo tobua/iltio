@@ -10,7 +10,12 @@ import { Variables } from './types'
 
 type InputProps = { valid: boolean; style: CSSProperties; variables: Variables }
 type ButtonProps = { children: string; style: CSSProperties; variables: Variables }
-type FormProps = { style: CSSProperties; children: JSX.Element | JSX.Element[] }
+type FormProps = {
+  style: CSSProperties
+  children: JSX.Element | JSX.Element[]
+  variables: Variables
+}
+type TabWrapperProps = { style: CSSProperties; variables: Variables }
 type TabProps = {
   style: CSSProperties
   variables: Variables
@@ -18,6 +23,7 @@ type TabProps = {
   children: string
 }
 type ErrorProps = { style: CSSProperties; variables: Variables; children: string }
+type MessageProps = { style: CSSProperties; variables: Variables; children: string }
 
 export type ComponentTypes = {
   Input?: FunctionComponent<
@@ -30,10 +36,12 @@ export type ComponentTypes = {
   Form?: FunctionComponent<
     (FormProps & DetailedHTMLProps<FormHTMLAttributes<HTMLFormElement>, HTMLFormElement>) | any
   >
+  TabWrapper?: FunctionComponent<TabWrapperProps & any>
   Tab?: FunctionComponent<
     (TabProps & DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>) | any
   >
   Error?: FunctionComponent<ErrorProps & any>
+  Message?: FunctionComponent<MessageProps & any>
 }
 
 export const components = {
@@ -44,9 +52,11 @@ export const components = {
         backgroundColor: variables.color,
         border: 'none',
         color: variables.contrast,
-        padding: 10,
+        padding: variables.smallSpace,
         cursor: 'pointer',
         borderRadius: variables.borderRadius,
+        fontSize: variables.fontSize,
+        fontFamily: variables.fontFamily,
         ...style,
       }}
       {...props}
@@ -63,23 +73,28 @@ export const components = {
         padding: 9,
         outline: 'none',
         borderRadius: variables.borderRadius,
+        fontSize: variables.fontSize,
+        fontFamily: variables.fontFamily,
         ...style,
       }}
       {...props}
     />
   ),
-  Form: ({ style, children, ...props }: FormProps) => (
+  Form: ({ style, children, variables, ...props }: FormProps) => (
     <form
       style={{
         display: 'flex',
         flexDirection: 'column',
-        gap: 20,
+        gap: variables.space,
         ...style,
       }}
       {...props}
     >
       {children}
     </form>
+  ),
+  TabWrapper: ({ style, variables, ...props }: TabWrapperProps) => (
+    <div style={{ display: 'flex', justifyContent: 'space-around', ...style }} {...props} />
   ),
   Tab: ({ style, variables, active, children, ...props }: TabProps) => (
     <button
@@ -90,8 +105,9 @@ export const components = {
         background: 'none',
         border: 'none',
         outline: 'none',
-        fontSize: '100%',
         padding: 0,
+        fontSize: variables.fontSize,
+        fontFamily: variables.fontFamily,
         ...(active && { fontWeight: 'bold' }),
         ...style,
       }}
@@ -101,7 +117,31 @@ export const components = {
     </button>
   ),
   Error: ({ style, variables, children, ...props }: ErrorProps) => (
-    <p style={{ color: 'red', margin: 0 }} {...props}>
+    <p
+      style={{
+        color: 'red',
+        margin: 0,
+        fontSize: variables.fontSize,
+        fontFamily: variables.fontFamily,
+        ...style,
+      }}
+      {...props}
+    >
+      {children}
+    </p>
+  ),
+  Message: ({ style, variables, children, ...props }: MessageProps) => (
+    <p
+      style={{
+        backgroundColor: 'lightgray',
+        margin: 0,
+        padding: variables.smallSpace,
+        borderRadius: variables.borderRadius,
+        fontSize: variables.fontSize,
+        fontFamily: variables.fontFamily,
+      }}
+      {...props}
+    >
       {children}
     </p>
   ),

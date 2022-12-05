@@ -42,7 +42,11 @@ export function Resend({
       >
         {loading ? 'Loading...' : labels.resend}
       </Components.Button>
-      {error && <Components.Error>{error}</Components.Error>}
+      {error && (
+        <Components.Error style={style.error} variables={variables}>
+          {error}
+        </Components.Error>
+      )}
     </>
   )
 }
