@@ -42,6 +42,12 @@ export type ComponentTypes = {
   >
   Error?: FunctionComponent<ErrorProps & any>
   Message?: FunctionComponent<MessageProps & any>
+  PhoneWrapper: FunctionComponent<any>
+  PhoneFlag: FunctionComponent<any>
+  PhonePrefix: FunctionComponent<any>
+  PhoneSelect: FunctionComponent<any>
+  PhoneOption: FunctionComponent<any>
+  PhoneInput: FunctionComponent<any>
 }
 
 export const components = {
@@ -75,6 +81,7 @@ export const components = {
         borderRadius: variables.borderRadius,
         fontSize: variables.fontSize,
         fontFamily: variables.fontFamily,
+        backgroundColor: 'inherit', // TODO test with background
         ...style,
       }}
       {...props}
@@ -144,5 +151,54 @@ export const components = {
     >
       {children}
     </p>
+  ),
+  PhoneWrapper: ({ style, variables, valid, ...props }: any) => (
+    <div
+      style={{
+        display: 'flex',
+        borderWidth: 1,
+        borderStyle: 'solid',
+        borderColor: valid ? variables.color : 'red',
+        borderRadius: variables.borderRadius,
+        paddingLeft: 10,
+        ...style,
+      }}
+      {...props}
+    />
+  ),
+  PhoneFlag: ({ style, variables, ...props }: any) => (
+    <span style={{ display: 'flex', justifyContent: 'center', width: 30, ...style }} {...props} />
+  ),
+  PhonePrefix: ({ style, variables, ...props }: any) => (
+    <span
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        width: 60,
+        ...style,
+      }}
+      {...props}
+    />
+  ),
+  PhoneSelect: ({ style, variables, ...props }: any) => (
+    <select
+      style={{ border: 'none', outline: 'none', background: 'none', width: 20, ...style }}
+      {...props}
+    />
+  ),
+  PhoneOption: ({ style, variables, ...props }: any) => <option style={style} {...props} />,
+  PhoneInput: ({ variables, valid, style, ...props }: any) => (
+    <input
+      style={{
+        background: 'none',
+        border: 'none',
+        padding: 9,
+        outline: 'none',
+        width: '100%',
+        ...style,
+      }}
+      {...props}
+    />
   ),
 } as ComponentTypes

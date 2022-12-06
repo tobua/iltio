@@ -34,7 +34,7 @@ export function Form({
   labels = {},
   Components = components,
 }: Props) {
-  const [tab, setTab] = useState('mail')
+  const [tab, setTab] = useState(allowMail ? 'mail' : 'phone')
   const [mail, setMail] = useState('')
   const [phone, setPhone] = useState('')
   const [countryCode, setCountryCode] = useState(initialCountryCode.toLowerCase())
@@ -60,7 +60,7 @@ export function Form({
       setError('')
       let name: string
 
-      if (tab === 'mail' && allowMail && mail) {
+      if (tab === 'mail' && allowMail) {
         const currentMailValid = validateEmail(mail)
         setMailValid(currentMailValid)
         if (!currentMailValid) {
@@ -70,10 +70,9 @@ export function Form({
         name = mail
       }
 
-      if (tab === 'phone' && allowPhone && phone) {
+      if (tab === 'phone' && allowPhone) {
         const removeLeadingZeros = String(Number(phone))
         const fullPhone = getNumberCountryPrefix(countryCode) + removeLeadingZeros
-
         const currentPhoneValid = validatePhone(fullPhone)
         setPhoneValid(currentPhoneValid)
         if (!currentPhoneValid) {
@@ -218,6 +217,8 @@ export function Form({
               setCountryCode={setCountryCode}
               phone={phone}
               setPhone={setPhone}
+              Components={Components}
+              style={style}
             />
           )}
           {error && (

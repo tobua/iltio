@@ -39,3 +39,14 @@ test('Invalid mail address leads to invalid input.', async () => {
   expect(screen.getByLabelText(Label.submit)).toHaveTextContent('Submit')
   expect(screen.getByLabelText(Label.inputMail)).toHaveAttribute('aria-invalid', 'true')
 })
+
+test('No submit with empty mail address.', async () => {
+  render(<Form allowPhone={false} />)
+
+  expect(screen.getByLabelText(Label.inputMail)).toHaveValue('')
+
+  await userEvent.click(screen.getByLabelText(Label.submit))
+
+  expect(fetchMockCalls().length).toBe(0)
+  expect(screen.getByLabelText(Label.inputMail)).toHaveAttribute('aria-invalid', 'true')
+})

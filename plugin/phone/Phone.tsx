@@ -1,7 +1,8 @@
 import React from 'react'
 import { Label } from '../label'
-import { Variables } from '../types'
+import { Variables, Styles } from '../types'
 import * as flags from './flags'
+import { ComponentTypes } from '../components'
 
 const countries = {
   us: {
@@ -46,6 +47,8 @@ interface Props {
   setCountryCode: Function
   phone: string
   setPhone: Function
+  Components: ComponentTypes
+  style: Styles
 }
 
 export function Phone({
@@ -55,56 +58,52 @@ export function Phone({
   setCountryCode,
   phone,
   setPhone,
+  Components,
+  style,
 }: Props) {
   const Flag = flags[countryCode.toUpperCase()] ?? (() => <span />)
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        borderWidth: 1,
-        borderStyle: 'solid',
-        borderColor: phoneValid ? variables.color : 'red',
-        borderRadius: variables.borderRadius,
-        paddingLeft: 10,
-      }}
-    >
-      <span style={{ display: 'flex', justifyContent: 'center', width: 30 }}>
+    <Components.PhoneWrapper style={style.phoneWrapper} variables={variables} valid={phoneValid}>
+      <Components.PhoneFlag style={style.phoneFlag} variables={variables}>
         <Flag />
-      </span>
-      <span
+      </Components.PhoneFlag>
+      <Components.PhonePrefix
         aria-label={Label.phonePrefix}
-        style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', width: 60 }}
+        style={style.phonePrefix}
+        variables={variables}
       >
         {countries[countryCode].prefix}
-      </span>
-      <select
+      </Components.PhonePrefix>
+      <Components.PhoneSelect
         aria-label={Label.phoneCountry}
-        style={{ border: 'none', outline: 'none', background: 'none', width: 20 }}
+        style={style.phoneSelect}
         value={countryCode}
+        variables={variables}
         onChange={(event) => setCountryCode(event.target.value)}
       >
         {Object.values(countries).map((country) => (
-          <option key={country.prefix} value={country.abbreviation}>
+          <Components.PhoneOption
+            key={country.prefix}
+            value={country.abbreviation}
+            style={style.phoneOption}
+            variables={variables}
+          >
             {country.name}
-          </option>
+          </Components.PhoneOption>
         ))}
-      </select>
-      <input
+      </Components.PhoneSelect>
+      <Components.PhoneInput
         aria-label={Label.inputPhone}
+        aria-invalid={!phoneValid}
         value={phone}
         onChange={(event) => setPhone(event.target.value)}
-        style={{
-          background: 'none',
-          border: 'none',
-          padding: 9,
-          outline: 'none',
-          width: '100%',
-        }}
+        style={style.phoneInput}
         required
+        valid={phoneValid}
         placeholder="Phone"
         type="tel"
       />
-    </div>
+    </Components.PhoneWrapper>
   )
 }
