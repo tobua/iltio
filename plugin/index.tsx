@@ -111,11 +111,25 @@ export function Form({
   const handleCode = useCallback(
     async (code: string) => {
       if (code.length === 4) {
+        setError('')
         const { error: localError, token } = await confirm(code)
 
         if (localError) {
-          setCodeValid(false)
+          if (localError === 'Code invalid or expired.') {
+            Store.removeCodeToken()
+            setSubmitted(false)
+            setError('Code expired, please try again.')
+          }
+
+          if (localError === 'Wrong code entered.') {
+            setCodeValid(false)
+          }
           return
+        }
+
+        if (app.pollInterval) {
+          clearInterval(app.pollInterval)
+          app.pollInterval = 0
         }
 
         if (token) {
@@ -137,6 +151,12 @@ export function Form({
       const { error: localError, token } = await poll()
 
       if (localError) {
+        // Code token expired, start over.
+        if (localError === 'Code expired.') {
+          Store.removeCodeToken()
+          setSubmitted(false)
+          setError('Code expired, please try again.')
+        }
         return
       }
 

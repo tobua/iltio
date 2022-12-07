@@ -42,12 +42,12 @@ export type ComponentTypes = {
   >
   Error?: FunctionComponent<ErrorProps & any>
   Message?: FunctionComponent<MessageProps & any>
-  PhoneWrapper: FunctionComponent<any>
-  PhoneFlag: FunctionComponent<any>
-  PhonePrefix: FunctionComponent<any>
-  PhoneSelect: FunctionComponent<any>
-  PhoneOption: FunctionComponent<any>
-  PhoneInput: FunctionComponent<any>
+  PhoneWrapper?: FunctionComponent<any>
+  PhoneFlag?: FunctionComponent<any>
+  PhonePrefix?: FunctionComponent<any>
+  PhoneSelect?: FunctionComponent<any>
+  PhoneOption?: FunctionComponent<any>
+  PhoneInput?: FunctionComponent<any>
 }
 
 export const components = {
@@ -101,7 +101,10 @@ export const components = {
     </form>
   ),
   TabWrapper: ({ style, variables, ...props }: TabWrapperProps) => (
-    <div style={{ display: 'flex', justifyContent: 'space-around', ...style }} {...props} />
+    <div
+      style={{ display: 'flex', justifyContent: 'space-around', gap: variables.space, ...style }}
+      {...props}
+    />
   ),
   Tab: ({ style, variables, active, children, ...props }: TabProps) => (
     <button
