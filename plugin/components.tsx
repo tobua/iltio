@@ -81,7 +81,7 @@ export const components = {
         borderRadius: variables.borderRadius,
         fontSize: variables.fontSize,
         fontFamily: variables.fontFamily,
-        backgroundColor: 'inherit', // TODO test with background
+        backgroundColor: 'inherit',
         ...style,
       }}
       {...props}

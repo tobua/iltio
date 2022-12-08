@@ -34,9 +34,9 @@ export const confirm = async (code: string) => {
   }>
 }
 
-export const resend = async () => {
+export const resend = async (token = Store.codeToken) => {
   const response = await fetch(
-    `${app.apiUrl}/resend-code?name=${encodeURIComponent(Store.name)}&token=${Store.codeToken}`
+    `${app.apiUrl}/resend-code?name=${encodeURIComponent(Store.name)}&token=${token}`
   )
 
   return response.json() as Promise<{

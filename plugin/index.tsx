@@ -10,7 +10,7 @@ import { Resend } from './resend'
 
 export { configure, Store, MemoryStorage } from './store'
 
-export * from './route'
+export { authenticate, poll, confirm, resend, authorize, logout, remove } from './route'
 export { getNameType } from './helper'
 
 interface Props {
