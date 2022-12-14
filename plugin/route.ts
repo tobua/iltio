@@ -2,8 +2,17 @@ import { app, Store } from './store'
 
 export const authenticate = async (name: string) => {
   const baseUrl = app.authenticateUrl || `${app.apiUrl}/authenticate`
+  const isReactNative = typeof navigator !== 'undefined' && navigator.product === 'ReactNative'
+  const fetchConfiguration = isReactNative
+    ? {
+        referrer: isReactNative ? 'https://iltio.com' : undefined,
+        headers: { referer: 'https://iltio.com' },
+      }
+    : {}
+
   const response = await fetch(
-    `${baseUrl}?name=${encodeURIComponent(name)}${app.apiToken ? `&token=${app.apiToken}` : ''}`
+    `${baseUrl}?name=${encodeURIComponent(name)}${app.apiToken ? `&token=${app.apiToken}` : ''}`,
+    fetchConfiguration
   )
 
   return response.json() as Promise<{

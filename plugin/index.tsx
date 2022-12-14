@@ -12,8 +12,9 @@ export { configure, Store, MemoryStorage } from './store'
 
 export { authenticate, poll, confirm, resend, authorize, logout, remove } from './route'
 export { getNameType } from './helper'
+export { NativeForm } from './native/index'
 
-interface Props {
+export interface Props {
   variables?: Variables
   style?: Styles
   allowPhone?: boolean

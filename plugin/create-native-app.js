@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { copyFileSync, renameSync, rmSync } from 'fs'
+import { copyFileSync, renameSync } from 'fs'
 import { join } from 'path'
 import { execSync } from 'child_process'
 
@@ -11,10 +11,9 @@ execSync(`npx react-native init ${appName} --template react-native-template-type
   stdio: 'inherit',
 })
 
-// copyFileSync('app/App.js', `${appName}/App.js`)
-// rmSync('app', { recursive: true })
-
 renameSync(appName, 'app')
+
+copyFileSync('native/App.tsx', `app/App.tsx`)
 
 // Install this package locally, avoiding symlinks.
 execSync('npm install $(npm pack .. | tail -1) --legacy-peer-deps', {
@@ -35,4 +34,4 @@ console.log('🐚 cd app')
 console.log('🐚 npm run ios / npm run android')
 console.log('🌪️  To copy over the changes from the plugin source run:')
 console.log('🐚 npm run watch')
-console.log('🛠️  This will copy changes over to the app.')
+console.log('🛠️ This will copy changes over to the app.')
