@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import { ComponentTypes } from './components'
-import { Variables, Styles, Labels } from './types'
+import { Variables, Styles, Labels, ComponentTypes } from './types'
 import { Label } from './label'
 import { resend } from './route'
 

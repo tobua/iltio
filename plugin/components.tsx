@@ -1,54 +1,14 @@
-import React, {
-  FunctionComponent,
-  CSSProperties,
-  DetailedHTMLProps,
-  ButtonHTMLAttributes,
-  InputHTMLAttributes,
-  FormHTMLAttributes,
-} from 'react'
-import { Variables } from './types'
-
-type InputProps = { valid: boolean; style: CSSProperties; variables: Variables }
-type ButtonProps = { children: string; style: CSSProperties; variables: Variables }
-type FormProps = {
-  style: CSSProperties
-  children: JSX.Element | JSX.Element[]
-  variables: Variables
-}
-type TabWrapperProps = { style: CSSProperties; variables: Variables }
-type TabProps = {
-  style: CSSProperties
-  variables: Variables
-  active: boolean
-  children: string
-}
-type ErrorProps = { style: CSSProperties; variables: Variables; children: string }
-type MessageProps = { style: CSSProperties; variables: Variables; children: string }
-
-export type ComponentTypes = {
-  Input?: FunctionComponent<
-    (InputProps & DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>) | any
-  >
-  Button?: FunctionComponent<
-    | (ButtonProps & DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>)
-    | any
-  >
-  Form?: FunctionComponent<
-    (FormProps & DetailedHTMLProps<FormHTMLAttributes<HTMLFormElement>, HTMLFormElement>) | any
-  >
-  TabWrapper?: FunctionComponent<TabWrapperProps & any>
-  Tab?: FunctionComponent<
-    (TabProps & DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>) | any
-  >
-  Error?: FunctionComponent<ErrorProps & any>
-  Message?: FunctionComponent<MessageProps & any>
-  PhoneWrapper?: FunctionComponent<any>
-  PhoneFlag?: FunctionComponent<any>
-  PhonePrefix?: FunctionComponent<any>
-  PhoneSelect?: FunctionComponent<any>
-  PhoneOption?: FunctionComponent<any>
-  PhoneInput?: FunctionComponent<any>
-}
+import React from 'react'
+import {
+  ButtonProps,
+  InputProps,
+  FormProps,
+  TabWrapperProps,
+  TabProps,
+  ErrorProps,
+  MessageProps,
+  ComponentTypes,
+} from './types'
 
 export const components = {
   Button: ({ variables, children, style, ...props }: ButtonProps) => (
@@ -170,7 +130,16 @@ export const components = {
     />
   ),
   PhoneFlag: ({ style, variables, ...props }: any) => (
-    <span style={{ display: 'flex', justifyContent: 'center', width: 30, ...style }} {...props} />
+    <span
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: variables.smallSpace,
+        ...style,
+      }}
+      {...props}
+    />
   ),
   PhonePrefix: ({ style, variables, ...props }: any) => (
     <span
@@ -178,7 +147,6 @@ export const components = {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'flex-end',
-        width: 60,
         ...style,
       }}
       {...props}

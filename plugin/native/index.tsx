@@ -1,7 +1,8 @@
 // https://www.npmjs.com/package/react-native-phone-number-input
-import React from 'react'
-import { Text, View, TextInput, TouchableOpacity } from 'react-native'
-import { Form, Props } from '../index'
+import React, { useState } from 'react'
+import { Text, View, TextInput, TouchableOpacity, Platform } from 'react-native'
+import { Form } from '../react'
+import type { Props } from '../types'
 
 const nativeInputTypeMap = {
   email: 'email-address',
@@ -41,12 +42,14 @@ const NativeComponents = {
         borderColor: variables.color,
         borderRadius: variables.borderRadius,
         marginBottom: variables.space,
-        padding: variables.smallSpace,
+        paddingVertical: Platform.OS === 'android' ? 5 : variables.smallSpace,
+        paddingHorizontal: variables.smallSpace,
       }}
     >
       <TextInput
         onChangeText={(value: string) => onChange({ target: { value } })}
         style={{
+          padding: 0, // Android
           ...style,
         }}
         keyboardType={nativeInputTypeMap[type]}
@@ -84,17 +87,88 @@ const NativeComponents = {
       {children}
     </Text>
   ),
-  PhoneWrapper: ({ ...props }) => <View {...props} />,
-  PhoneFlag: ({ ...props }) => <View {...props} />,
-  PhonePrefix: ({ ...props }) => <View {...props} />,
-  PhoneSelect: ({ ...props }) => <View {...props} />,
-  PhoneOption: ({ ...props }) => <View {...props} />,
-  PhoneInput: ({ ...props }) => <View {...props} />,
+  PhoneWrapper: ({ style, variables, ...props }: any) => (
+    <View
+      style={{
+        flexDirection: 'row',
+        borderWidth: 1,
+        borderColor: variables.color,
+        borderRadius: variables.borderRadius,
+        marginBottom: variables.space,
+        padding: variables.smallSpace,
+        ...style,
+      }}
+      {...props}
+    />
+  ),
+  PhoneFlag: () => null,
+  PhonePrefix: ({ style, variables, ...props }: any) => (
+    <Text
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        width: 60,
+        ...style,
+      }}
+      {...props}
+    />
+  ),
+  // https://github.com/react-native-picker/picker
+  PhoneSelect: ({ variables, style, ...props }: any) => {
+    const open = useState(false)
+    return (
+      <View
+        style={{
+          width: 0,
+          height: 0,
+          backgroundColor: 'transparent',
+          borderStyle: 'solid',
+          borderLeftWidth: 5,
+          borderRightWidth: 5,
+          borderTopWidth: 10,
+          borderLeftColor: 'transparent',
+          borderRightColor: 'transparent',
+          borderTopColor: variables.color,
+        }}
+        {...props}
+      />
+    )
+  },
+  PhoneOption: ({ ...props }) => <View />,
+  PhoneInput: ({ style, variables, onChange, type, ...props }: any) => (
+    <TextInput
+      onChangeText={(value: string) => onChange({ target: { value } })}
+      style={{
+        ...style,
+      }}
+      keyboardType={nativeInputTypeMap[type]}
+      autoCapitalize="none"
+      autoCorrect={false}
+      {...props}
+    />
+  ),
 }
 
-export function NativeForm({ Components, ...props }: Props) {
+const getCountryLocation = (initialCountryCode?: string) => {
+  if (initialCountryCode) {
+    return initialCountryCode
+  }
+
+  // https://www.npmjs.com/package/react-native-device-country
+
+  return 'us'
+}
+
+export function NativeForm({ Components, initialCountryCode, ...props }: Props) {
   // The only difference to the regular form is the UI, for which we use native components.
   Object.assign(NativeComponents, Components)
 
-  return <Form Components={NativeComponents} {...props} />
+  return (
+    <Form
+      Components={NativeComponents}
+      initialCountryCode={getCountryLocation(initialCountryCode)}
+      {...props}
+    />
+  )
 }

@@ -6,4 +6,9 @@ export default defineConfig({
   server: {
     port: 3001,
   },
+  resolve: {
+    alias: {
+      'react-native': 'react',
+    },
+  },
 })

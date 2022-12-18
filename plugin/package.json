@@ -19,8 +19,7 @@
       }
     },
     "entry": [
-      "index.tsx",
-      "native.tsx"
+      "index.tsx"
     ]
   },
   "peerDependencies": {
