@@ -10,7 +10,7 @@
     "app:copy": "cpx 'dist/**/*' app/node_modules/iltio/dist --watch",
     "build": "padua build",
     "start": "padua watch",
-    "test": "vitest run --dir test --environment happy-dom --globals"
+    "test": "vitest run"
   },
   "padua": {
     "tsconfig": {
@@ -57,7 +57,7 @@
     "react-dom": "^18.2.0",
     "react-native": "^0.70.6",
     "styled-components": "^5.3.6",
-    "vitest": "^0.25.8"
+    "vitest": "^0.26.0"
   },
   "prettier": "padua/configuration/.prettierrc.json",
   "eslintConfig": {
