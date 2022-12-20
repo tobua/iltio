@@ -9,7 +9,6 @@ import {
   MessageProps,
   ComponentTypes,
 } from './types'
-import { Label } from './label'
 
 export const components = {
   Button: ({ variables, children, style, ...props }: ButtonProps) => (

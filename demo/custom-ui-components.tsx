@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
-import { Form } from '../plugin/index'
+import { useState } from 'react'
+import { Form } from 'iltio'
 
-const MyButton = ({ variables, style, ...props }) => {
+const MyButton = ({ variables, style, ...props }: any) => {
   const [active, setActive] = useState(false)
   const [pressed, setPressed] = useState(false)
 
@@ -50,7 +50,7 @@ const MyButton = ({ variables, style, ...props }) => {
   )
 }
 
-const MyInput = ({ variables, style, valid, ...props }) => (
+const MyInput = ({ variables, style, valid, ...props }: any) => (
   <input
     style={{
       border: 'none',
@@ -67,7 +67,7 @@ const MyInput = ({ variables, style, valid, ...props }) => (
   />
 )
 
-const MyPhoneWrapper = ({ variables, style, valid, ...props }) => (
+const MyPhoneWrapper = ({ variables, style, valid, ...props }: any) => (
   <div
     style={{
       borderBottom: '1px solid black',
