@@ -70,7 +70,16 @@ test('Country can be selected.', async () => {
 
   render(<Form allowMail={false} />)
 
-  await userEvent.selectOptions(screen.getByLabelText(Label.phoneCountry), 'ch')
+  expect(screen.getByLabelText(Label.phoneCountry)).toHaveAttribute('data-country', 'us')
+
+  await userEvent.click(screen.getByLabelText(Label.phoneCountry))
+
+  const switzerlandButton = screen.getByTestId('ch')
+
+  await userEvent.click(switzerlandButton)
+
+  expect(screen.getByLabelText(Label.phoneCountry)).toHaveAttribute('data-country', 'ch')
+
   await userEvent.type(screen.getByLabelText(Label.inputPhone), phoneNumber)
 
   expect(screen.getByLabelText(Label.inputPhone)).toHaveAttribute('aria-invalid', 'false')
@@ -79,4 +88,20 @@ test('Country can be selected.', async () => {
 
   expect(fetchMockCalls().length).toBe(1)
   expect(fetchMockCalls()[0][0]).toContain(encodeURIComponent(`+41${phoneNumber}`))
+})
+
+test('Countries can be filtered.', async () => {
+  render(<Form allowMail={false} />)
+
+  expect(screen.getByLabelText(Label.phoneCountry)).toHaveAttribute('data-country', 'us')
+
+  await userEvent.click(screen.getByLabelText(Label.phoneCountry))
+
+  const displayedCountriesCount = () => screen.getAllByLabelText(Label.phoneCountryOption).length
+
+  expect(displayedCountriesCount()).toBeGreaterThan(100)
+
+  await userEvent.type(screen.getByLabelText(Label.phoneInputCountrySearch), 'swi')
+
+  expect(displayedCountriesCount()).toBeLessThan(5)
 })

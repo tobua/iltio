@@ -31,6 +31,7 @@ export type Styles = {
   phoneSelect?: CSSProperties
   phoneOption?: CSSProperties
   phoneInput?: CSSProperties
+  phoneInputCountrySearch?: CSSProperties
 }
 
 export type Labels = {
@@ -75,11 +76,11 @@ export type ComponentTypes = {
   Error?: FunctionComponent<ErrorProps & any>
   Message?: FunctionComponent<MessageProps & any>
   PhoneWrapper?: FunctionComponent<any>
-  PhoneFlag?: FunctionComponent<any>
-  PhonePrefix?: FunctionComponent<any>
-  PhoneSelect?: FunctionComponent<any>
-  PhoneOption?: FunctionComponent<any>
   PhoneInput?: FunctionComponent<any>
+  PhoneTop?: FunctionComponent<any>
+  PhoneCountry?: FunctionComponent<any>
+  PhoneCountryOptions?: FunctionComponent<any>
+  PhoneCountryOption?: FunctionComponent<any>
 }
 
 export interface Props {

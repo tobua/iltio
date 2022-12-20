@@ -8,7 +8,8 @@ export const Label = {
   submit: 'authentication-submit',
   inputNumber: 'authentication-input-number',
   phoneCountry: 'authentication-phone-country',
-  phonePrefix: 'authentication-phone-prefix',
   resendCode: 'authentication-resend-code',
   registration: 'authentication-registration',
+  phoneInputCountrySearch: 'authentication-phone-input-country-search',
+  phoneCountryOption: 'authentication-phone-country-option',
 }

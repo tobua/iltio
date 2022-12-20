@@ -1,36 +1,16 @@
 import { useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { Form, Store, configure, authorize, logout, remove } from 'iltio'
+import { CustomUIComponents } from './custom-ui-components'
 
 configure({
   token: 'demo',
   storage: window.localStorage,
 })
 
-const themes = {
-  default: {},
-  blue: {
-    color: 'blue',
-  },
-  redRounded: {
-    color: 'red',
-    borderRadius: 10,
-  },
-}
-
-const buttonStyle = {
-  outline: 'none',
-  border: 'none',
-  background: 'gray',
-  color: 'white',
-  padding: 10,
-  cursor: 'pointer',
-}
-
 const App = () => {
   const [name, setName] = useState('')
   const [loading, setLoading] = useState(true)
-  const [theme, setTheme] = useState(themes.default)
 
   useEffect(() => {
     if (!loading) {
@@ -94,52 +74,46 @@ const App = () => {
 
   return (
     <>
-      <Form variables={theme} onSuccess={setName} />
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          gap: 40,
+          justifyContent: 'center',
+        }}
+      >
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <p>Regular Form</p>
+          <Form onSuccess={setName} />
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <p>Phone Only</p>
+          <Form allowMail={false} onSuccess={setName} />
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <p>Custom Variables & Style</p>
+          <Form
+            variables={{
+              color: 'blue',
+              borderRadius: 10,
+            }}
+            style={{
+              form: {
+                width: 130,
+              },
+            }}
+            onSuccess={setName}
+          />
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <p>Custom UI Components</p>
+          <CustomUIComponents onSuccess={setName} />
+        </div>
+      </div>
       <p style={{ margin: 0 }}>
         Enter an email address or phone number above to register or login to the demo application.
-        Select a theme to use for the form below.
       </p>
-      <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
-        <span>Theme:</span>
-        <button
-          style={{
-            ...buttonStyle,
-            ...(theme === themes.default && {
-              background: 'black',
-              color: 'white',
-            }),
-          }}
-          onClick={() => setTheme(themes.default)}
-        >
-          Default
-        </button>
-        <button
-          style={{
-            ...buttonStyle,
-            background: 'blue',
-            ...(theme === themes.blue && {
-              background: 'black',
-              color: 'white',
-            }),
-          }}
-          onClick={() => setTheme(themes.blue)}
-        >
-          Blue
-        </button>
-        <button
-          style={{
-            ...buttonStyle,
-            background: 'red',
-            ...(theme === themes.redRounded && {
-              background: 'black',
-              color: 'white',
-            }),
-          }}
-          onClick={() => setTheme(themes.redRounded)}
-        >
-          Red Rounded
-        </button>
-      </div>
     </>
   )
 }
@@ -156,7 +130,6 @@ createRoot(document.getElementById('root') as HTMLElement).render(
   >
     <h1>iltio Demo</h1>
     <p style={{ margin: 0 }}>Authentication for the Web and Mobile</p>
-    <p style={{ textAlign: 'center', fontSize: '150%', margin: 0 }}>Login or Register</p>
     <App />
     <hr
       style={{

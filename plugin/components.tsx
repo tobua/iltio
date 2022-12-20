@@ -9,6 +9,7 @@ import {
   MessageProps,
   ComponentTypes,
 } from './types'
+import { Label } from './label'
 
 export const components = {
   Button: ({ variables, children, style, ...props }: ButtonProps) => (
@@ -30,7 +31,7 @@ export const components = {
       {children}
     </button>
   ),
-  Input: ({ variables, valid, style, ...props }: InputProps) => (
+  Input: ({ variables, valid = true, style, ...props }: InputProps) => (
     <input
       style={{
         borderWidth: 1,
@@ -119,6 +120,7 @@ export const components = {
     <div
       style={{
         display: 'flex',
+        flexDirection: 'column',
         borderWidth: 1,
         borderStyle: 'solid',
         borderColor: valid ? variables.color : 'red',
@@ -129,36 +131,26 @@ export const components = {
       {...props}
     />
   ),
-  PhoneFlag: ({ style, variables, ...props }: any) => (
-    <span
+  PhoneTop: ({ ...props }: any) => <div style={{ display: 'flex' }} {...props} />,
+  PhoneCountry: ({ variables, prefix, flag, togglePicker, ...props }: any) => (
+    <button
       style={{
         display: 'flex',
-        justifyContent: 'center',
+        gap: variables.smallSpace,
         alignItems: 'center',
-        marginRight: variables.smallSpace,
-        ...style,
+        border: 'none',
+        background: 'none',
+        outline: 'none',
+        padding: 0,
       }}
+      type="button"
+      onClick={togglePicker}
       {...props}
-    />
+    >
+      <span>{flag}</span>
+      <span>{prefix}</span>
+    </button>
   ),
-  PhonePrefix: ({ style, variables, ...props }: any) => (
-    <span
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        ...style,
-      }}
-      {...props}
-    />
-  ),
-  PhoneSelect: ({ style, variables, ...props }: any) => (
-    <select
-      style={{ border: 'none', outline: 'none', background: 'none', width: 20, ...style }}
-      {...props}
-    />
-  ),
-  PhoneOption: ({ style, variables, ...props }: any) => <option style={style} {...props} />,
   PhoneInput: ({ variables, valid, style, ...props }: any) => (
     <input
       style={{
@@ -171,5 +163,43 @@ export const components = {
       }}
       {...props}
     />
+  ),
+  PhoneCountryOptions: ({ variables, ...props }: any) => (
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        maxHeight: 200,
+        overflowY: 'auto',
+        overflowX: 'hidden',
+        paddingRight: variables.smallSpace,
+        rowGap: 5,
+      }}
+      {...props}
+    />
+  ),
+  PhoneCountryOption: ({ variables, selected, children, onSelect, ...props }: any) => (
+    <button
+      style={{
+        fontWeight: selected ? 'bold' : 'normal',
+        margin: 0,
+        padding: 0,
+        fontFamily: variables.fontFamily,
+        fontSize: variables.fontSize,
+        border: 'none',
+        background: 'none',
+        outline: 'none',
+        display: 'flex',
+        cursor: 'pointer',
+        maxWidth: '100%',
+      }}
+      onClick={onSelect}
+      type="button"
+      {...props}
+    >
+      <span style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
+        {children}
+      </span>
+    </button>
   ),
 } as ComponentTypes

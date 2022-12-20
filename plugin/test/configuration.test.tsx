@@ -67,8 +67,8 @@ test('Can configure the initial phone country code.', async () => {
 
   await userEvent.click(screen.getByLabelText(Label.tabPhone))
 
-  expect(screen.getByLabelText(Label.phoneCountry)).toHaveValue('us')
-  expect(screen.getByLabelText(Label.phonePrefix)).toHaveTextContent('+1')
+  expect(screen.getByLabelText(Label.phoneCountry)).toHaveAttribute('data-country', 'us')
+  expect(screen.getByLabelText(Label.phoneCountry)).toHaveTextContent('🇺🇸+1')
 
   unmount()
 
@@ -76,8 +76,8 @@ test('Can configure the initial phone country code.', async () => {
 
   await userEvent.click(screen.getByLabelText(Label.tabPhone))
 
-  expect(screen.getByLabelText(Label.phoneCountry)).toHaveValue('ch')
-  expect(screen.getByLabelText(Label.phonePrefix)).toHaveTextContent('+41')
+  expect(screen.getByLabelText(Label.phoneCountry)).toHaveAttribute('data-country', 'ch')
+  expect(screen.getByLabelText(Label.phoneCountry)).toHaveTextContent('🇨🇭+41')
 })
 
 test('Can add React components to override default elements.', async () => {
