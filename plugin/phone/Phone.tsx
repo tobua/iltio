@@ -50,7 +50,7 @@ export function Phone({
 
   return (
     <Components.PhoneWrapper style={style.phoneWrapper} variables={variables} valid={phoneValid}>
-      <Components.PhoneTop>
+      <Components.PhoneTop style={style.phoneTop} variables={variables}>
         <Components.PhoneCountry
           prefix={country.prefix}
           flag={country.flag}

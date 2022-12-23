@@ -1,4 +1,4 @@
-import React, { FormEventHandler, useCallback, useEffect, useState } from 'react'
+import React, { FormEventHandler, useCallback, useEffect, useMemo, useState } from 'react'
 import { Label } from './label'
 import { Phone, getNumberCountryPrefix } from './phone/Phone'
 import { components } from './components'
@@ -32,11 +32,11 @@ export function Form({
   const [codeValid, setCodeValid] = useState(true)
 
   // eslint-disable-next-line no-param-reassign
-  Components = { ...components, ...Components }
+  Components = useMemo(() => ({ ...components, ...Components }), [Components])
   // eslint-disable-next-line no-param-reassign
-  variables = { ...defaultVariables, ...variables }
+  variables = useMemo(() => ({ ...defaultVariables, ...variables }), [variables])
   // eslint-disable-next-line no-param-reassign
-  labels = { ...defaultLabels, ...labels }
+  labels = useMemo(() => ({ ...defaultLabels, ...labels }), [labels])
 
   const handleSubmit = useCallback<FormEventHandler<HTMLFormElement>>(
     async (event) => {

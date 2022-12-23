@@ -1,6 +1,6 @@
 // https://www.npmjs.com/package/react-native-phone-number-input
-import React, { useState } from 'react'
-import { Text, View, TextInput, TouchableOpacity, Platform } from 'react-native'
+import React from 'react'
+import { Text, View, TextInput, TouchableOpacity, Platform, ScrollView } from 'react-native'
 import { Form } from '../react'
 import type { Props } from '../types'
 
@@ -11,7 +11,7 @@ const nativeInputTypeMap = {
 }
 
 const NativeComponents = {
-  Form: ({ ...props }) => <View {...props} />,
+  Form: ({ style, ...props }) => <View style={{ alignSelf: 'stretch', ...style }} {...props} />,
   TabWrapper: ({ variables, style, ...props }: any) => (
     <View
       style={{
@@ -49,6 +49,7 @@ const NativeComponents = {
       <TextInput
         onChangeText={(value: string) => onChange({ target: { value } })}
         style={{
+          minWidth: 100,
           padding: 0, // Android
           ...style,
         }}
@@ -90,7 +91,7 @@ const NativeComponents = {
   PhoneWrapper: ({ style, variables, ...props }: any) => (
     <View
       style={{
-        flexDirection: 'row',
+        flexDirection: 'column',
         borderWidth: 1,
         borderColor: variables.color,
         borderRadius: variables.borderRadius,
@@ -101,45 +102,53 @@ const NativeComponents = {
       {...props}
     />
   ),
-  PhoneFlag: () => null,
-  PhonePrefix: ({ style, variables, ...props }: any) => (
-    <Text
+  PhoneTop: ({ style, variables, ...props }: any) => (
+    <View style={{ flexDirection: 'row' }} {...props} />
+  ),
+  PhoneCountry: ({ variables, prefix, flag, togglePicker, ...props }: any) => (
+    <TouchableOpacity
       style={{
         display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        width: 60,
-        ...style,
+        flexDirection: 'row',
+        marginRight: variables.smallSpace,
       }}
+      onPress={togglePicker}
       {...props}
-    />
+    >
+      <Text style={{ marginRight: variables.smallSpace }}>{flag}</Text>
+      <Text>{prefix}</Text>
+    </TouchableOpacity>
   ),
-  // https://github.com/react-native-picker/picker
-  PhoneSelect: ({ variables, style, ...props }: any) => {
-    const open = useState(false)
-    return (
-      <View
-        style={{
-          width: 0,
-          height: 0,
-          backgroundColor: 'transparent',
-          borderStyle: 'solid',
-          borderLeftWidth: 5,
-          borderRightWidth: 5,
-          borderTopWidth: 10,
-          borderLeftColor: 'transparent',
-          borderRightColor: 'transparent',
-          borderTopColor: variables.color,
+  PhoneCountryOptions: ({ variables, ...props }: any) => (
+    <View style={{ height: 200 }}>
+      <ScrollView
+        contentContainerStyle={{
+          display: 'flex',
+          flexDirection: 'column',
+          marginTop: variables.smallSpace,
         }}
         {...props}
       />
-    )
-  },
-  PhoneOption: ({ ...props }) => <View />,
+    </View>
+  ),
+  PhoneCountryOption: ({ variables, selected, children, onSelect, ...props }: any) => (
+    <TouchableOpacity
+      style={{
+        marginBottom: variables.smallSpace,
+      }}
+      onPress={onSelect}
+      {...props}
+    >
+      <Text style={{ fontWeight: selected ? 'bold' : 'normal' }} numberOfLines={1}>
+        {children}
+      </Text>
+    </TouchableOpacity>
+  ),
   PhoneInput: ({ style, variables, onChange, type, ...props }: any) => (
     <TextInput
       onChangeText={(value: string) => onChange({ target: { value } })}
       style={{
+        minWidth: 100,
         ...style,
       }}
       keyboardType={nativeInputTypeMap[type]}

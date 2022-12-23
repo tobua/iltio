@@ -125,10 +125,10 @@ createRoot(document.getElementById('root') as HTMLElement).render(
       alignItems: 'center',
       flexDirection: 'column',
       fontFamily: 'sans-serif',
-      gap: 40,
+      gap: 20,
     }}
   >
-    <h1>iltio Demo</h1>
+    <h1 style={{ marginBottom: 0 }}>iltio Demo</h1>
     <p style={{ margin: 0 }}>Authentication for the Web and Mobile</p>
     <App />
     <hr

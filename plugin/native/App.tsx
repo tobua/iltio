@@ -1,15 +1,19 @@
 // This file will be copied over to the demo app when running create-native-app.js.
 import React from 'react'
-import { SafeAreaView, StyleSheet, Text, View, Alert, TextInput, ScrollView } from 'react-native'
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+  Alert,
+  TextInput,
+  ScrollView,
+  TouchableOpacity,
+  Platform,
+} from 'react-native'
 import { NativeForm, configure } from 'iltio'
 
 configure({ token: 'demo' })
-
-// const Section: React.FC<
-//   PropsWithChildren<{
-//     title: string;
-//   }>
-// > = ({children, title}) => {};
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -38,11 +42,12 @@ const styles = StyleSheet.create({
 })
 
 const inputWrapperStyles = (variables: any) => ({
-  borderWidth: 2,
+  borderWidth: 0,
+  borderBottomWidth: 1,
   borderColor: variables.color,
   borderRadius: variables.borderRadius,
   marginBottom: variables.space,
-  padding: variables.smallSpace,
+  paddingVertical: variables.smallSpace,
 })
 
 const CustomInput = ({ variables, style, onChange, type, ...props }: any) => (
@@ -59,6 +64,58 @@ const CustomInput = ({ variables, style, onChange, type, ...props }: any) => (
       {...props}
     />
   </View>
+)
+
+const CustomButton = ({ variables, style, onClick, children, ...props }: any) => (
+  <TouchableOpacity
+    style={{
+      backgroundColor: variables.color,
+      borderRadius: 5,
+      ...style,
+    }}
+    {...props}
+    onPress={onClick}
+  >
+    <Text
+      style={{
+        textAlign: 'center',
+        color: variables.contrast,
+        padding: variables.smallSpace,
+        borderRadius: variables.borderRadius,
+        fontSize: 18,
+        fontWeight: 'bold',
+        fontFamily: Platform.OS === 'android' ? 'serif' : 'Times New Roman',
+      }}
+    >
+      {children}
+    </Text>
+  </TouchableOpacity>
+)
+
+const CustomPhoneWrapper = ({ style, variables, ...props }: any) => (
+  <View
+    style={{
+      flexDirection: 'column',
+      borderWidth: 0,
+      borderColor: variables.color,
+      borderRadius: variables.borderRadius,
+      marginBottom: variables.space,
+      ...style,
+    }}
+    {...props}
+  />
+)
+
+const CustomPhoneTop = ({ style, variables, ...props }: any) => (
+  <View
+    style={{
+      flexDirection: 'row',
+      borderBottomWidth: 1,
+      borderColor: variables.color,
+      paddingVertical: variables.smallSpace,
+    }}
+    {...props}
+  />
 )
 
 const handleSuccess = (_: string, name: string) =>
@@ -79,7 +136,15 @@ export default () => {
           onSuccess={handleSuccess}
         />
         <Text style={styles.description}>Custom UI Components</Text>
-        <NativeForm onSuccess={handleSuccess} Components={{ Input: CustomInput }} />
+        <NativeForm
+          onSuccess={handleSuccess}
+          Components={{
+            Input: CustomInput,
+            Button: CustomButton,
+            PhoneWrapper: CustomPhoneWrapper,
+            PhoneTop: CustomPhoneTop,
+          }}
+        />
       </ScrollView>
     </SafeAreaView>
   )

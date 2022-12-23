@@ -32,6 +32,7 @@ export type Styles = {
   phoneOption?: CSSProperties
   phoneInput?: CSSProperties
   phoneInputCountrySearch?: CSSProperties
+  phoneTop?: CSSProperties
 }
 
 export type Labels = {
