@@ -19,20 +19,38 @@ export type Variables = {
 
 export type Styles = {
   form?: CSSProperties
-  inputMail?: CSSProperties
-  button?: CSSProperties
   tabWrapper?: CSSProperties
   tab?: CSSProperties
+  inputMail?: CSSProperties
+  inputCode?: CSSProperties
+  button?: CSSProperties
   error?: CSSProperties
   message?: CSSProperties
   phoneWrapper?: CSSProperties
-  phoneFlag?: CSSProperties
-  phonePrefix?: CSSProperties
-  phoneSelect?: CSSProperties
-  phoneOption?: CSSProperties
-  phoneInput?: CSSProperties
-  phoneInputCountrySearch?: CSSProperties
   phoneTop?: CSSProperties
+  phoneCountry?: { button?: CSSProperties; flag?: CSSProperties; prefix?: CSSProperties }
+  phoneInput?: CSSProperties
+  phoneCountryOptions?: CSSProperties
+  phoneCountryOption?: { button?: CSSProperties; text?: CSSProperties }
+  phoneInputCountrySearch?: CSSProperties
+}
+
+export type NativeStyles = {
+  form?: CSSProperties
+  tabWrapper?: CSSProperties
+  tab?: { touchable?: CSSProperties; text?: CSSProperties }
+  inputMail?: { view?: CSSProperties; input?: CSSProperties }
+  inputCode?: { view?: CSSProperties; input?: CSSProperties }
+  button?: { touchable?: CSSProperties; text?: CSSProperties }
+  error?: CSSProperties
+  message?: CSSProperties
+  phoneWrapper?: CSSProperties
+  phoneTop?: CSSProperties
+  phoneCountry?: { touchable?: CSSProperties; flag?: CSSProperties; prefix?: CSSProperties }
+  phoneInput?: CSSProperties
+  phoneCountryOptions?: { wrapper?: CSSProperties; content?: CSSProperties }
+  phoneCountryOption?: { touchable?: CSSProperties; text?: CSSProperties }
+  phoneInputCountrySearch?: { view?: CSSProperties; input?: CSSProperties }
 }
 
 export type Labels = {

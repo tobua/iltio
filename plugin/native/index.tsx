@@ -1,8 +1,7 @@
-// https://www.npmjs.com/package/react-native-phone-number-input
-import React from 'react'
+import React, { CSSProperties } from 'react'
 import { Text, View, TextInput, TouchableOpacity, Platform, ScrollView } from 'react-native'
 import { Form } from '../react'
-import type { Props } from '../types'
+import type { Props, NativeStyles, Variables, Styles } from '../types'
 
 const nativeInputTypeMap = {
   email: 'email-address',
@@ -10,9 +9,13 @@ const nativeInputTypeMap = {
   number: 'numeric',
 }
 
+type ComponentProps = { style?: CSSProperties; variables: Variables }
+
 const NativeComponents = {
-  Form: ({ style, ...props }) => <View style={{ alignSelf: 'stretch', ...style }} {...props} />,
-  TabWrapper: ({ variables, style, ...props }: any) => (
+  Form: ({ style, ...props }: ComponentProps) => (
+    <View style={{ alignSelf: 'stretch', ...style }} {...props} />
+  ),
+  TabWrapper: ({ variables, style, ...props }: ComponentProps) => (
     <View
       style={{
         flexDirection: 'row',
@@ -23,19 +26,39 @@ const NativeComponents = {
       {...props}
     />
   ),
-  Tab: ({ variables, style, active, onClick, ...props }: any) => (
-    <TouchableOpacity onPress={onClick}>
+  Tab: ({
+    variables,
+    style,
+    active,
+    onClick,
+    ...props
+  }: ComponentProps & {
+    style?: { touchable?: CSSProperties; text?: CSSProperties }
+    active: boolean
+    onClick: () => void
+  }) => (
+    <TouchableOpacity onPress={onClick} style={style.touchable}>
       <Text
         style={{
           paddingHorizontal: variables.smallSpace,
           fontWeight: active ? 'bold' : 'normal',
-          ...style,
+          ...style.text,
         }}
         {...props}
       />
     </TouchableOpacity>
   ),
-  Input: ({ variables, style, onChange, type, ...props }: any) => (
+  Input: ({
+    variables,
+    style,
+    onChange,
+    type,
+    ...props
+  }: ComponentProps & {
+    style?: { view?: CSSProperties; input?: CSSProperties }
+    type: string
+    onChange: ({ target: { value } }: { target: { value: string } }) => void
+  }) => (
     <View
       style={{
         borderWidth: 1,
@@ -44,6 +67,7 @@ const NativeComponents = {
         marginBottom: variables.space,
         paddingVertical: Platform.OS === 'android' ? 5 : variables.smallSpace,
         paddingHorizontal: variables.smallSpace,
+        ...style.view,
       }}
     >
       <TextInput
@@ -51,7 +75,7 @@ const NativeComponents = {
         style={{
           minWidth: 100,
           padding: 0, // Android
-          ...style,
+          ...style.input,
         }}
         keyboardType={nativeInputTypeMap[type]}
         autoCapitalize="none"
@@ -60,9 +84,23 @@ const NativeComponents = {
       />
     </View>
   ),
-  Button: ({ variables, style, onClick, children, ...props }: any) => (
+  Button: ({
+    variables,
+    style,
+    onClick,
+    children,
+    ...props
+  }: ComponentProps & {
+    style?: { touchable?: CSSProperties; text?: CSSProperties }
+    children: string
+    onClick: () => void
+  }) => (
     <TouchableOpacity
-      style={{ backgroundColor: variables.color, ...style }}
+      style={{
+        backgroundColor: variables.color,
+        borderRadius: variables.borderRadius,
+        ...style.touchable,
+      }}
       {...props}
       onPress={onClick}
     >
@@ -72,23 +110,38 @@ const NativeComponents = {
           color: variables.contrast,
           padding: variables.smallSpace,
           borderRadius: variables.borderRadius,
+          ...style.text,
         }}
       >
         {children}
       </Text>
     </TouchableOpacity>
   ),
-  Error: ({ style, variables, children, ...props }: any) => (
+  Error: ({
+    style,
+    variables,
+    children,
+    ...props
+  }: ComponentProps & {
+    children: string
+  }) => (
     <Text style={{ color: 'red', marginBottom: variables.space, ...style }} {...props}>
       {children}
     </Text>
   ),
-  Message: ({ style, variables, children, ...props }: any) => (
+  Message: ({
+    style,
+    variables,
+    children,
+    ...props
+  }: ComponentProps & {
+    children: string
+  }) => (
     <Text style={{ marginBottom: variables.space, ...style }} {...props}>
       {children}
     </Text>
   ),
-  PhoneWrapper: ({ style, variables, ...props }: any) => (
+  PhoneWrapper: ({ style, variables, ...props }: ComponentProps) => (
     <View
       style={{
         flexDirection: 'column',
@@ -102,49 +155,91 @@ const NativeComponents = {
       {...props}
     />
   ),
-  PhoneTop: ({ style, variables, ...props }: any) => (
+  PhoneTop: ({ style, variables, ...props }: ComponentProps) => (
     <View style={{ flexDirection: 'row' }} {...props} />
   ),
-  PhoneCountry: ({ variables, prefix, flag, togglePicker, ...props }: any) => (
+  PhoneCountry: ({
+    variables,
+    style,
+    prefix,
+    flag,
+    togglePicker,
+    ...props
+  }: ComponentProps & {
+    style?: { touchable?: CSSProperties; flag?: CSSProperties; prefix?: CSSProperties }
+    prefix: string
+    flag: string
+    togglePicker: () => void
+  }) => (
     <TouchableOpacity
       style={{
         display: 'flex',
         flexDirection: 'row',
         marginRight: variables.smallSpace,
+        ...style.touchable,
       }}
       onPress={togglePicker}
       {...props}
     >
-      <Text style={{ marginRight: variables.smallSpace }}>{flag}</Text>
-      <Text>{prefix}</Text>
+      <Text style={{ marginRight: variables.smallSpace, ...style.flag }}>{flag}</Text>
+      <Text style={style.prefix}>{prefix}</Text>
     </TouchableOpacity>
   ),
-  PhoneCountryOptions: ({ variables, ...props }: any) => (
-    <View style={{ height: 200 }}>
-      <ScrollView
-        contentContainerStyle={{
-          display: 'flex',
-          flexDirection: 'column',
-          marginTop: variables.smallSpace,
-        }}
-        {...props}
-      />
-    </View>
+  PhoneCountryOptions: ({
+    variables,
+    style,
+    ...props
+  }: ComponentProps & {
+    style?: { wrapper?: CSSProperties; content?: any }
+  }) => (
+    <ScrollView
+      style={{ height: 200, ...style.wrapper }}
+      contentContainerStyle={{
+        display: 'flex',
+        flexDirection: 'column',
+        marginTop: variables.smallSpace,
+        ...style.content,
+      }}
+      {...props}
+    />
   ),
-  PhoneCountryOption: ({ variables, selected, children, onSelect, ...props }: any) => (
+  PhoneCountryOption: ({
+    variables,
+    style,
+    selected,
+    children,
+    onSelect,
+    ...props
+  }: ComponentProps & {
+    style?: { touchable?: CSSProperties; text?: CSSProperties }
+    selected: boolean
+    children: string
+    onSelect: () => void
+  }) => (
     <TouchableOpacity
       style={{
         marginBottom: variables.smallSpace,
+        ...style.touchable,
       }}
       onPress={onSelect}
       {...props}
     >
-      <Text style={{ fontWeight: selected ? 'bold' : 'normal' }} numberOfLines={1}>
+      <Text style={{ fontWeight: selected ? 'bold' : 'normal', ...style.text }} numberOfLines={1}>
         {children}
       </Text>
     </TouchableOpacity>
   ),
-  PhoneInput: ({ style, variables, onChange, type, ...props }: any) => (
+  PhoneInput: ({
+    style,
+    variables,
+    onChange,
+    type,
+    ...props
+  }: ComponentProps & {
+    style?: CSSProperties
+    type: string
+    onChange: ({ target: { value } }: { target: { value: string } }) => void
+  }) => (
     <TextInput
       onChangeText={(value: string) => onChange({ target: { value } })}
       style={{
@@ -159,25 +254,25 @@ const NativeComponents = {
   ),
 }
 
-const getCountryLocation = (initialCountryCode?: string) => {
-  if (initialCountryCode) {
-    return initialCountryCode
-  }
-
-  // https://www.npmjs.com/package/react-native-device-country
-
-  return 'us'
-}
-
-export function NativeForm({ Components, initialCountryCode, ...props }: Props) {
+export function NativeForm({
+  Components,
+  style,
+  ...props
+}: Omit<Props, 'style'> & { style?: NativeStyles }) {
   // The only difference to the regular form is the UI, for which we use native components.
   Object.assign(NativeComponents, Components)
+  // eslint-disable-next-line no-param-reassign
+  style = {
+    tab: {},
+    button: {},
+    phoneCountry: {},
+    phoneCountryOptions: {},
+    phoneCountryOption: {},
+    inputMail: {},
+    inputCode: {},
+    phoneInputCountrySearch: {},
+    ...style,
+  }
 
-  return (
-    <Form
-      Components={NativeComponents}
-      initialCountryCode={getCountryLocation(initialCountryCode)}
-      {...props}
-    />
-  )
+  return <Form Components={NativeComponents} style={style as Styles} {...props} />
 }

@@ -1,5 +1,5 @@
 // This file will be copied over to the demo app when running create-native-app.js.
-import React from 'react'
+import React, { useMemo } from 'react'
 import {
   SafeAreaView,
   StyleSheet,
@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native'
+import { getCountry } from 'react-native-localize'
 import { NativeForm, configure } from 'iltio'
 
 configure({ token: 'demo' })
@@ -122,6 +123,8 @@ const handleSuccess = (_: string, name: string) =>
   Alert.alert(`Successfully authenticated ${name}.`)
 
 export default () => {
+  const country = useMemo(() => getCountry() ?? 'us', [])
+
   return (
     <SafeAreaView style={styles.wrapper}>
       <Text style={styles.title}>iltio Native Authentication</Text>
@@ -133,6 +136,7 @@ export default () => {
           allowMail={false}
           variables={{ color: 'blue', borderRadius: 10 }}
           labels={{ submit: 'Register or Login' }}
+          initialCountryCode={country}
           onSuccess={handleSuccess}
         />
         <Text style={styles.description}>Custom UI Components</Text>

@@ -58,6 +58,7 @@ export function Phone({
           togglePicker={() => setOpen(!open)}
           aria-label={Label.phoneCountry}
           data-country={countryCode}
+          style={style.phoneCountry}
         />
         <Components.PhoneInput
           aria-label={Label.inputPhone}
@@ -72,7 +73,7 @@ export function Phone({
         />
       </Components.PhoneTop>
       {open && (
-        <Components.PhoneCountryOptions variables={variables}>
+        <Components.PhoneCountryOptions style={style.phoneCountryOptions} variables={variables}>
           <Components.Input
             aria-label={Label.phoneInputCountrySearch}
             value={filter}
@@ -89,6 +90,7 @@ export function Phone({
               variables={variables}
               selected={item.abbreviation === countryCode}
               key={item.abbreviation}
+              style={style.phoneCountryOption}
               onSelect={() => {
                 setCountryCode(item.abbreviation)
                 setOpen(!open)

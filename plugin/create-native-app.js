@@ -15,6 +15,11 @@ renameSync(appName, 'app')
 
 copyFileSync('native/App.tsx', `app/App.tsx`)
 
+// Ensure plugin /dist contents are available
+execSync('npm run build', {
+  stdio: 'inherit',
+})
+
 // Install this package locally, avoiding symlinks.
 execSync('npm install $(npm pack .. | tail -1) --legacy-peer-deps', {
   cwd: join(process.cwd(), 'app'),
@@ -22,7 +27,7 @@ execSync('npm install $(npm pack .. | tail -1) --legacy-peer-deps', {
 })
 
 // Additional dependency.
-execSync('npm install iltio --legacy-peer-deps', {
+execSync('npm install iltio react-native-localize --legacy-peer-deps', {
   cwd: join(process.cwd(), 'app'),
   stdio: 'inherit',
 })

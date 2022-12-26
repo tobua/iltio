@@ -37,6 +37,8 @@ export function Form({
   variables = useMemo(() => ({ ...defaultVariables, ...variables }), [variables])
   // eslint-disable-next-line no-param-reassign
   labels = useMemo(() => ({ ...defaultLabels, ...labels }), [labels])
+  // eslint-disable-next-line no-param-reassign
+  style = { phoneCountry: {}, phoneCountryOption: {}, ...style }
 
   const handleSubmit = useCallback<FormEventHandler<HTMLFormElement>>(
     async (event) => {
@@ -264,7 +266,7 @@ export function Form({
             placeholder="Code"
             type="number"
             maxLength={4}
-            style={{ textAlign: 'center' }}
+            style={{ textAlign: 'center', ...style.inputCode }}
             variables={variables}
           />
           <Resend Components={Components} labels={labels} variables={variables} style={style} />

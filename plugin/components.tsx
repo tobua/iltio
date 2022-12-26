@@ -11,42 +11,6 @@ import {
 } from './types'
 
 export const components = {
-  Button: ({ variables, children, style, ...props }: ButtonProps) => (
-    <button
-      type="submit"
-      style={{
-        backgroundColor: variables.color,
-        border: 'none',
-        color: variables.contrast,
-        padding: variables.smallSpace,
-        cursor: 'pointer',
-        borderRadius: variables.borderRadius,
-        fontSize: variables.fontSize,
-        fontFamily: variables.fontFamily,
-        ...style,
-      }}
-      {...props}
-    >
-      {children}
-    </button>
-  ),
-  Input: ({ variables, valid = true, style, ...props }: InputProps) => (
-    <input
-      style={{
-        borderWidth: 1,
-        borderStyle: 'solid',
-        borderColor: valid ? variables.color : 'red',
-        padding: 9,
-        outline: 'none',
-        borderRadius: variables.borderRadius,
-        fontSize: variables.fontSize,
-        fontFamily: variables.fontFamily,
-        backgroundColor: 'inherit',
-        ...style,
-      }}
-      {...props}
-    />
-  ),
   Form: ({ style, children, variables, ...props }: FormProps) => (
     <form
       style={{
@@ -86,6 +50,42 @@ export const components = {
       {children}
     </button>
   ),
+  Button: ({ variables, children, style, ...props }: ButtonProps) => (
+    <button
+      type="submit"
+      style={{
+        backgroundColor: variables.color,
+        border: 'none',
+        color: variables.contrast,
+        padding: variables.smallSpace,
+        cursor: 'pointer',
+        borderRadius: variables.borderRadius,
+        fontSize: variables.fontSize,
+        fontFamily: variables.fontFamily,
+        ...style,
+      }}
+      {...props}
+    >
+      {children}
+    </button>
+  ),
+  Input: ({ variables, valid = true, style, ...props }: InputProps) => (
+    <input
+      style={{
+        borderWidth: 1,
+        borderStyle: 'solid',
+        borderColor: valid ? variables.color : 'red',
+        padding: 9,
+        outline: 'none',
+        borderRadius: variables.borderRadius,
+        fontSize: variables.fontSize,
+        fontFamily: variables.fontFamily,
+        backgroundColor: 'inherit',
+        ...style,
+      }}
+      {...props}
+    />
+  ),
   Error: ({ style, variables, children, ...props }: ErrorProps) => (
     <p
       style={{
@@ -109,6 +109,7 @@ export const components = {
         borderRadius: variables.borderRadius,
         fontSize: variables.fontSize,
         fontFamily: variables.fontFamily,
+        ...style,
       }}
       {...props}
     >
@@ -130,8 +131,10 @@ export const components = {
       {...props}
     />
   ),
-  PhoneTop: ({ ...props }: any) => <div style={{ display: 'flex' }} {...props} />,
-  PhoneCountry: ({ variables, prefix, flag, togglePicker, ...props }: any) => (
+  PhoneTop: ({ style, variables, ...props }: any) => (
+    <div style={{ display: 'flex', ...style }} {...props} />
+  ),
+  PhoneCountry: ({ variables, prefix, flag, togglePicker, style, ...props }: any) => (
     <button
       style={{
         display: 'flex',
@@ -141,13 +144,14 @@ export const components = {
         background: 'none',
         outline: 'none',
         padding: 0,
+        ...style.button,
       }}
       type="button"
       onClick={togglePicker}
       {...props}
     >
-      <span>{flag}</span>
-      <span>{prefix}</span>
+      <span style={style.flag}>{flag}</span>
+      <span style={style.prefix}>{prefix}</span>
     </button>
   ),
   PhoneInput: ({ variables, valid, style, ...props }: any) => (
@@ -163,7 +167,7 @@ export const components = {
       {...props}
     />
   ),
-  PhoneCountryOptions: ({ variables, ...props }: any) => (
+  PhoneCountryOptions: ({ style, variables, ...props }: any) => (
     <div
       style={{
         display: 'flex',
@@ -173,11 +177,12 @@ export const components = {
         overflowX: 'hidden',
         paddingRight: variables.smallSpace,
         rowGap: 5,
+        ...style,
       }}
       {...props}
     />
   ),
-  PhoneCountryOption: ({ variables, selected, children, onSelect, ...props }: any) => (
+  PhoneCountryOption: ({ variables, style, selected, children, onSelect, ...props }: any) => (
     <button
       style={{
         fontWeight: selected ? 'bold' : 'normal',
@@ -191,12 +196,20 @@ export const components = {
         display: 'flex',
         cursor: 'pointer',
         maxWidth: '100%',
+        ...style.button,
       }}
       onClick={onSelect}
       type="button"
       {...props}
     >
-      <span style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
+      <span
+        style={{
+          whiteSpace: 'nowrap',
+          textOverflow: 'ellipsis',
+          overflow: 'hidden',
+          ...style.text,
+        }}
+      >
         {children}
       </span>
     </button>
