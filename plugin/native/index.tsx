@@ -3,6 +3,11 @@ import { Text, View, TextInput, TouchableOpacity, Platform, ScrollView } from 'r
 import { Form } from '../react'
 import type { Props, NativeStyles, Variables, Styles } from '../types'
 
+export { configure, Store, MemoryStorage } from '../store'
+export { authenticate, poll, confirm, resend, authorize, logout, remove } from '../route'
+export type { Variables, Styles, NativeStyles, Labels, ComponentTypes } from '../types'
+export { getNameType } from '../helper'
+
 const nativeInputTypeMap = {
   email: 'email-address',
   tel: 'phone-pad',

@@ -1,5 +1,4 @@
 export { Form } from './react'
-export { NativeForm } from './native/index'
 export { configure, Store, MemoryStorage } from './store'
 export { authenticate, poll, confirm, resend, authorize, logout, remove } from './route'
 export type { Variables, Styles, NativeStyles, Labels, ComponentTypes } from './types'

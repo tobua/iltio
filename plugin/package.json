@@ -19,7 +19,8 @@
       }
     },
     "entry": [
-      "index.tsx"
+      "index.tsx",
+      "native/index.tsx"
     ]
   },
   "peerDependencies": {
@@ -31,7 +32,8 @@
   "main": "dist/index.js",
   "exports": {
     ".": "./dist/index.js",
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./dist/native/index.js": "./dist/native/index.js"
   },
   "types": "dist/index.d.ts",
   "files": [

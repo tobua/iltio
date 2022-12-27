@@ -12,7 +12,7 @@ import {
   Platform,
 } from 'react-native'
 import { getCountry } from 'react-native-localize'
-import { NativeForm, configure } from 'iltio'
+import { NativeForm, configure } from 'iltio/dist/native/index.js'
 
 configure({ token: 'demo' })
 
