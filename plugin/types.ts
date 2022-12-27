@@ -78,19 +78,19 @@ export type ErrorProps = { style: CSSProperties; variables: Variables; children:
 export type MessageProps = { style: CSSProperties; variables: Variables; children: string }
 
 export type ComponentTypes = {
-  Input?: FunctionComponent<
-    (InputProps & DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>) | any
-  >
-  Button?: FunctionComponent<
-    | (ButtonProps & DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>)
-    | any
-  >
   Form?: FunctionComponent<
     (FormProps & DetailedHTMLProps<FormHTMLAttributes<HTMLFormElement>, HTMLFormElement>) | any
   >
   TabWrapper?: FunctionComponent<TabWrapperProps & any>
   Tab?: FunctionComponent<
     (TabProps & DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>) | any
+  >
+  Input?: FunctionComponent<
+    (InputProps & DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>) | any
+  >
+  Button?: FunctionComponent<
+    | (ButtonProps & DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>)
+    | any
   >
   Error?: FunctionComponent<ErrorProps & any>
   Message?: FunctionComponent<MessageProps & any>
