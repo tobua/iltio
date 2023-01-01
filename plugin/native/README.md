@@ -5,7 +5,7 @@ Based on the React plugin the React Native plugin features the same functionalit
 ## Installation and Usage
 
 ```tsx
-import { NativeForm, configure } from 'iltio'
+import { NativeForm, configure } from 'iltio/dist/native/index.js'
 
 configure({ token: APP_TOKEN })
 
