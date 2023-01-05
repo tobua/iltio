@@ -176,6 +176,7 @@ export const components = {
         overflowY: 'auto',
         overflowX: 'hidden',
         paddingRight: variables.smallSpace,
+        paddingBottom: variables.smallSpace,
         rowGap: 5,
         ...style,
       }}

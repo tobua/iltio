@@ -50,7 +50,7 @@ const MyButton = ({ variables, style, ...props }: any) => {
   )
 }
 
-const MyInput = ({ variables, style, valid, ...props }: any) => (
+const MyInput = ({ variables, style, valid = true, ...props }: any) => (
   <input
     style={{
       border: 'none',
@@ -72,6 +72,7 @@ const MyPhoneWrapper = ({ variables, style, valid, ...props }: any) => (
     style={{
       borderBottom: '1px solid black',
       display: 'flex',
+      flexDirection: 'column',
       borderColor: valid ? variables.color : 'red',
       ...style,
     }}
