@@ -103,6 +103,7 @@ export type ComponentTypes = {
 }
 
 export interface Props {
+  configuration?: Configuration
   variables?: Variables
   style?: Styles
   allowPhone?: boolean
@@ -111,4 +112,21 @@ export interface Props {
   initialCountryCode?: string
   Components?: ComponentTypes
   labels?: Labels
+}
+
+export interface BasicStorage {
+  getItem: (key: string) => string | null
+  setItem: (key: string, value: string) => void
+  removeItem: (key: string) => void
+}
+
+export interface Configuration {
+  url?: string
+  token: string
+  storage?: BasicStorage
+  authenticateUrl?: string
+  tokenStorageKey?: string
+  codeTokenStorageKey?: string
+  nameStorageKey?: string
+  pollDuration?: number
 }

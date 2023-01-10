@@ -188,3 +188,27 @@ test('Polling interval can be configured.', async () => {
   expect(fetchMockCalls().length).toBe(3)
   expect(onSuccessMock.mock.calls.length).toBe(1)
 })
+
+test('Can configure the token on the JSX tag as well.', async () => {
+  const mailAddress = 'some@person.com'
+  const appTokenModified = 'test-token-modified'
+
+  render(<Form configuration={{ token: appTokenModified }} />)
+
+  await userEvent.type(screen.getByLabelText(Label.inputMail), mailAddress)
+
+  const codeToken = '123'
+
+  setResponse({
+    error: false,
+    codeToken,
+    registration: true,
+    pollLink: 'https://iltio.com/api/verify/poll',
+  })
+
+  await userEvent.click(screen.getByLabelText(Label.submit))
+
+  expect(fetchMockCalls().length).toBe(1)
+
+  expect(fetchMockCalls()[0][0]).toContain(`token=${appTokenModified}`)
+})

@@ -3,7 +3,6 @@ import { Label } from '../label'
 import { Variables, Styles, ComponentTypes } from '../types'
 import { countries } from '../helper'
 
-// TODO order countries by population.
 export const getNumberCountryPrefix = (countryCode: string) => countries[countryCode].prefix
 
 const filterCountries = (filter: string) => {

@@ -3,12 +3,13 @@ import { Label } from './label'
 import { Phone, getNumberCountryPrefix } from './phone/Phone'
 import { components } from './components'
 import { Props } from './types'
-import { Store, app } from './store'
+import { Store, app, configure } from './store'
 import { authenticate, confirm, poll } from './route'
 import { defaultVariables, defaultLabels, validateEmail, validatePhone } from './helper'
 import { Resend } from './resend'
 
 export function Form({
+  configuration,
   allowPhone = true,
   allowMail = true,
   onSuccess,
@@ -98,7 +99,7 @@ export function Form({
     async (code: string) => {
       if (code.length === 4) {
         setError('')
-        const { error: localError, token } = await confirm(code)
+        const { error: localError, token: userToken } = await confirm(code)
 
         if (localError) {
           if (localError === 'Code invalid or expired.') {
@@ -118,11 +119,11 @@ export function Form({
           app.pollInterval = 0
         }
 
-        if (token) {
-          Store.token = token
+        if (userToken) {
+          Store.token = userToken
           Store.removeCodeToken()
           if (onSuccess) {
-            onSuccess(Store.name, token, registration)
+            onSuccess(Store.name, userToken, registration)
           }
         }
       } else {
@@ -134,7 +135,7 @@ export function Form({
 
   useEffect(() => {
     async function checkVerified() {
-      const { error: localError, token } = await poll()
+      const { error: localError, token: userToken } = await poll()
 
       if (localError) {
         // Code token expired, start over.
@@ -146,8 +147,8 @@ export function Form({
         return
       }
 
-      if (token) {
-        Store.token = token
+      if (userToken) {
+        Store.token = userToken
         Store.removeCodeToken()
 
         if (app.pollInterval) {
@@ -156,9 +157,13 @@ export function Form({
         }
 
         if (onSuccess) {
-          onSuccess(Store.name, token, registration)
+          onSuccess(Store.name, userToken, registration)
         }
       }
+    }
+
+    if (configuration) {
+      configure(configuration)
     }
 
     if (submitted) {
@@ -168,7 +173,7 @@ export function Form({
       clearInterval(app.pollInterval)
       app.pollInterval = 0
     }
-  }, [submitted, registration, Store])
+  }, [submitted, registration, Store, configuration])
 
   return (
     <Components.Form
@@ -256,7 +261,7 @@ export function Form({
             </Components.Message>
           )}
           <Components.Message style={style.message} variables={variables}>
-            Enter the code received in your mail below or click the attached link.
+            Enter the code received in your mail below or confirm through the link.
           </Components.Message>
           <Components.Input
             aria-label={Label.inputNumber}

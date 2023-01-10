@@ -1,8 +1,4 @@
-interface BasicStorage {
-  getItem: (key: string) => string | null
-  setItem: (key: string, value: string) => void
-  removeItem: (key: string) => void
-}
+import { BasicStorage, Configuration } from './types'
 
 export const MemoryStorage = {
   data: {},
@@ -42,20 +38,8 @@ export const app = {
   pollInterval: null,
 }
 
-export const configure = ({
-  url,
-  token,
-  ...options
-}: {
-  url?: string
-  token: string
-  storage?: BasicStorage
-  authenticateUrl?: string
-  tokenStorageKey?: string
-  codeTokenStorageKey?: string
-  nameStorageKey?: string
-  pollDuration?: number
-}) => Object.assign(app, { ...options, apiUrl: url || app.apiUrl, apiToken: token || app.apiToken })
+export const configure = ({ url, token, ...options }: Configuration) =>
+  Object.assign(app, { ...options, apiUrl: url || app.apiUrl, apiToken: token || app.apiToken })
 
 export const Store = {
   get token() {

@@ -5,11 +5,9 @@ Based on the React plugin the React Native plugin features the same functionalit
 ## Installation and Usage
 
 ```tsx
-import { NativeForm, configure } from 'iltio/dist/native/index.js'
+import { NativeForm } from 'iltio/dist/native/index.js'
 
-configure({ token: APP_TOKEN })
-
-export const MyNativeAuthentication = () => <NativeForm {...} />
+export const MyNativeAuthentication = () => <NativeForm configuration={{ token: APP_TOKEN }} {...} />
 ```
 
 ## Demo
