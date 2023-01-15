@@ -1,5 +1,15 @@
-import React, { CSSProperties } from 'react'
-import { Text, View, TextInput, TouchableOpacity, Platform, ScrollView } from 'react-native'
+import React from 'react'
+import {
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+  Platform,
+  ScrollView,
+  StyleProp,
+  ViewStyle,
+  TextStyle,
+} from 'react-native'
 import { Form } from '../react'
 import type { Props, NativeStyles, Variables, Styles } from '../types'
 
@@ -14,20 +24,22 @@ const nativeInputTypeMap = {
   number: 'numeric',
 }
 
-type ComponentProps = { style?: CSSProperties; variables: Variables }
+type ComponentProps = { style?: StyleProp<ViewStyle & TextStyle>; variables: Variables }
 
 const NativeComponents = {
   Form: ({ style, ...props }: ComponentProps) => (
-    <View style={{ alignSelf: 'stretch', ...style }} {...props} />
+    <View style={[{ alignSelf: 'stretch' }, style]} {...props} />
   ),
   TabWrapper: ({ variables, style, ...props }: ComponentProps) => (
     <View
-      style={{
-        flexDirection: 'row',
-        marginBottom: variables.space,
-        justifyContent: 'center',
-        ...style,
-      }}
+      style={[
+        {
+          flexDirection: 'row',
+          marginBottom: variables.space,
+          justifyContent: 'center',
+        },
+        style,
+      ]}
       {...props}
     />
   ),
@@ -38,17 +50,19 @@ const NativeComponents = {
     onClick,
     ...props
   }: ComponentProps & {
-    style?: { touchable?: CSSProperties; text?: CSSProperties }
+    style?: { touchable?: StyleProp<ViewStyle>; text?: StyleProp<TextStyle> }
     active: boolean
     onClick: () => void
   }) => (
     <TouchableOpacity onPress={onClick} style={style.touchable}>
       <Text
-        style={{
-          paddingHorizontal: variables.smallSpace,
-          fontWeight: active ? 'bold' : 'normal',
-          ...style.text,
-        }}
+        style={[
+          {
+            paddingHorizontal: variables.smallSpace,
+            fontWeight: active ? 'bold' : 'normal',
+          },
+          style.text,
+        ]}
         {...props}
       />
     </TouchableOpacity>
@@ -60,28 +74,33 @@ const NativeComponents = {
     type,
     ...props
   }: ComponentProps & {
-    style?: { view?: CSSProperties; input?: CSSProperties }
+    style?: { view?: StyleProp<ViewStyle>; input?: StyleProp<TextStyle> }
     type: string
     onChange: ({ target: { value } }: { target: { value: string } }) => void
   }) => (
     <View
-      style={{
-        borderWidth: 1,
-        borderColor: variables.color,
-        borderRadius: variables.borderRadius,
-        marginBottom: variables.space,
-        paddingVertical: Platform.OS === 'android' ? 5 : variables.smallSpace,
-        paddingHorizontal: variables.smallSpace,
-        ...style.view,
-      }}
+      style={[
+        {
+          // TODO properties do not exist on view.
+          // borderWidth: 1,
+          // borderColor: variables.color,
+          // borderRadius: variables.borderRadius,
+          marginBottom: variables.space,
+          paddingVertical: Platform.OS === 'android' ? 5 : variables.smallSpace,
+          paddingHorizontal: variables.smallSpace,
+        },
+        style.view,
+      ]}
     >
       <TextInput
         onChangeText={(value: string) => onChange({ target: { value } })}
-        style={{
-          minWidth: 100,
-          padding: 0, // Android
-          ...style.input,
-        }}
+        style={[
+          {
+            minWidth: 100,
+            padding: 0, // Android
+          },
+          style.input,
+        ]}
         keyboardType={nativeInputTypeMap[type]}
         autoCapitalize="none"
         autoCorrect={false}
@@ -96,27 +115,33 @@ const NativeComponents = {
     children,
     ...props
   }: ComponentProps & {
-    style?: { touchable?: CSSProperties; text?: CSSProperties }
+    style?: { touchable?: StyleProp<ViewStyle>; text?: StyleProp<TextStyle> }
     children: string
     onClick: () => void
   }) => (
     <TouchableOpacity
-      style={{
-        backgroundColor: variables.color,
-        borderRadius: variables.borderRadius,
-        ...style.touchable,
-      }}
+      style={[
+        {
+          backgroundColor: variables.color,
+          // TODO does not exist on touchable.
+          // borderRadius: variables.borderRadius,
+        },
+        style.touchable,
+      ]}
       {...props}
       onPress={onClick}
     >
       <Text
-        style={{
-          textAlign: 'center',
-          color: variables.contrast,
-          padding: variables.smallSpace,
-          borderRadius: variables.borderRadius,
-          ...style.text,
-        }}
+        style={[
+          {
+            textAlign: 'center',
+            color: variables.contrast,
+            padding: variables.smallSpace,
+            // TODO does not exist on text.
+            // borderRadius: variables.borderRadius,
+          },
+          style.text,
+        ]}
       >
         {children}
       </Text>
@@ -130,7 +155,7 @@ const NativeComponents = {
   }: ComponentProps & {
     children: string
   }) => (
-    <Text style={{ color: 'red', marginBottom: variables.space, ...style }} {...props}>
+    <Text style={[{ color: 'red', marginBottom: variables.space }, style]} {...props}>
       {children}
     </Text>
   ),
@@ -142,26 +167,29 @@ const NativeComponents = {
   }: ComponentProps & {
     children: string
   }) => (
-    <Text style={{ marginBottom: variables.space, ...style }} {...props}>
+    <Text style={[{ marginBottom: variables.space }, style]} {...props}>
       {children}
     </Text>
   ),
   PhoneWrapper: ({ style, variables, ...props }: ComponentProps) => (
     <View
-      style={{
-        flexDirection: 'column',
-        borderWidth: 1,
-        borderColor: variables.color,
-        borderRadius: variables.borderRadius,
-        marginBottom: variables.space,
-        padding: variables.smallSpace,
-        ...style,
-      }}
+      style={[
+        {
+          flexDirection: 'column',
+          // TODO are the following 3 applicable to a View?
+          // borderWidth: 1,
+          // borderColor: variables.color,
+          // borderRadius: variables.borderRadius,
+          marginBottom: variables.space,
+          padding: variables.smallSpace,
+        },
+        style,
+      ]}
       {...props}
     />
   ),
   PhoneTop: ({ style, variables, ...props }: ComponentProps) => (
-    <View style={{ flexDirection: 'row' }} {...props} />
+    <View style={[{ flexDirection: 'row' }, style]} {...props} />
   ),
   PhoneCountry: ({
     variables,
@@ -171,22 +199,28 @@ const NativeComponents = {
     togglePicker,
     ...props
   }: ComponentProps & {
-    style?: { touchable?: CSSProperties; flag?: CSSProperties; prefix?: CSSProperties }
+    style?: {
+      touchable?: StyleProp<ViewStyle>
+      flag?: StyleProp<TextStyle>
+      prefix?: StyleProp<TextStyle>
+    }
     prefix: string
     flag: string
     togglePicker: () => void
   }) => (
     <TouchableOpacity
-      style={{
-        display: 'flex',
-        flexDirection: 'row',
-        marginRight: variables.smallSpace,
-        ...style.touchable,
-      }}
+      style={[
+        {
+          display: 'flex',
+          flexDirection: 'row',
+          marginRight: variables.smallSpace,
+        },
+        style.touchable,
+      ]}
       onPress={togglePicker}
       {...props}
     >
-      <Text style={{ marginRight: variables.smallSpace, ...style.flag }}>{flag}</Text>
+      <Text style={[{ marginRight: variables.smallSpace }, style.flag]}>{flag}</Text>
       <Text style={style.prefix}>{prefix}</Text>
     </TouchableOpacity>
   ),
@@ -195,16 +229,18 @@ const NativeComponents = {
     style,
     ...props
   }: ComponentProps & {
-    style?: { wrapper?: CSSProperties; content?: any }
+    style?: { wrapper?: StyleProp<ViewStyle>; content?: StyleProp<ViewStyle> }
   }) => (
     <ScrollView
-      style={{ height: 200, ...style.wrapper }}
-      contentContainerStyle={{
-        display: 'flex',
-        flexDirection: 'column',
-        marginTop: variables.smallSpace,
-        ...style.content,
-      }}
+      style={[{ height: 200 }, style.wrapper]}
+      contentContainerStyle={[
+        {
+          display: 'flex',
+          flexDirection: 'column',
+          marginTop: variables.smallSpace,
+        },
+        style.content,
+      ]}
       {...props}
     />
   ),
@@ -216,20 +252,22 @@ const NativeComponents = {
     onSelect,
     ...props
   }: ComponentProps & {
-    style?: { touchable?: CSSProperties; text?: CSSProperties }
+    style?: { touchable?: StyleProp<ViewStyle>; text?: StyleProp<TextStyle> }
     selected: boolean
     children: string
     onSelect: () => void
   }) => (
     <TouchableOpacity
-      style={{
-        marginBottom: variables.smallSpace,
-        ...style.touchable,
-      }}
+      style={[
+        {
+          marginBottom: variables.smallSpace,
+        },
+        style.touchable,
+      ]}
       onPress={onSelect}
       {...props}
     >
-      <Text style={{ fontWeight: selected ? 'bold' : 'normal', ...style.text }} numberOfLines={1}>
+      <Text style={[{ fontWeight: selected ? 'bold' : 'normal' }, style.text]} numberOfLines={1}>
         {children}
       </Text>
     </TouchableOpacity>
@@ -241,16 +279,18 @@ const NativeComponents = {
     type,
     ...props
   }: ComponentProps & {
-    style?: CSSProperties
+    style?: StyleProp<TextStyle>
     type: string
     onChange: ({ target: { value } }: { target: { value: string } }) => void
   }) => (
     <TextInput
       onChangeText={(value: string) => onChange({ target: { value } })}
-      style={{
-        minWidth: 100,
-        ...style,
-      }}
+      style={[
+        {
+          minWidth: 100,
+        },
+        style,
+      ]}
       keyboardType={nativeInputTypeMap[type]}
       autoCapitalize="none"
       autoCorrect={false}

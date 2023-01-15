@@ -122,7 +122,7 @@ export interface BasicStorage {
 
 export interface Configuration {
   url?: string
-  token: string
+  token?: string
   storage?: BasicStorage
   authenticateUrl?: string
   tokenStorageKey?: string

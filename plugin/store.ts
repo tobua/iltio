@@ -1,3 +1,4 @@
+import { parse } from 'cookie'
 import { BasicStorage, Configuration } from './types'
 
 export const MemoryStorage = {
@@ -9,6 +10,19 @@ export const MemoryStorage = {
   removeItem: (key: string) => {
     delete MemoryStorage.data[key]
   },
+}
+
+export const CookieStorage = {
+  getItem: (key: string) => {
+    if (typeof document !== 'undefined') {
+      const cookies = parse(document.cookie)
+      return cookies[key]
+    }
+    return null
+  },
+  // Ignoring as set and remove done on server.
+  setItem: () => null,
+  removeItem: () => null,
 }
 
 function getInitialStorage() {

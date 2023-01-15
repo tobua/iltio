@@ -15,15 +15,22 @@
   "padua": {
     "tsconfig": {
       "compilerOptions": {
-        "target": "esnext"
+        "target": "esnext",
+        "skipLibCheck": true
       }
     },
     "entry": [
       "index.tsx",
-      "native/index.tsx"
+      "native/index.tsx",
+      "next.tsx"
     ]
   },
+  "dependencies": {
+    "cookie": "^0.5.0",
+    "cookies-next": "^2.1.1"
+  },
   "peerDependencies": {
+    "next": ">= 13",
     "react": ">= 18.0",
     "react-native": ">= 0.69"
   },
@@ -33,7 +40,9 @@
   "exports": {
     ".": "./dist/index.js",
     "./package.json": "./package.json",
-    "./dist/native/index.js": "./dist/native/index.js"
+    "./dist/native/index.js": "./dist/native/index.js",
+    "./native": "./dist/native/index.js",
+    "./next": "./dist/next.js"
   },
   "types": "dist/index.d.ts",
   "files": [
@@ -51,15 +60,17 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^14.4.3",
+    "@types/cookie": "^0.5.1",
     "@types/styled-components": "^5.1.26",
     "cpx": "^1.5.0",
-    "happy-dom": "^8.1.2",
+    "happy-dom": "^8.1.4",
+    "next": "^13.1.2",
     "padua": "^1.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-native": "^0.70.6",
+    "react-native": "^0.71.0",
     "styled-components": "^5.3.6",
-    "vitest": "^0.26.3"
+    "vitest": "^0.27.1"
   },
   "prettier": "padua/configuration/.prettierrc.json",
   "eslintConfig": {
