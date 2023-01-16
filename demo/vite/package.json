@@ -1,7 +1,9 @@
 {
   "name": "iltio-demo",
   "description": "Demo React application using iltio authentication.",
+  "version": "1.0.0",
   "license": "MIT",
+  "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",

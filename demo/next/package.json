@@ -1,7 +1,9 @@
 {
   "name": "iltio-next-demo",
+  "description": "Demo of iltio server-side integration with Next.js.",
   "version": "1.0.0",
   "license": "MIT",
+  "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
