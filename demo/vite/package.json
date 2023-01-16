@@ -1,5 +1,5 @@
 {
-  "name": "iltio-demo",
+  "name": "iltio-react-demo",
   "description": "Demo React application using iltio authentication.",
   "version": "1.0.0",
   "license": "MIT",
@@ -11,7 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "iltio": "^1.0.0",
+    "iltio": "*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

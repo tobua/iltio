@@ -1,7 +1,10 @@
 {
   "name": "iltio-main",
-  "license": "MIT",
   "private": true,
+  "license": "MIT",
+  "scripts": {
+    "postinstall": "npm run build --workspace=plugin"
+  },
   "type": "module",
   "workspaces": [
     "demo/*",
