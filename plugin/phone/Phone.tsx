@@ -65,6 +65,7 @@ export function Phone({
           value={phone}
           onChange={(event) => setPhone(event.target.value)}
           style={style.phoneInput}
+          variables={variables}
           required
           valid={phoneValid}
           placeholder="Phone"

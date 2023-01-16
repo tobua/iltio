@@ -110,6 +110,19 @@ const App = () => {
           <p>Custom UI Components</p>
           <CustomUIComponents onSuccess={setName} />
         </div>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            color: 'green',
+            fontSize: 14,
+            fontFamily: 'monospace',
+          }}
+        >
+          <p>Inherited Styles</p>
+          <Form variables={{ fontSize: 'inherit' }} onSuccess={setName} />
+        </div>
       </div>
       <p style={{ margin: 0 }}>
         Enter an email address or phone number above to register or login to the demo application.

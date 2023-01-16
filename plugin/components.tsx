@@ -8,7 +8,11 @@ import {
   ErrorProps,
   MessageProps,
   ComponentTypes,
+  Variables,
+  Styles,
 } from './types'
+
+type ComponentProps = { style?: Styles; variables: Variables }
 
 export const components = {
   Form: ({ style, children, variables, ...props }: FormProps) => (
@@ -134,7 +138,19 @@ export const components = {
   PhoneTop: ({ style, variables, ...props }: any) => (
     <div style={{ display: 'flex', ...style }} {...props} />
   ),
-  PhoneCountry: ({ variables, prefix, flag, togglePicker, style, ...props }: any) => (
+  PhoneCountry: ({
+    variables,
+    prefix,
+    flag,
+    togglePicker,
+    style,
+    ...props
+  }: ComponentProps & {
+    prefix: string
+    flag: string
+    togglePicker: () => void
+    style: Styles['phoneCountry']
+  }) => (
     <button
       style={{
         display: 'flex',
@@ -144,17 +160,35 @@ export const components = {
         background: 'none',
         outline: 'none',
         padding: 0,
+        fontSize: variables.fontSize,
+        fontFamily: variables.fontFamily,
         ...style.button,
       }}
       type="button"
       onClick={togglePicker}
       {...props}
     >
-      <span style={style.flag}>{flag}</span>
-      <span style={style.prefix}>{prefix}</span>
+      <span
+        style={{ fontSize: variables.fontSize, fontFamily: variables.fontFamily, ...style.flag }}
+      >
+        {flag}
+      </span>
+      <span
+        style={{ fontSize: variables.fontSize, fontFamily: variables.fontFamily, ...style.prefix }}
+      >
+        {prefix}
+      </span>
     </button>
   ),
-  PhoneInput: ({ variables, valid, style, ...props }: any) => (
+  PhoneInput: ({
+    variables,
+    valid,
+    style,
+    ...props
+  }: ComponentProps & {
+    valid: boolean
+    style: Styles['phoneInput']
+  }) => (
     <input
       style={{
         background: 'none',
@@ -162,6 +196,8 @@ export const components = {
         padding: 9,
         outline: 'none',
         width: '100%',
+        fontSize: variables.fontSize,
+        fontFamily: variables.fontFamily,
         ...style,
       }}
       {...props}

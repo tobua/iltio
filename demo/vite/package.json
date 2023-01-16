@@ -1,6 +1,7 @@
 {
   "name": "iltio-demo",
   "description": "Demo React application using iltio authentication.",
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -8,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "iltio": "latest",
+    "iltio": "^1.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

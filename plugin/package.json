@@ -1,7 +1,7 @@
 {
   "name": "iltio",
   "description": "Authentication for the Web and Mobile.",
-  "version": "0.0.0-development",
+  "version": "1.0.0",
   "repository": "github:tobua/iltio",
   "license": "MIT",
   "author": "Matthias Giger",
@@ -15,8 +15,7 @@
   "padua": {
     "tsconfig": {
       "compilerOptions": {
-        "target": "esnext",
-        "skipLibCheck": true
+        "target": "esnext"
       }
     },
     "entry": [
@@ -65,7 +64,7 @@
     "cpx": "^1.5.0",
     "happy-dom": "^8.1.4",
     "next": "^13.1.2",
-    "padua": "^1.0.1",
+    "padua": "^1.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-native": "^0.71.0",
