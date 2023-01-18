@@ -76,13 +76,11 @@ export function Projects() {
     refetchQueries: [{ query: getProjectsQuery }],
   })
 
-  const projects =
-    data?.project ??
-    ([] as {
-      id: number
-      name: string
-      tasks: { id: number; name: string; done: boolean }[]
-    }[])
+  const projects = (data?.project ?? []) as {
+    id: number
+    name: string
+    tasks: { id: number; name: string; done: boolean }[]
+  }[]
 
   if (error) return <p>Error loading data.</p>
   if (loading) return <p>Loading data.</p>
