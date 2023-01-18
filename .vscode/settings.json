@@ -1,3 +1,8 @@
 {
-  "eslint.workingDirectories": ["demo", "plugin"]
+  "eslint.workingDirectories": [
+    "demo/next",
+    "demo/vite",
+    "demo/hasura",
+    "plugin"
+  ]
 }

@@ -10,9 +10,8 @@ Plugins and demos to integrate Authentication into any React website or React Na
 - [Next.js Server-Side React Demo](https://github.com/tobua/iltio/tree/main/demo/next) - [Live Demo](https://iltio-next-demo.vercel.app)
   - iltio interface behind proxy
   - First party cookie for authentication token
-- Hasura React Demo (Coming Soon)
+- [Hasura React Demo](https://github.com/tobua/iltio/tree/main/demo/hasura) - [Live Demo](https://iltio-hasura-demo.vercel.app)
   - Backendless
-  - Anonymous login
 - [React Native Demo](https://github.com/tobua/iltio/tree/main/plugin/native)
 
 The following plugins are included in the repository.
