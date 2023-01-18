@@ -1,15 +1,13 @@
-import { ApolloClient, InMemoryCache, gql, NormalizedCacheObject } from '@apollo/client'
-
-let client: ApolloClient<NormalizedCacheObject>
+import { ApolloClient, InMemoryCache, gql } from '@apollo/client'
 
 export const createClient = (token: string) => {
-  return (client = new ApolloClient({
+  return new ApolloClient({
     uri: 'https://relieved-dinosaur-18.hasura.app/v1/graphql',
     cache: new InMemoryCache(),
     headers: {
       'x-token': token,
     },
-  }))
+  })
 }
 
 export const getProjectsQuery = gql`

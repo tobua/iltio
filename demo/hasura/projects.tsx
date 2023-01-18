@@ -7,10 +7,10 @@ import {
 } from './interface'
 import { Colors } from './main'
 
-const Form = ({ title, onAdd }) => (
+const Form = ({ title, onAdd }: { title: string; onAdd: (value: string) => void }) => (
   <form
     style={{ display: 'flex', justifyContent: 'space-between', gap: 20 }}
-    onSubmit={(event) => {
+    onSubmit={(event: any) => {
       event.preventDefault()
       onAdd(event.target[0].value)
       event.target[0].value = ''
@@ -35,7 +35,7 @@ const Form = ({ title, onAdd }) => (
 )
 
 const Notification = ({ loading, error }: { loading: boolean; error: boolean }) =>
-  (loading || error) && (
+  loading || error ? (
     <div
       style={{
         position: 'fixed',
@@ -50,27 +50,39 @@ const Notification = ({ loading, error }: { loading: boolean; error: boolean }) 
       {loading && <p>Loading</p>}
       {error && <p>Error</p>}
     </div>
-  )
+  ) : null
 
 export function Projects() {
   const { loading, error, data } = useQuery(getProjectsQuery)
 
-  const [addProject, { error: errorAddProject, data: dataAddProject, loading: loadingAddProject }] =
-    useMutation<any, { name: string }>(addProjectMutation, {
-      refetchQueries: [{ query: getProjectsQuery }],
-    })
-
-  const [addTask, { error: errorAddTask, data: dataAddTask, loading: loadingAddTask }] =
-    useMutation<any, { name: string; project: number }>(addTaskMutation, {
-      refetchQueries: [{ query: getProjectsQuery }],
-    })
-
-  const [
-    updateProject,
-    { error: errorUpdateProject, data: dataUpdateProject, loading: loadingUpdateProject },
-  ] = useMutation<any, { id: number; done: boolean }>(updateProjectMutation, {
+  const [addProject, { error: errorAddProject, loading: loadingAddProject }] = useMutation<
+    any,
+    { name: string }
+  >(addProjectMutation, {
     refetchQueries: [{ query: getProjectsQuery }],
   })
+
+  const [addTask, { error: errorAddTask, loading: loadingAddTask }] = useMutation<
+    any,
+    { name: string; project: number }
+  >(addTaskMutation, {
+    refetchQueries: [{ query: getProjectsQuery }],
+  })
+
+  const [updateProject, { error: errorUpdateProject, loading: loadingUpdateProject }] = useMutation<
+    any,
+    { id: number; done: boolean }
+  >(updateProjectMutation, {
+    refetchQueries: [{ query: getProjectsQuery }],
+  })
+
+  const projects =
+    data?.project ??
+    ([] as {
+      id: number
+      name: string
+      tasks: { id: number; name: string; done: boolean }[]
+    }[])
 
   if (error) return <p>Error loading data.</p>
   if (loading) return <p>Loading data.</p>
@@ -87,7 +99,7 @@ export function Projects() {
           addProject({ variables: { name: value } })
         }}
       />
-      {data.project.map((project) => (
+      {projects.map((project) => (
         <div
           key={project.id}
           style={{
