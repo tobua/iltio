@@ -4,6 +4,10 @@ Based on the React plugin the React Native plugin features the same functionalit
 
 ## Installation and Usage
 
+```sh
+npm install iltio react-native-localize
+```
+
 ```tsx
 import { NativeForm } from 'iltio/dist/native/index.js'
 

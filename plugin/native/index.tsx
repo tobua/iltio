@@ -11,11 +11,17 @@ import {
   TextStyle,
 } from 'react-native'
 import { Form } from '../react'
-import type { Props, NativeStyles, Variables, Styles } from '../types'
+import type { Props, NativeStyles, NativeVariables, Styles } from '../types'
 
 export { configure, Store, MemoryStorage } from '../store'
 export { authenticate, poll, confirm, resend, authorize, logout, remove } from '../route'
-export type { Variables, Styles, NativeStyles, Labels, ComponentTypes } from '../types'
+export type {
+  NativeVariables as Variables,
+  Styles,
+  NativeStyles,
+  Labels,
+  ComponentTypes,
+} from '../types'
 export { getNameType } from '../helper'
 
 const nativeInputTypeMap = {
@@ -24,7 +30,7 @@ const nativeInputTypeMap = {
   number: 'numeric',
 }
 
-type ComponentProps = { style?: StyleProp<ViewStyle & TextStyle>; variables: Variables }
+type ComponentProps = { style?: StyleProp<ViewStyle & TextStyle>; variables: NativeVariables }
 
 const NativeComponents = {
   Form: ({ style, ...props }: ComponentProps) => (
@@ -81,10 +87,9 @@ const NativeComponents = {
     <View
       style={[
         {
-          // TODO properties do not exist on view.
-          // borderWidth: 1,
-          // borderColor: variables.color,
-          // borderRadius: variables.borderRadius,
+          borderWidth: 1,
+          borderColor: variables.color,
+          borderRadius: variables.borderRadius,
           marginBottom: variables.space,
           paddingVertical: Platform.OS === 'android' ? 5 : variables.smallSpace,
           paddingHorizontal: variables.smallSpace,
@@ -123,8 +128,7 @@ const NativeComponents = {
       style={[
         {
           backgroundColor: variables.color,
-          // TODO does not exist on touchable.
-          // borderRadius: variables.borderRadius,
+          borderRadius: variables.borderRadius,
         },
         style.touchable,
       ]}
@@ -137,8 +141,6 @@ const NativeComponents = {
             textAlign: 'center',
             color: variables.contrast,
             padding: variables.smallSpace,
-            // TODO does not exist on text.
-            // borderRadius: variables.borderRadius,
           },
           style.text,
         ]}
@@ -167,7 +169,17 @@ const NativeComponents = {
   }: ComponentProps & {
     children: string
   }) => (
-    <Text style={[{ marginBottom: variables.space }, style]} {...props}>
+    <Text
+      style={[
+        {
+          backgroundColor: 'lightgray',
+          padding: variables.smallSpace,
+          marginBottom: variables.space,
+        },
+        style,
+      ]}
+      {...props}
+    >
       {children}
     </Text>
   ),
@@ -176,10 +188,9 @@ const NativeComponents = {
       style={[
         {
           flexDirection: 'column',
-          // TODO are the following 3 applicable to a View?
-          // borderWidth: 1,
-          // borderColor: variables.color,
-          // borderRadius: variables.borderRadius,
+          borderWidth: 1,
+          borderColor: variables.color,
+          borderRadius: variables.borderRadius,
           marginBottom: variables.space,
           padding: variables.smallSpace,
         },

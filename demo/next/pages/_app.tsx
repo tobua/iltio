@@ -56,7 +56,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <title>iltio Next.JS Demo</title>
         <meta
           name="description"
-          content="Demoes authentication with iltio featuring an interface proxy and first-party cookie."
+          content="Demos authentication with iltio featuring an interface proxy and first-party cookie."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>

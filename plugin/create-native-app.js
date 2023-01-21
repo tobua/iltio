@@ -32,6 +32,12 @@ execSync('npm install iltio react-native-localize --legacy-peer-deps', {
   stdio: 'inherit',
 })
 
+// Linking for react-native-localize.
+execSync('pod install', {
+  cwd: join(process.cwd(), 'app/ios'),
+  stdio: 'inherit',
+})
+
 console.log('')
 console.log('🍞 React Native App created inside /app.')
 console.log('🛠️  To run the example with the plugin included:')

@@ -45,7 +45,6 @@ test('Can configure the token and the storage keys.', async () => {
     error: false,
     codeToken,
     registration: true,
-    pollLink: 'https://iltio.com/api/verify/poll',
   })
 
   await userEvent.click(screen.getByLabelText(Label.submit))
@@ -151,7 +150,6 @@ test('Polling interval can be configured.', async () => {
     error: false,
     codeToken,
     registration: true,
-    pollLink: 'https://iltio.com/api/verify/poll',
   })
 
   await userEvent.click(screen.getByLabelText(Label.submit))
@@ -203,7 +201,6 @@ test('Can configure the token on the JSX tag as well.', async () => {
     error: false,
     codeToken,
     registration: true,
-    pollLink: 'https://iltio.com/api/verify/poll',
   })
 
   await userEvent.click(screen.getByLabelText(Label.submit))

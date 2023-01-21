@@ -7,7 +7,7 @@ import {
   FormHTMLAttributes,
 } from 'react'
 
-export type Variables = {
+export interface Variables {
   color?: string
   contrast?: string
   borderRadius?: number | string
@@ -15,6 +15,10 @@ export type Variables = {
   space?: number | string
   fontSize?: number | string
   fontFamily?: string
+}
+
+export interface NativeVariables extends Variables {
+  borderRadius?: number
 }
 
 export type Styles = {

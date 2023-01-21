@@ -41,7 +41,6 @@ test('Can successfully register with a mail address.', async () => {
     error: false,
     codeToken,
     registration: true,
-    pollLink: 'https://iltio.com/api/verify/poll',
   })
 
   await userEvent.click(screen.getByLabelText(Label.submit))
@@ -93,7 +92,6 @@ test('Can login with the same mail address.', async () => {
     error: false,
     codeToken,
     registration: false,
-    pollLink: 'https://iltio.com/api/verify/poll',
   })
 
   await userEvent.click(screen.getByLabelText(Label.submit))
@@ -113,27 +111,23 @@ test('authenticate: Can successfully register and login.', async () => {
     error: false,
     codeToken: '123',
     registration: true,
-    pollLink: 'https://iltio.com/api/verify/poll',
   })
 
   let result = await authenticate('me@me.com')
 
   expect(result.error).toBe(false)
   expect(result.codeToken).toBe(getResponse().codeToken)
-  expect(result.pollLink).toBe(getResponse().pollLink)
   expect(result.registration).toBe(true)
 
   setResponse({
     error: false,
     codeToken: '456',
     registration: false,
-    pollLink: 'https://iltio.com/api/verify/poll',
   })
 
   result = await authenticate('me@me.com')
 
   expect(result.error).toBe(false)
   expect(result.codeToken).toBe(getResponse().codeToken)
-  expect(result.pollLink).toBe(getResponse().pollLink)
   expect(result.registration).toBe(false)
 })
