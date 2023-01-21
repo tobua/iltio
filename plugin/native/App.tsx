@@ -48,17 +48,14 @@ const inputWrapperStyles = (variables: any) => ({
   borderColor: variables.color,
   borderRadius: variables.borderRadius,
   marginBottom: variables.space,
-  paddingVertical: variables.smallSpace,
+  paddingVertical: Platform.OS === 'android' ? 5 : variables.smallSpace,
 })
 
-const CustomInput = ({ variables, style, onChange, type, ...props }: any) => (
-  <View style={inputWrapperStyles(variables)}>
+const CustomInput = ({ variables, style, onChange, _type, ...props }: any) => (
+  <View style={[inputWrapperStyles(variables), style.view]}>
     <TextInput
       onChangeText={(value: string) => onChange({ target: { value } })}
-      style={{
-        ...styles.inputElement,
-        ...style,
-      }}
+      style={[styles.inputElement, style.input]}
       keyboardType="email-address"
       autoCapitalize="none"
       autoCorrect={false}
@@ -69,24 +66,29 @@ const CustomInput = ({ variables, style, onChange, type, ...props }: any) => (
 
 const CustomButton = ({ variables, style, onClick, children, ...props }: any) => (
   <TouchableOpacity
-    style={{
-      backgroundColor: variables.color,
-      borderRadius: 5,
-      ...style,
-    }}
+    style={[
+      {
+        backgroundColor: variables.color,
+        borderRadius: 5,
+      },
+      style.touchable,
+    ]}
     {...props}
     onPress={onClick}
   >
     <Text
-      style={{
-        textAlign: 'center',
-        color: variables.contrast,
-        padding: variables.smallSpace,
-        borderRadius: variables.borderRadius,
-        fontSize: 18,
-        fontWeight: 'bold',
-        fontFamily: Platform.OS === 'android' ? 'serif' : 'Times New Roman',
-      }}
+      style={[
+        {
+          textAlign: 'center',
+          color: variables.contrast,
+          padding: variables.smallSpace,
+          borderRadius: variables.borderRadius,
+          fontSize: 18,
+          fontWeight: 'bold',
+          fontFamily: Platform.OS === 'android' ? 'serif' : 'Times New Roman',
+        },
+        style.text,
+      ]}
     >
       {children}
     </Text>
@@ -95,26 +97,31 @@ const CustomButton = ({ variables, style, onClick, children, ...props }: any) =>
 
 const CustomPhoneWrapper = ({ style, variables, ...props }: any) => (
   <View
-    style={{
-      flexDirection: 'column',
-      borderWidth: 0,
-      borderColor: variables.color,
-      borderRadius: variables.borderRadius,
-      marginBottom: variables.space,
-      ...style,
-    }}
+    style={[
+      {
+        flexDirection: 'column',
+        borderWidth: 0,
+        borderColor: variables.color,
+        borderRadius: variables.borderRadius,
+        marginBottom: variables.space,
+      },
+      style,
+    ]}
     {...props}
   />
 )
 
 const CustomPhoneTop = ({ style, variables, ...props }: any) => (
   <View
-    style={{
-      flexDirection: 'row',
-      borderBottomWidth: 1,
-      borderColor: variables.color,
-      paddingVertical: variables.smallSpace,
-    }}
+    style={[
+      {
+        flexDirection: 'row',
+        borderBottomWidth: 1,
+        borderColor: variables.color,
+        alignItems: 'center',
+      },
+      style,
+    ]}
     {...props}
   />
 )

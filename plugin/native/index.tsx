@@ -93,6 +93,7 @@ const NativeComponents = {
           marginBottom: variables.space,
           paddingVertical: Platform.OS === 'android' ? 5 : variables.smallSpace,
           paddingHorizontal: variables.smallSpace,
+          padding: 0,
         },
         style.view,
       ]}
@@ -192,7 +193,7 @@ const NativeComponents = {
           borderColor: variables.color,
           borderRadius: variables.borderRadius,
           marginBottom: variables.space,
-          padding: variables.smallSpace,
+          paddingHorizontal: variables.smallSpace,
         },
         style,
       ]}
@@ -200,7 +201,16 @@ const NativeComponents = {
     />
   ),
   PhoneTop: ({ style, variables, ...props }: ComponentProps) => (
-    <View style={[{ flexDirection: 'row' }, style]} {...props} />
+    <View
+      style={[
+        {
+          flexDirection: 'row',
+          alignItems: 'center',
+        },
+        style,
+      ]}
+      {...props}
+    />
   ),
   PhoneCountry: ({
     variables,
@@ -224,7 +234,6 @@ const NativeComponents = {
         {
           display: 'flex',
           flexDirection: 'row',
-          marginRight: variables.smallSpace,
         },
         style.touchable,
       ]}
@@ -243,7 +252,7 @@ const NativeComponents = {
     style?: { wrapper?: StyleProp<ViewStyle>; content?: StyleProp<ViewStyle> }
   }) => (
     <ScrollView
-      style={[{ height: 200 }, style.wrapper]}
+      style={[{ height: 200, marginBottom: variables.smallSpace }, style.wrapper]}
       contentContainerStyle={[
         {
           display: 'flex',
@@ -299,6 +308,8 @@ const NativeComponents = {
       style={[
         {
           minWidth: 100,
+          paddingHorizontal: variables.smallSpace,
+          paddingVertical: Platform.OS === 'android' ? 5 : variables.smallSpace,
         },
         style,
       ]}
