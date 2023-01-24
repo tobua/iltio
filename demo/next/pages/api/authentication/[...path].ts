@@ -1,3 +1,3 @@
 import { createHandler } from 'iltio/next'
 
-export default createHandler()
+export default createHandler({ verifyPage: '/' })

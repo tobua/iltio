@@ -1,8 +1,20 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getCookie, setCookie, deleteCookie, hasCookie } from 'cookies-next'
+import { joinUrl } from './helper'
+
+const inferRouteFromPath = (path: string | string[]) => {
+  if (!Array.isArray(path)) {
+    path = [path]
+  }
+  const lastIndex = path.length - 1
+  return path[lastIndex]
+}
+
+const isRelativeUrl = (url: string) => url.indexOf('http://') !== 0 && url.indexOf('https://') !== 0
 
 type Options = {
   referrer?: string
+  verifyPage?: string
   sameSite?: boolean | 'lax' | 'none' | 'strict'
   path?: string
   maxAge?: number
@@ -12,7 +24,7 @@ type Options = {
 
 export const createHandler = (inputs: Options = {}) =>
   async function handler(request: NextApiRequest, response: NextApiResponse<any>) {
-    const { referrer, ...cookieOptions } = inputs
+    const { referrer, verifyPage, ...cookieOptions } = inputs
     const addCookie = (key: string, value: string) =>
       setCookie(key, value, {
         req: request,
@@ -24,12 +36,15 @@ export const createHandler = (inputs: Options = {}) =>
       })
 
     const { path, ...queryParameters } = request.query
+    const route = inferRouteFromPath(path)
+    const authenticateRoute = route === 'authenticate' || route === 'resend-code'
+    const verifyRoute = route === 'confirm' || route === 'poll'
 
     if (!Array.isArray(path)) {
       return response.status(500).json({ error: 'Invalid path.' })
     }
 
-    if (path.includes('logout') || path.includes('delete')) {
+    if (route === 'logout' || route === 'delete') {
       deleteCookie('auth-token', { req: request, res: response })
       deleteCookie('auth-verify-token', { req: request, res: response })
       deleteCookie('auth-name', { req: request, res: response })
@@ -37,7 +52,8 @@ export const createHandler = (inputs: Options = {}) =>
 
     // Move codeToken to query params (relevant for HTTP only cookies).
     if (
-      path.includes('verify') &&
+      verifyRoute &&
+      !queryParameters.token &&
       hasCookie('auth-verify-token', { req: request, res: response })
     ) {
       queryParameters.token = getCookie('auth-verify-token', {
@@ -49,7 +65,7 @@ export const createHandler = (inputs: Options = {}) =>
     const tokenCookie = getCookie('auth-token', { req: request, res: response })
 
     // Move token from cookie to GET parameters.
-    if (typeof tokenCookie === 'string') {
+    if (typeof tokenCookie === 'string' && tokenCookie.length !== 0) {
       const authorizeResponse = await (
         await fetch(`https://iltio.com/api/authorize?token=${encodeURIComponent(tokenCookie)}`)
       ).json()
@@ -59,6 +75,14 @@ export const createHandler = (inputs: Options = {}) =>
         deleteCookie('auth-token', { req: request, res: response })
       } else {
         queryParameters.token = tokenCookie as string
+      }
+    }
+
+    if (authenticateRoute && verifyPage) {
+      if (isRelativeUrl(verifyPage) && request.headers.referer) {
+        queryParameters['verify-page'] = joinUrl(verifyPage, request.headers.referer)
+      } else {
+        queryParameters['verify-page'] = verifyPage
       }
     }
 
@@ -74,7 +98,7 @@ export const createHandler = (inputs: Options = {}) =>
     const fetchResponse = await fetch(url, options)
     const { token, codeToken, ...data } = await fetchResponse.json()
 
-    if (path.includes('verify') && token && token.length === 64) {
+    if (verifyRoute && token && token.length === 64) {
       addCookie('auth-token', token)
       data.token = 'next'
 
@@ -83,7 +107,7 @@ export const createHandler = (inputs: Options = {}) =>
       }
     }
 
-    if (path.includes('authenticate') && codeToken && codeToken.length === 64) {
+    if (route === 'authenticate' && codeToken && codeToken.length === 64) {
       addCookie('auth-verify-token', codeToken)
 
       if (typeof queryParameters.name === 'string') {
