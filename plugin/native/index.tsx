@@ -10,7 +10,7 @@ import {
   ViewStyle,
   TextStyle,
 } from 'react-native'
-import { Form } from '../react'
+import { Form } from '../react-plugin'
 import type { Props, NativeStyles, NativeVariables, Styles } from '../types'
 
 export { configure, Store, MemoryStorage } from '../store'

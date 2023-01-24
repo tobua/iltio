@@ -1,4 +1,4 @@
-export { Form } from './react'
+export { Form } from './react-plugin'
 export { configure, Store, MemoryStorage, CookieStorage } from './store'
 export { authenticate, poll, confirm, resend, authorize, logout, remove } from './route'
 export type { Variables, Styles, NativeStyles, Labels, ComponentTypes } from './types'
