@@ -30,7 +30,7 @@ export default function User(props: Data) {
 
   return authenticated ? (
     <>
-      <p>Successfully logged in as "{name}".</p>
+      <p>Successfully logged in as &quot;{name}&quot;.</p>
       <button
         className={styles.button}
         onClick={() => {

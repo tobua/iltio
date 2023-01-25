@@ -2,7 +2,7 @@ import { parse } from 'cookie'
 import { BasicStorage, Configuration } from './types'
 
 export const MemoryStorage = {
-  data: {},
+  data: {} as { [key: string]: string },
   getItem: (key: string) => MemoryStorage.data[key],
   setItem: (key: string, value: any) => {
     MemoryStorage.data[key] = value
