@@ -1,5 +1,6 @@
 {
   "name": "iltio-svelte-demo",
+  "type": "module",
   "scripts": {
     "dev": "vite dev --port 3000",
     "build": "vite build",
@@ -19,5 +20,9 @@
     "typescript": "^4.9.3",
     "vite": "^4.0.0"
   },
-  "type": "module"
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "printWidth": 100
+  }
 }
