@@ -1,4 +1,5 @@
 import { useState, Show, onMount } from '@builder.io/mitosis'
+import Button from './Button.lite'
 
 const Label = {
   form: 'authentication-form',
@@ -83,83 +84,92 @@ export default function Authentication(props: Props) {
     <form aria-label={Label.form} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-around', gap: '20px' }}>
         <Show when={props.allowMail}>
-          <button
-            type="button"
-            aria-label="authentication-tab-mail"
+          <Button
+            label={Label.tabMail}
             onClick={() => {
               setTab('mail')
-              setMailTabClass('active')
-              setPhoneTabClass('')
               setMailTabOpen(true)
               setPhoneTabOpen(false)
             }}
-            class={mailTabClass}
-            style={{
-              cursor: 'pointer',
-              color: 'black',
-              background: 'none',
-              border: 'none',
-              outline: 'none',
-              padding: '0px',
-              fontSize: '16px',
-              fontFamily: 'inherit',
-              fontWeight: tab === 'mail' ? 'bold' : 'auto',
-            }}
+            currentTab={tab}
+            tab="mail"
           >
             Mail
-          </button>
+          </Button>
         </Show>
         <Show when={props.allowPhone}>
-          <button
-            type="button"
-            aria-label="authentication-tab-phone"
+          <Button
+            label={Label.tabPhone}
             onClick={() => {
               setTab('phone')
-              setMailTabClass('')
-              setPhoneTabClass('active')
               setMailTabOpen(false)
               setPhoneTabOpen(true)
             }}
-            class={phoneTabClass}
-            style={{
-              cursor: 'pointer',
-              color: 'black',
-              background: 'none',
-              border: 'none',
-              outline: 'none',
-              padding: '0px',
-              fontSize: '16px',
-              fontFamily: 'inherit',
-              fontWeight: tab === 'phone' ? 'bold' : 'auto',
-            }}
+            currentTab={tab}
+            tab="phone"
           >
             Phone
-          </button>
+          </Button>
         </Show>
       </div>
-      <input
-        aria-label={Label.inputMail}
-        aria-invalid={false}
-        value={mail}
-        onChange={(event) => setMail(event.target.value)}
-        required
-        placeholder="Mail"
-        type="email"
+      <Show when={mailTabOpen}>
+        <input
+          aria-label={Label.inputMail}
+          aria-invalid={false}
+          value={mail}
+          onChange={(event) => setMail(event.target.value)}
+          placeholder="Mail"
+          type="email"
+          style={{
+            borderWidth: '1px',
+            borderStyle: 'solid',
+            borderColor: 'black',
+            padding: '9px',
+            outline: 'none',
+            borderRadius: '0px',
+            fontSize: '16px',
+            fontFamily: 'inherit',
+            backgroundColor: 'inherit',
+          }}
+        />
+      </Show>
+      <Show when={phoneTabOpen}>
+        <input
+          aria-label={Label.inputPhone}
+          aria-invalid={false}
+          value={phone}
+          onChange={(event) => setPhone(event.target.value)}
+          placeholder="Phone"
+          type="tel"
+          style={{
+            borderWidth: '1px',
+            borderStyle: 'solid',
+            borderColor: 'black',
+            padding: '9px',
+            outline: 'none',
+            borderRadius: '0px',
+            fontSize: '16px',
+            fontFamily: 'inherit',
+            backgroundColor: 'inherit',
+          }}
+        />
+      </Show>
+      <button
+        type="submit"
+        aria-label={Label.submit}
         style={{
-          borderWidth: '1px',
-          borderStyle: 'solid',
-          borderColor: 'black',
-          padding: '9px',
-          outline: 'none',
+          backgroundColor: 'black',
+          border: 'none',
+          color: 'white',
+          padding: '10px',
+          cursor: 'pointer',
           borderRadius: '0px',
           fontSize: '16px',
           fontFamily: 'inherit',
-          backgroundColor: 'inherit',
         }}
-      />
-      <p>
-        Hello <span>{tab}</span>!
-      </p>
+      >
+        Submit
+      </button>
     </form>
   )
 }
