@@ -1,5 +1,5 @@
 package-lock.json
 node_modules
-demo/mitosis/*/dist
-demo/mitosis/*/build
-demo/mitosis/*/.svelte-kit
+demo/frameworks/*/dist
+demo/frameworks/*/build
+demo/frameworks/*/.svelte-kit
