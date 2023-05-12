@@ -1,0 +1,30 @@
+export const Label = {
+  form: 'authentication-form',
+  title: 'authentication-title',
+  tabMail: 'authentication-tab-mail',
+  tabPhone: 'authentication-tab-phone',
+  inputMail: 'authentication-input-mail',
+  inputPhone: 'authentication-input-phone',
+  submit: 'authentication-submit',
+  inputNumber: 'authentication-input-number',
+  phoneCountry: 'authentication-phone-country',
+  resendCode: 'authentication-resend-code',
+  registration: 'authentication-registration',
+  phoneInputCountrySearch: 'authentication-phone-input-country-search',
+  phoneCountryOption: 'authentication-phone-country-option',
+}
+
+export const Text = {
+  RegistrationMessage: 'A new account was created for you.',
+  CodeSentMessage: 'Enter the code received in your mail below or confirm through the link.',
+  CodeInputPlaceholder: 'Code',
+  LoadingButton: 'Loading...',
+  MailInputPlaceholder: 'Mail',
+  CodeExpiredError: 'Code expired, please try again.',
+  UnknownError: 'An unknown error occurred.',
+  InvalidPhoneNumberError: 'Please enter a valid phone number.',
+  InvalidMailError: 'Please enter a valid mail address.',
+  FilterCountriesInputPlaceholder: 'Filter Countries',
+  PhoneInputPlaceholder: 'Phone',
+  CodeResentMessage: 'A new code is being sent to you.',
+}

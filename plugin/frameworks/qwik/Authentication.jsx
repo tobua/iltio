@@ -2,7 +2,7 @@ import { Fragment, component$, h, useStore } from '@builder.io/qwik'
 import { Label, defaultVariables, defaultLabels, Store, configure, app, Props } from 'iltio'
 
 const components = {
-  Form: component$<{ children: any }>(({ children }) => (
+  Form: component$(({ children }) => (
     <form
       style={{
         display: 'flex',

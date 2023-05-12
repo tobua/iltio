@@ -10,7 +10,7 @@ import {
   ComponentTypes,
   Variables,
   Styles,
-} from './types'
+} from '../types'
 
 type ComponentProps = { style?: Styles; variables: Variables }
 
@@ -129,7 +129,7 @@ export const components = {
         borderStyle: 'solid',
         borderColor: valid ? variables.color : 'red',
         borderRadius: variables.borderRadius,
-        paddingLeft: 10,
+        paddingLeft: variables.smallSpace,
         ...style,
       }}
       {...props}
@@ -160,6 +160,7 @@ export const components = {
         background: 'none',
         outline: 'none',
         padding: 0,
+        cursor: 'pointer',
         fontSize: variables.fontSize,
         fontFamily: variables.fontFamily,
         ...style.button,
@@ -198,6 +199,7 @@ export const components = {
         width: '100%',
         fontSize: variables.fontSize,
         fontFamily: variables.fontFamily,
+        borderColor: valid ? variables.color : 'red',
         ...style,
       }}
       {...props}

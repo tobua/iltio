@@ -18,11 +18,7 @@
         <button
           type="button"
           :aria-label="Label.tabMail"
-          @click="
-            tab = 'mail'
-            mailTabOpen = true
-            phoneTabOpen = false
-          "
+          @click="openTab('mail')"
           :style="{
             cursor: 'pointer',
             color: 'black',
@@ -32,6 +28,7 @@
             padding: '0px',
             fontSize: '16px',
             fontFamily: 'inherit',
+            fontWeight: mailTabOpen ? 'bold' : 'inherit',
           }"
         >
           Mail
@@ -42,11 +39,7 @@
         <button
           type="button"
           :aria-label="Label.tabPhone"
-          @click="
-            tab = 'phone'
-            mailTabOpen = false
-            phoneTabOpen = true
-          "
+          @click="openTab('phone')"
           :style="{
             cursor: 'pointer',
             color: 'black',
@@ -56,6 +49,7 @@
             padding: '0px',
             fontSize: '16px',
             fontFamily: 'inherit',
+            fontWeight: phoneTabOpen ? 'bold' : 'inherit',
           }"
         >
           Phone
@@ -110,6 +104,7 @@
     <button
       type="submit"
       :aria-label="Label.submit"
+      @click="submit"
       :style="{
         backgroundColor: 'black',
         border: 'none',
@@ -121,7 +116,7 @@
         fontFamily: 'inherit',
       }"
     >
-      Submit
+      {{ loading ? 'Loading...' : 'Submit' }}
     </button>
   </form>
 </template>
@@ -152,6 +147,18 @@ export default {
       mailTabClass: '',
       Label,
     }
+  },
+
+  methods: {
+    openTab: function (newTab) {
+      this.tab = newTab
+      this.mailTabOpen = newTab === 'mail'
+      this.phoneTabOpen = newTab !== 'mail'
+    },
+    submit: function (event) {
+      event.preventDefault()
+      this.loading = true
+    },
   },
 
   created() {

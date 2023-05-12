@@ -48,7 +48,8 @@
     "./solid": "./frameworks/solid/Authentication.jsx",
     "./vue": "./frameworks/vue/Authentication.vue",
     "./svelte": "./frameworks/svelte/Authentication.svelte",
-    "./qwik": "./frameworks/qwik/Authentication.jsx"
+    "./qwik": "./frameworks/qwik/Authentication.jsx",
+    "./base": "./frameworks/base/Authentication.jsx"
   },
   "types": "dist/index.d.ts",
   "files": [
@@ -64,21 +65,21 @@
     "token"
   ],
   "devDependencies": {
-    "@builder.io/qwik": "^0.100.0",
+    "@builder.io/qwik": "^1.1.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
     "@types/cookie": "^0.5.1",
     "@types/styled-components": "^5.1.26",
     "cpx": "^1.5.0",
-    "happy-dom": "^9.1.0",
-    "next": "^13.2.4",
+    "happy-dom": "^9.16.0",
+    "next": "^13.4.2",
     "padua": "^1.2.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-native": "^0.71.5",
-    "styled-components": "^5.3.9",
-    "vitest": "^0.29.8"
+    "react-native": "^0.71.8",
+    "styled-components": "^5.3.10",
+    "vitest": "^0.31.0"
   },
   "prettier": "padua/configuration/.prettierrc.json",
   "eslintConfig": {

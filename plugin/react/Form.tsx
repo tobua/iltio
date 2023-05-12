@@ -1,13 +1,16 @@
 import React, { FormEventHandler, useCallback, useEffect, useMemo, useState } from 'react'
-import { Label } from './label'
-import { Phone, getNumberCountryPrefix } from './phone/Phone'
+import { Label, Text } from '../text'
+import { Phone } from './Phone'
 import { components } from './components'
-import { Props } from './types'
-import { Store, app, configure } from './store'
-import { authenticate, confirm, poll } from './route'
-import { defaultVariables, defaultLabels, validateEmail, validatePhone } from './helper'
-import { Resend } from './resend'
+import { Props } from '../types'
+import { Store, app, configure } from '../store'
+import { authenticate, confirm, poll } from '../route'
+import { defaultVariables, defaultLabels, validateEmail, validatePhone } from '../helper'
+import { countries } from '../data/countries'
+import { Resend } from './Resend'
 
+// TODO rename to Authentication as well.
+// TODO export as ./react
 export function Form({
   configuration,
   allowPhone = true,
@@ -51,7 +54,7 @@ export function Form({
         const currentMailValid = validateEmail(mail)
         setMailValid(currentMailValid)
         if (!currentMailValid) {
-          setError('Please enter a valid mail address.')
+          setError(Text.InvalidMailError)
           return
         }
         name = mail
@@ -59,11 +62,11 @@ export function Form({
 
       if (tab === 'phone' && allowPhone) {
         const removeLeadingZeros = String(Number(phone))
-        const fullPhone = getNumberCountryPrefix(countryCode) + removeLeadingZeros
+        const fullPhone = countries[countryCode].prefix + removeLeadingZeros
         const currentPhoneValid = validatePhone(fullPhone)
         setPhoneValid(currentPhoneValid)
         if (!currentPhoneValid) {
-          setError('Please enter a valid phone number.')
+          setError(Text.InvalidPhoneNumberError)
           return
         }
         name = fullPhone
@@ -85,7 +88,7 @@ export function Form({
       setLoading(false)
 
       if (localError) {
-        setError(localError === true ? 'An unknown error occurred.' : localError)
+        setError(localError === true ? Text.UnknownError : localError)
         return
       }
 
@@ -95,6 +98,7 @@ export function Form({
     [mail, phone, allowMail, allowPhone, tab]
   )
 
+  // TODO return backend errors as status code numbers.
   const handleCode = useCallback(
     async (code: string) => {
       if (code.length === 4) {
@@ -105,7 +109,7 @@ export function Form({
           if (localError === 'Code invalid or expired.') {
             Store.removeCodeToken()
             setSubmitted(false)
-            setError('Code expired, please try again.')
+            setError(Text.CodeExpiredError)
           }
 
           if (localError === 'Wrong code entered.') {
@@ -142,7 +146,7 @@ export function Form({
         if (localError === 'Code expired.') {
           Store.removeCodeToken()
           setSubmitted(false)
-          setError('Code expired, please try again.')
+          setError(Text.CodeExpiredError)
         }
         return
       }
@@ -166,6 +170,7 @@ export function Form({
       configure(configuration)
     }
 
+    // TODO refactor polling to fit into core.
     if (submitted) {
       // Continue polling after page reload in verification stage.
       app.pollInterval = setInterval(checkVerified, app.pollDuration)
@@ -216,7 +221,7 @@ export function Form({
               valid={mailValid}
               variables={variables}
               style={style.inputMail}
-              placeholder="Mail"
+              placeholder={Text.MailInputPlaceholder}
               type="email"
             />
           )}
@@ -245,7 +250,7 @@ export function Form({
             style={style.button}
             variables={variables}
           >
-            {loading ? 'Loading...' : labels.submit}
+            {loading ? Text.LoadingButton : labels.submit}
           </Components.Button>
         </>
       )}
@@ -257,18 +262,18 @@ export function Form({
               style={style.message}
               variables={variables}
             >
-              A new account was created for you.
+              {Text.RegistrationMessage}
             </Components.Message>
           )}
           <Components.Message style={style.message} variables={variables}>
-            Enter the code received in your mail below or confirm through the link.
+            {Text.CodeSentMessage}
           </Components.Message>
           <Components.Input
             aria-label={Label.inputNumber}
             onChange={(event) => handleCode(event.target.value)}
             valid={codeValid}
             required
-            placeholder="Code"
+            placeholder={Text.CodeInputPlaceholder}
             type="number"
             maxLength={4}
             style={{ textAlign: 'center', ...style.inputCode }}

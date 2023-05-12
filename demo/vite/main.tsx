@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { Form, Store, configure, authorize, logout, remove } from 'iltio'
+import { Authentication } from 'iltio/base'
 import { CustomUIComponents } from './custom-ui-components'
 
 configure({
@@ -127,6 +128,9 @@ const App = () => {
       <p style={{ margin: 0 }}>
         Enter an email address or phone number above to register or login to the demo application.
       </p>
+      <div>
+        <Authentication onSuccess={() => alert('success')} />
+      </div>
     </>
   )
 }

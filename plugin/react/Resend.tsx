@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react'
-import { Variables, Styles, Labels, ComponentTypes } from './types'
-import { Label } from './label'
-import { resend } from './route'
+import { Variables, Styles, Labels, ComponentTypes } from '../types'
+import { Label, Text } from '../text'
+import { resend } from '../route'
 
 export function Resend({
   Components,
@@ -16,15 +16,19 @@ export function Resend({
 }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
 
   const handleReset = useCallback(async () => {
     setLoading(true)
     setError('')
+    setSuccess('')
 
     const { error: localError } = await resend()
 
     if (localError) {
-      setError(typeof localError === 'string' ? localError : 'An error occurred.')
+      setError(typeof localError === 'string' ? localError : Text.UnknownError)
+    } else {
+      setSuccess(Text.CodeResentMessage)
     }
 
     setLoading(false)
@@ -39,12 +43,17 @@ export function Resend({
         style={style.button}
         variables={variables}
       >
-        {loading ? 'Loading...' : labels.resend}
+        {loading ? Text.LoadingButton : labels.resend}
       </Components.Button>
       {error && (
         <Components.Error style={style.error} variables={variables}>
           {error}
         </Components.Error>
+      )}
+      {success && (
+        <Components.Message style={style.message} variables={variables}>
+          {success}
+        </Components.Message>
       )}
     </>
   )
