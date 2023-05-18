@@ -18,10 +18,16 @@
         "target": "esnext"
       }
     },
+    "esbuild": {
+      "external": [
+        "iltio"
+      ]
+    },
     "entry": [
       "index.tsx",
       "native/index.tsx",
-      "next.tsx"
+      "next.tsx",
+      "frameworks/base/Authentication.tsx"
     ]
   },
   "dependencies": {
@@ -40,16 +46,34 @@
   "sideEffects": false,
   "main": "dist/index.js",
   "exports": {
-    ".": "./dist/index.js",
+    ".": {
+      "import": {
+        "default": "./dist/index.js",
+        "types": "./dist/index.d.ts"
+      },
+      "default": {
+        "default": "./dist/index.js",
+        "types": "./dist/index.d.ts"
+      }
+    },
     "./package.json": "./package.json",
     "./dist/native/index.js": "./dist/native/index.js",
     "./native": "./dist/native/index.js",
     "./next": "./dist/next.js",
     "./solid": "./frameworks/solid/Authentication.jsx",
-    "./vue": "./frameworks/vue/Authentication.vue",
+    "./vue": {
+      "import": {
+        "default": "./frameworks/vue/Authentication.vue"
+      }
+    },
     "./svelte": "./frameworks/svelte/Authentication.svelte",
     "./qwik": "./frameworks/qwik/Authentication.jsx",
-    "./base": "./frameworks/base/Authentication.jsx"
+    "./base": {
+      "import": {
+        "default": "./dist/frameworks/base/Authentication.js",
+        "types": "./dist/frameworks/base/Authentication.d.ts"
+      }
+    }
   },
   "types": "dist/index.d.ts",
   "files": [
@@ -65,22 +89,22 @@
     "token"
   ],
   "devDependencies": {
-    "@builder.io/qwik": "^1.1.1",
+    "@builder.io/qwik": "^1.1.4",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
     "@types/cookie": "^0.5.1",
     "@types/styled-components": "^5.1.26",
     "cpx": "^1.5.0",
-    "happy-dom": "^9.17.0",
+    "happy-dom": "^9.18.3",
     "next": "^13.4.2",
-    "padua": "^1.2.2",
+    "padua": "^1.2.3",
     "prettier-plugin-svelte": "^2.10.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-native": "^0.71.8",
     "styled-components": "^5.3.10",
-    "vitest": "^0.31.0"
+    "vitest": "^0.31.1"
   },
   "prettier": "padua/configuration/.prettierrc.json",
   "eslintConfig": {

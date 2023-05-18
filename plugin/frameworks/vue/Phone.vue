@@ -1,16 +1,16 @@
 <template>
-  <Components.PhoneWrapper :style="style.phoneWrapper" :variables="variables" :valid="phoneValid">
-    <Components.PhoneTop :style="style.phoneTop" :variables="variables">
-      <Components.PhoneCountry
+  <PhoneWrapper :style="style.phoneWrapper" :variables="variables" :valid="phoneValid">
+    <PhoneTop :style="style.phoneTop" :variables="variables">
+      <PhoneCountry
         :prefix="country.prefix"
         :flag="country.flag"
         :variables="variables"
-        @togglePicker="() => setOpen(!open)"
+        @click="() => setOpen(!open)"
         aria-label="phoneCountry"
         :data-country="countryCode"
         :style="style.phoneCountry"
       />
-      <Components.PhoneInput
+      <PhoneInput
         aria-label="inputPhone"
         :aria-invalid="!phoneValid"
         :value="phone"
@@ -22,14 +22,10 @@
         :placeholder="Text.PhoneInputPlaceholder"
         type="tel"
       />
-    </Components.PhoneTop>
-    <Components.PhoneCountryOptions
-      v-if="open"
-      :style="style.phoneCountryOptions"
-      :variables="variables"
-    >
-      <Components.Input
-        aria-label="phoneInputCountrySearch"
+    </PhoneTop>
+    <PhoneCountryOptions v-if="open" :style="style.phoneCountryOptions" :variables="variables">
+      <Input
+        :aria-label="Label.phoneInputCountrySearch"
         :value="filter"
         @input="(event) => setFilter(event.target.value)"
         :variables="variables"
@@ -38,7 +34,7 @@
         type="text"
       />
       <template v-for="item in Object.values(filteredCountries)" :key="item.abbreviation">
-        <Components.PhoneCountryOption
+        <PhoneCountryOption
           aria-label="phoneCountryOption"
           :data-testid="item.abbreviation"
           :variables="variables"
@@ -52,14 +48,21 @@
           "
         >
           {{ item.flag }} {{ item.name }}
-        </Components.PhoneCountryOption>
+        </PhoneCountryOption>
       </template>
-    </Components.PhoneCountryOptions>
-  </Components.PhoneWrapper>
+    </PhoneCountryOptions>
+  </PhoneWrapper>
 </template>
 
 <script>
-import { countries, Label, filterCountries } from 'iltio'
+import { countries, Text, Label, filterCountries } from 'iltio'
+import Input from './components/Input.vue'
+import PhoneWrapper from './components/PhoneWrapper.vue'
+import PhoneTop from './components/PhoneTop.vue'
+import PhoneInput from './components/PhoneInput.vue'
+import PhoneCountryOptions from './components/PhoneCountryOptions.vue'
+import PhoneCountryOption from './components/PhoneCountryOption.vue'
+import PhoneCountry from './components/PhoneCountry.vue'
 
 export default {
   props: {
@@ -76,7 +79,18 @@ export default {
     return {
       open: false,
       filter: '',
+      Text,
+      Label,
     }
+  },
+  components: {
+    Input,
+    PhoneWrapper,
+    PhoneTop,
+    PhoneInput,
+    PhoneCountryOptions,
+    PhoneCountryOption,
+    PhoneCountry,
   },
   computed: {
     filteredCountries() {
@@ -88,6 +102,7 @@ export default {
   },
   methods: {
     setOpen(value) {
+      console.log('set open', value)
       this.open = value
     },
     setFilter(value) {

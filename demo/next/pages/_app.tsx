@@ -2,7 +2,7 @@ import { useState } from 'react'
 import Head from 'next/head'
 import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
-import { Inter } from '@next/font/google'
+import { Inter } from 'next/font/google'
 import { authorize } from 'iltio'
 import styles from '@/styles/app.module.css'
 

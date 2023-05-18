@@ -1,7 +1,7 @@
 import React from 'react'
 import { Label } from 'iltio'
 
-export function Tabs({ multipleInputs, tab, Components, setTab, style, variables, labels }) {
+export function Tabs({ multipleInputs, tab, Components, setTab, style, variables, labels }: any) {
   if (!multipleInputs) {
     return null
   }

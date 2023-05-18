@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { countries, Label, filterCountries } from 'iltio'
+import { countries, Label, filterCountries, Text } from 'iltio'
 
 export function Phone({
   phoneValid,
@@ -10,7 +10,7 @@ export function Phone({
   setPhone,
   Components,
   style,
-}) {
+}: any) {
   const [open, setOpen] = useState(false)
   const [filter, setFilter] = useState('')
   const filteredCountries = filterCountries(filter)

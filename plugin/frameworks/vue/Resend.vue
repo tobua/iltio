@@ -1,55 +1,49 @@
 <template>
-  <div>
-    <Components.Button
-      aria-label="resend code"
-      @click="handleReset"
-      type="button"
-      :style="style.button"
-      :variables="variables"
-    >
-      {{ loading ? 'Loading...' : labels.resend }}
-    </Components.Button>
-    <Components.Error v-if="error" :style="style.error" :variables="variables">
-      {{ error }}
-    </Components.Error>
-    <Components.Message v-if="success" :style="style.message" :variables="variables">
-      {{ success }}
-    </Components.Message>
-  </div>
+  <Button
+    :aria-label="Label.resendCode"
+    @click="handleResend"
+    type="button"
+    :style="style.button"
+    :variables="variables"
+  >
+    {{ loading ? 'Loading...' : labels.resend }}
+  </Button>
+  <Error v-if="error" :style="style.error" :variables="variables">
+    {{ error }}
+  </Error>
+  <Message v-if="success" :style="style.message" :variables="variables">
+    {{ success }}
+  </Message>
 </template>
 
 <script>
-import { Label, Text } from 'iltio'
+import { Label } from 'iltio'
+import Button from './components/Button.vue'
+import Error from './components/Error.vue'
+import Message from './components/Message.vue'
 
 export default {
   name: 'Resend',
   props: {
-    Components: {
-      type: Object,
-      required: true,
-    },
-    style: {
-      type: Object,
-      default: () => ({}),
-    },
-    variables: {
-      type: Object,
-      default: () => ({}),
-    },
-    labels: {
-      type: Object,
-      required: true,
-    },
+    style: Object,
+    variables: Object,
+    labels: Object,
   },
   data() {
     return {
       loading: false,
       error: '',
       success: '',
+      Label,
     }
   },
+  components: {
+    Button,
+    Error,
+    Message,
+  },
   methods: {
-    async handleReset() {
+    async handleResend() {
       this.loading = true
       this.error = ''
       this.success = ''

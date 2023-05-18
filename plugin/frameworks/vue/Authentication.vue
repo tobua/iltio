@@ -1,6 +1,6 @@
 <template>
-  <Components.Form
-    :aria-label="labels.form"
+  <Form
+    :aria-label="Label.form"
     @submit.prevent="handleSubmit"
     :style="style.form"
     :variables="variables"
@@ -9,22 +9,21 @@
       <Tabs
         :multipleInputs="multipleInputs"
         :tab="tab"
-        :Components="Components"
-        @setTab="setTab"
+        :setTab="setTab"
         :style="style"
         :variables="variables"
         :labels="labels"
       />
-      <Components.Input
+      <Input
         v-if="allowMail && (!multipleInputs || tab === 'mail')"
-        :aria-label="labels.inputMail"
+        :aria-label="Label.inputMail"
         :aria-invalid="!mailValid"
         v-model="mail"
         required
         :valid="mailValid"
         :variables="variables"
         :style="style.inputMail"
-        placeholder="Text.MailInputPlaceholder"
+        :placeholder="Text.MailInputPlaceholder"
         type="email"
       />
       <Phone
@@ -32,37 +31,29 @@
         :variables="variables"
         :phoneValid="phoneValid"
         :countryCode="countryCode"
-        @setCountryCode="setCountryCode"
+        :setCountryCode="setCountryCode"
         :phone="phone"
         @setPhone="setPhone"
-        :Components="Components"
         :style="style"
       />
-      <Components.Error v-if="error" :style="style.error" :variables="variables">
+      <Error v-if="error" :style="style.error" :variables="variables">
         {{ error }}
-      </Components.Error>
-      <Components.Button
-        :aria-label="labels.submit"
-        @click="handleSubmit"
-        type="submit"
-        :style="style.button"
-        :variables="variables"
-      >
+      </Error>
+      <Button :aria-label="Label.submit" type="submit" :style="style.button" :variables="variables">
         {{ loading ? Text.LoadingButton : labels.submit }}
-      </Components.Button>
+      </Button>
     </template>
     <template v-else>
       <Code
-        :Components="Components"
         :style="style"
         :variables="variables"
         :labels="labels"
         :registration="registration"
         :codeValid="codeValid"
-        @handleCode="handleCode"
+        :handleCode="handleCode"
       />
     </template>
-  </Components.Form>
+  </Form>
 </template>
 
 <script>
@@ -71,32 +62,21 @@ import Phone from './Phone.vue'
 import Tabs from './Tabs.vue'
 import Code from './Code.vue'
 import Form from './components/Form.vue'
+import Input from './components/Input.vue'
+import Button from './components/Button.vue'
+import Error from './components/Error.vue'
 
 export default {
   props: {
     allowPhone: { type: Boolean, default: true },
     allowMail: { type: Boolean, default: true },
     initialCountryCode: { type: String, default: 'us' },
-    style: { type: Object, default: () => ({}) },
+    style: { type: Object, default: () => ({ phoneCountry: {}, phoneCountryOption: {} }) },
     variables: { type: Object, default: () => defaultVariables },
     labels: { type: Object, default: () => ({}) },
     Components: {
       type: Object,
-      default: () => ({
-        Form,
-        TabWrapper: Form,
-        Tab: Form,
-        Input: Form,
-        Button: Form,
-        Message: Form,
-        Error: Form,
-        PhoneCountry: Form,
-        PhoneCountryOptions: Form,
-        PhoneCountryOption: Form,
-        PhoneInput: Form,
-        PhoneTop: Form,
-        PhoneWrapper: Form,
-      }),
+      default: () => ({}),
     },
   },
   data() {
@@ -113,31 +93,38 @@ export default {
       registration: false,
       error: '',
       codeValid: true,
+      Text,
+      labels: { ...defaultLabels },
+      Label,
     }
   },
-  watch: {
-    Components: {
-      handler() {
-        this.Components = { ...components, ...this.Components }
-      },
-      deep: true,
-    },
-    variables: {
-      handler() {
-        this.variables = { ...defaultVariables, ...this.variables }
-      },
-      deep: true,
-    },
-    labels: {
-      handler() {
-        this.labels = { ...defaultLabels, ...this.labels }
-      },
-      deep: true,
-    },
+  components: {
+    Tabs,
+    Code,
+    Phone,
+    Form,
+    Input,
+    Button,
+    Error,
   },
   methods: {
     handleSubmit() {
-      console.log('submit')
+      this.loading = true
+      this.error = ''
+
+      setTimeout(() => {
+        const success = Math.random() > 0.5
+
+        this.loading = false
+        this.mailValid = success
+        this.phoneValid = success
+        this.registration = success
+        this.submitted = success
+
+        if (!success) {
+          this.error = 'Please enter a valid mail address or phone number.'
+        }
+      }, 2000)
     },
     handleCode(code) {
       console.log(code)
@@ -153,7 +140,7 @@ export default {
     },
   },
   mounted() {
-    console.log('effect')
+    // TODO check verified.
   },
 }
 </script>

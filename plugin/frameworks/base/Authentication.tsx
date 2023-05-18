@@ -14,7 +14,7 @@ export function Authentication({
   variables = defaultVariables,
   labels = {},
   Components = components,
-}) {
+}: any) {
   const [tab, setTab] = useState(allowMail ? 'mail' : 'phone')
   const [mail, setMail] = useState('')
   const [phone, setPhone] = useState('')

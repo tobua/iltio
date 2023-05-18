@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react'
 import { Label, Text } from 'iltio'
 
-export function Resend({ Components, style, variables, labels }) {
+export function Resend({ Components, style, variables, labels }: any) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')

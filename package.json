@@ -9,6 +9,7 @@
   "workspaces": [
     "demo/*",
     "demo/frameworks/*",
-    "plugin"
+    "plugin",
+    "test"
   ]
 }

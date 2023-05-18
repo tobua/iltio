@@ -1,9 +1,12 @@
 <template>
-  <form
-    :style="{ display: 'flex', flexDirection: 'column', gap: `${variables.space}px`, ...style }"
+  <div
+    :style="{
+      display: 'flex',
+      ...style,
+    }"
   >
     <slot />
-  </form>
+  </div>
 </template>
 
 <script>

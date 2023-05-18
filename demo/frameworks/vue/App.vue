@@ -5,6 +5,8 @@ import Authentication from 'iltio/vue'
 <template>
   <main :style="{ fontFamily: 'sans-serif' }">
     <h1>iltio Vue Demo</h1>
-    <Authentication token="123" allowMail="true" allowPhone="true" />
+    <div id="base" :style="{ display: 'flex', justifyContent: 'center' }">
+      <Authentication token="123" />
+    </div>
   </main>
 </template>

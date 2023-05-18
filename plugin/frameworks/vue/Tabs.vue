@@ -1,27 +1,31 @@
 <template>
-  <Components.TabWrapper :style="style.tabWrapper" :variables="variables">
-    <Components.Tab
-      aria-label="Tab Mail"
+  <TabWrapper :style="style.tabWrapper" :variables="variables">
+    <Tab
+      :aria-label="Label.tabMail"
       :active="tab === 'mail'"
-      @click="setTab('mail')"
+      @click.prevent="setTab('mail')"
       :variables="variables"
       :style="style.tab"
     >
       {{ labels.tabMail }}
-    </Components.Tab>
-    <Components.Tab
-      aria-label="Tab Phone"
+    </Tab>
+    <Tab
+      :aria-label="Label.tabPhone"
       :active="tab === 'phone'"
-      @click="setTab('phone')"
+      @click.prevent="setTab('phone')"
       :variables="variables"
       :style="style.tab"
     >
       {{ labels.tabPhone }}
-    </Components.Tab>
-  </Components.TabWrapper>
+    </Tab>
+  </TabWrapper>
 </template>
 
 <script>
+import { Label } from 'iltio'
+import TabWrapper from './components/TabWrapper.vue'
+import Tab from './components/Tab.vue'
+
 export default {
   name: 'Tabs',
   props: {
@@ -32,6 +36,15 @@ export default {
     style: Object,
     variables: Object,
     labels: Object,
+  },
+  data() {
+    return {
+      Label,
+    }
+  },
+  components: {
+    TabWrapper,
+    Tab,
   },
 }
 </script>

@@ -10,7 +10,7 @@ export function Code({
   registration,
   codeValid,
   handleCode,
-}) {
+}: any) {
   return (
     <>
       {registration && (
