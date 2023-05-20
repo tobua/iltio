@@ -22,12 +22,12 @@
     "cookie": "^0.5.0",
     "cookies-next": "^2.1.1",
     "iltio": "*",
-    "next": "13.4.2",
+    "next": "13.4.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "typescript": "5.0.4"
   },
   "devDependencies": {
-    "eslint-config-next": "13.4.2"
+    "eslint-config-next": "13.4.3"
   }
 }

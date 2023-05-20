@@ -1,11 +1,11 @@
 <script>
-  export let style;
-  export let variables;
+  export let style
+  export let variables
 </script>
 
 <div
-  style="display: flex; justify-content: space-around; gap: {variables.space};"
+  style="display: flex; justify-content: space-around; gap: {variables.space}px;"
   {...$$restProps}
 >
-    <slot />
+  <slot />
 </div>

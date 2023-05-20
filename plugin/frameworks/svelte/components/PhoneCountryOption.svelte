@@ -9,7 +9,7 @@
   type="button"
   style="margin: 0; padding: 0; border: none; background: none; outline: none; display: flex; cursor: pointer; max-width: 100%; font-weight: {selected
     ? 'bold'
-    : 'normal'}; font-size: {variables.fontSize}; font-family: {variables.fontFamily}; {style.button}"
+    : 'normal'}; font-size: {variables.fontSize}px; font-family: {variables.fontFamily}; {style.button}"
   {...$$restProps}
 >
   <span style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; {style.text}">

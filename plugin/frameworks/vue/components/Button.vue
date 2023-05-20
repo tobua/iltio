@@ -8,7 +8,7 @@
       padding: `${variables.smallSpace}px`,
       cursor: 'pointer',
       borderRadius: variables.borderRadius,
-      fontSize: variables.fontSize,
+      fontSize: `${variables.fontSize}px`,
       fontFamily: variables.fontFamily,
       ...style,
     }"

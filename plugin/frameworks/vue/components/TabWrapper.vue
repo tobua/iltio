@@ -6,7 +6,6 @@
       gap: `${variables.space}px`,
       ...style,
     }"
-    v-bind="$props"
   >
     <slot />
   </div>
