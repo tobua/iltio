@@ -13,28 +13,28 @@ export default defineConfig({
   projects: [
     // React Base
     {
-      name: 'chromium',
+      name: 'chromium-base',
       use: {
         ...devices['Desktop Chrome'],
         baseURL: 'http://localhost:3001',
       },
     },
-    // Svelte
-    {
-      name: 'chromium',
-      use: {
-        ...devices['Desktop Chrome'],
-        baseURL: 'http://localhost:3002',
-      },
-    },
     // Vue
-    {
-      name: 'chromium',
-      use: {
-        ...devices['Desktop Chrome'],
-        baseURL: 'http://localhost:3000',
-      },
-    },
+    // {
+    //   name: 'chromium-vue',
+    //   use: {
+    //     ...devices['Desktop Chrome'],
+    //     baseURL: 'http://localhost:3002',
+    //   },
+    // },
+    // Svelte
+    // {
+    //   name: 'chromium-svelte',
+    //   use: {
+    //     ...devices['Desktop Chrome'],
+    //     baseURL: 'http://localhost:3000',
+    //   },
+    // },
     // {
     //   name: 'firefox',
     //   use: { ...devices['Desktop Firefox'] },

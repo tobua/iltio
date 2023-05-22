@@ -6,12 +6,12 @@
         :flag="country.flag"
         :variables="variables"
         @click="() => setOpen(!open)"
-        aria-label="phoneCountry"
+        :aria-label="Label.phoneCountry"
         :data-country="countryCode"
         :style="style.phoneCountry"
       />
       <PhoneInput
-        aria-label="inputPhone"
+        :aria-label="Label.inputPhone"
         :aria-invalid="!phoneValid"
         :value="phone"
         @input="(event) => setPhone(event.target.value)"

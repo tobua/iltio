@@ -10,7 +10,7 @@
       padding: 0,
       fontSize: `${variables.fontSize}px`,
       fontFamily: variables.fontFamily,
-      ...(active && { fontWeight: 'bold' }),
+      fontWeight: active ? 'bold' : 'normal',
       ...style,
     }"
   >

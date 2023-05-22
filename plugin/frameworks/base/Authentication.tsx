@@ -1,5 +1,17 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { Label, Text, defaultVariables, defaultLabels, Store, app, configure } from 'iltio'
+import React, { FormEvent, useCallback, useEffect, useMemo, useState } from 'react'
+import {
+  Label,
+  Text,
+  defaultVariables,
+  defaultLabels,
+  Store,
+  app,
+  configure,
+  validateEmail,
+  validatePhone,
+  countries,
+  authenticate,
+} from 'iltio'
 import { Phone } from './Phone'
 import { components } from './Components'
 import { Tabs } from './Tabs'
@@ -33,25 +45,59 @@ export function Authentication({
   labels = useMemo(() => ({ ...defaultLabels, ...labels }), [labels])
   style = { phoneCountry: {}, phoneCountryOption: {}, ...style }
 
-  const handleSubmit = useCallback((event) => {
-    event.preventDefault()
-    setLoading(true)
-    setError('')
+  const handleSubmit = useCallback(
+    async (event: FormEvent<HTMLButtonElement>) => {
+      event.preventDefault()
+      setError('')
+      let name: string
 
-    setTimeout(() => {
-      const success = Math.random() > 0.5
+      if (tab === 'mail' && allowMail) {
+        const currentMailValid = validateEmail(mail)
+        setMailValid(currentMailValid)
+        if (!currentMailValid) {
+          setError(Text.InvalidMailError)
+          return
+        }
+        name = mail
+      }
+
+      if (tab === 'phone' && allowPhone) {
+        const removeLeadingZeros = String(Number(phone))
+        const fullPhone = countries[countryCode].prefix + removeLeadingZeros
+        const currentPhoneValid = validatePhone(fullPhone)
+        setPhoneValid(currentPhoneValid)
+        if (!currentPhoneValid) {
+          setError(Text.InvalidPhoneNumberError)
+          return
+        }
+        name = fullPhone
+      }
+
+      setLoading(true)
+
+      const {
+        codeToken,
+        error: localError,
+        registration: localRegistration,
+      } = await authenticate(name)
+
+      if (codeToken) {
+        Store.codeToken = codeToken
+        Store.name = name
+      }
 
       setLoading(false)
-      setMailValid(success)
-      setPhoneValid(success)
-      setRegistration(success)
-      setSubmitted(success)
 
-      if (!success) {
-        setError('Please enter a valid mail address or phone number.')
+      if (localError) {
+        setError(localError === true ? Text.UnknownError : localError)
+        return
       }
-    }, 2000)
-  }, [])
+
+      setRegistration(localRegistration)
+      setSubmitted(true)
+    },
+    [mail, phone, allowMail, allowPhone, tab]
+  )
 
   const handleCode = useCallback((code) => {
     setCodeValid(true)
@@ -123,7 +169,11 @@ export function Authentication({
             />
           )}
           {error && (
-            <Components.Error style={style.error} variables={variables}>
+            <Components.Error
+              aria-label={Label.inputError}
+              style={style.error}
+              variables={variables}
+            >
               {error}
             </Components.Error>
           )}

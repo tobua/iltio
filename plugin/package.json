@@ -48,12 +48,12 @@
   "exports": {
     ".": {
       "import": {
-        "default": "./dist/index.js",
-        "types": "./dist/index.d.ts"
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
       },
       "default": {
-        "default": "./dist/index.js",
-        "types": "./dist/index.d.ts"
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
       }
     },
     "./package.json": "./package.json",
@@ -70,8 +70,8 @@
     "./qwik": "./frameworks/qwik/Authentication.jsx",
     "./base": {
       "import": {
-        "default": "./dist/frameworks/base/Authentication.js",
-        "types": "./dist/frameworks/base/Authentication.d.ts"
+        "types": "./dist/frameworks/base/Authentication.d.ts",
+        "default": "./dist/frameworks/base/Authentication.js"
       }
     }
   },
@@ -98,7 +98,7 @@
     "cpx": "^1.5.0",
     "happy-dom": "^9.19.2",
     "next": "^13.4.3",
-    "padua": "^1.2.3",
+    "padua": "^1.2.4",
     "prettier-plugin-svelte": "^2.10.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

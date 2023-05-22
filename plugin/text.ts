@@ -12,6 +12,7 @@ export const Label = {
   registration: 'authentication-registration',
   phoneInputCountrySearch: 'authentication-phone-input-country-search',
   phoneCountryOption: 'authentication-phone-country-option',
+  inputError: 'authentication-input-error',
 }
 
 export const Text = {

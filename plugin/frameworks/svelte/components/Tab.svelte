@@ -8,7 +8,7 @@
   type="button"
   style="cursor: pointer; background: none; outline: none; border: none; padding: 0; color: {variables.color}; font-size: {variables.fontSize}px; font-family: {variables.fontFamily}; font-weight: {active
     ? 'bold'
-    : 'normal'};"
+    : 'normal'}; {style}"
   on:click
   {...$$restProps}
 >
