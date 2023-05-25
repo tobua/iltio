@@ -16,25 +16,25 @@ export default defineConfig({
       name: 'chromium-base',
       use: {
         ...devices['Desktop Chrome'],
-        baseURL: 'http://localhost:3001',
+        baseURL: 'http://localhost:3000',
       },
     },
     // Vue
-    // {
-    //   name: 'chromium-vue',
-    //   use: {
-    //     ...devices['Desktop Chrome'],
-    //     baseURL: 'http://localhost:3002',
-    //   },
-    // },
+    {
+      name: 'chromium-vue',
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: 'http://localhost:3001',
+      },
+    },
     // Svelte
-    // {
-    //   name: 'chromium-svelte',
-    //   use: {
-    //     ...devices['Desktop Chrome'],
-    //     baseURL: 'http://localhost:3000',
-    //   },
-    // },
+    {
+      name: 'chromium-svelte',
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: 'http://localhost:3002',
+      },
+    },
     // {
     //   name: 'firefox',
     //   use: { ...devices['Desktop Firefox'] },
@@ -44,10 +44,24 @@ export default defineConfig({
     //   use: { ...devices['Desktop Safari'] },
     // },
   ],
-  /* Run your local dev server before starting the tests */
-  // webServer: {
-  //   command: 'npm run start',
-  //   url: 'http://127.0.0.1:3000',
-  //   reuseExistingServer: !process.env.CI,
-  // },
+  webServer: [
+    // React
+    {
+      command: 'npm run dev --prefix ../demo/vite -- --port 3000',
+      url: 'http://localhost:3000',
+      reuseExistingServer: !process.env.CI,
+    },
+    // Vue
+    {
+      command: 'npm run dev --prefix ../demo/frameworks/vue -- --port 3001',
+      url: 'http://localhost:3001',
+      reuseExistingServer: !process.env.CI,
+    },
+    // Svelte
+    {
+      command: 'npm run dev --prefix ../demo/frameworks/svelte -- --port 3002',
+      url: 'http://localhost:3002',
+      reuseExistingServer: !process.env.CI,
+    },
+  ],
 })

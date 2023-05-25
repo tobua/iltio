@@ -129,7 +129,7 @@ const App = () => {
         Enter an email address or phone number above to register or login to the demo application.
       </p>
       <div id="base">
-        <Authentication token="demo" onSuccess={() => alert('success')} />
+        <Authentication configuration={{ token: 'demo' }} onSuccess={() => alert('success')} />
       </div>
     </>
   )

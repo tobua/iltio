@@ -17,7 +17,12 @@ export function Phone({
   const country = countries[countryCode]
 
   return (
-    <Components.PhoneWrapper style={style.phoneWrapper} variables={variables} valid={phoneValid}>
+    <Components.PhoneWrapper
+      aria-label={Label.phoneWrapper}
+      style={style.phoneWrapper}
+      variables={variables}
+      valid={phoneValid}
+    >
       <Components.PhoneTop style={style.phoneTop} variables={variables}>
         <Components.PhoneCountry
           prefix={country.prefix}

@@ -7,11 +7,11 @@
   >
     {{ Text.RegistrationMessage }}
   </Message>
-  <Message :style="style.message" :variables="variables">
+  <Message :aria-label="Label.messageConfirm" :style="style.message" :variables="variables">
     {{ Text.CodeSentMessage }}
   </Message>
   <Input
-    :aria-label="Label.inputNumber"
+    :aria-label="Label.inputCode"
     @change="handleCode"
     :valid="codeValid"
     required

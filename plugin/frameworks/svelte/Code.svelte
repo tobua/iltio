@@ -10,11 +10,11 @@
     {Text.RegistrationMessage}
   </Components.Message>
 {/if}
-<Components.Message style={style.message} {variables}>
+<Components.Message aria-label={Label.messageConfirm} style={style.message} {variables}>
   {Text.CodeSentMessage}
 </Components.Message>
 <Components.Input
-  aria-label={Label.inputNumber}
+  aria-label={Label.inputCode}
   on:change={(event) => handleCode(event.target.value)}
   valid={codeValid}
   required

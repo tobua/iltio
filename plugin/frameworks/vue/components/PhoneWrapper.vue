@@ -20,10 +20,7 @@ export default {
   props: {
     style: Object,
     variables: Object,
-    valid: {
-      type: Boolean,
-      default: true,
-    },
+    valid: Boolean,
   },
 }
 </script>

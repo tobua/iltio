@@ -1,6 +1,17 @@
 <script>
   import { onMount } from 'svelte'
-  import { Label, Text, defaultVariables, defaultLabels, Store } from 'iltio'
+  import {
+    Label,
+    Text,
+    defaultVariables,
+    defaultLabels,
+    Store,
+    configure,
+    validateEmail,
+    validatePhone,
+    authenticate,
+    countries,
+  } from 'iltio'
   import Phone from './Phone.svelte'
   import Tabs from './Tabs.svelte'
   import Code from './Code.svelte'
@@ -18,13 +29,13 @@
   import PhoneTop from './components/PhoneTop.svelte'
   import PhoneWrapper from './components/PhoneWrapper.svelte'
 
-  export let token = ''
   export let allowPhone = true
   export let allowMail = true
   export let initialCountryCode = 'us'
   export let style = { phoneCountry: {}, phoneCountryOption: {} }
   export let variables = defaultVariables
   export let labels = defaultLabels
+  export let configuration = {}
 
   let tab = allowMail ? 'mail' : 'phone'
   let mail = ''
@@ -54,10 +65,55 @@
     PhoneWrapper,
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    error = ''
+    let name
+
+    if (tab === 'mail' && allowMail) {
+      const currentMailValid = validateEmail(mail)
+      mailValid = currentMailValid
+      if (!currentMailValid) {
+        error = Text.InvalidMailError
+        return
+      }
+      name = mail
+    }
+
+    if (tab === 'phone' && allowPhone) {
+      const removeLeadingZeros = String(Number(phone))
+      const fullPhone = countries[countryCode].prefix + removeLeadingZeros
+      const currentPhoneValid = validatePhone(fullPhone)
+      phoneValid = currentPhoneValid
+      if (!currentPhoneValid) {
+        error = Text.InvalidPhoneNumberError
+        return
+      }
+      name = fullPhone
+    }
+
     loading = true
+
+    const {
+      codeToken,
+      error: localError,
+      registration: localRegistration,
+    } = await authenticate(name)
+
+    if (codeToken) {
+      Store.codeToken = codeToken
+      Store.name = name
+    }
+
+    loading = false
+
+    if (localError) {
+      error = localError === true ? Text.UnknownError : localError
+      return
+    }
+
+    registration = localRegistration
     submitted = true
-    console.log(mail)
   }
 
   const handleCode = (code) => {
@@ -73,6 +129,7 @@
   }
 
   const setPhone = (value) => {
+    console.log('pheon', value)
     phone = value
   }
 
@@ -81,7 +138,9 @@
   }
 
   onMount(() => {
-    console.log('effect')
+    if (configuration) {
+      configure(configuration)
+    }
   })
 </script>
 
@@ -115,7 +174,7 @@
       />
     {/if}
     {#if error}
-      <Components.Error style={style.error} {variables}>
+      <Components.Error style={style.error} {variables} aria-label={Label.inputError}>
         {error}
       </Components.Error>
     {/if}

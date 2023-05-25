@@ -18,18 +18,9 @@
 <script>
 export default {
   props: {
-    variables: {
-      type: Object,
-      required: true,
-    },
-    valid: {
-      type: Boolean,
-      default: true,
-    },
-    style: {
-      type: Object,
-      default: () => ({}),
-    },
+    variables: Object,
+    valid: Boolean,
+    style: Object,
   },
 }
 </script>

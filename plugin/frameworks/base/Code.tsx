@@ -22,11 +22,15 @@ export function Code({
           {Text.RegistrationMessage}
         </Components.Message>
       )}
-      <Components.Message style={style.message} variables={variables}>
+      <Components.Message
+        aria-label={Label.messageConfirm}
+        style={style.message}
+        variables={variables}
+      >
         {Text.CodeSentMessage}
       </Components.Message>
       <Components.Input
-        aria-label={Label.inputNumber}
+        aria-label={Label.inputCode}
         onChange={(event) => handleCode(event.target.value)}
         valid={codeValid}
         required

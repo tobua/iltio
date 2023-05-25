@@ -1,6 +1,23 @@
 import { rest } from 'msw'
 import { Label } from 'iltio'
 import { test, expect } from './setup.js'
+import { Page } from '@playwright/test'
+
+const wait = (duration: number) =>
+  new Promise((done) => {
+    setTimeout(done, duration * 1000)
+  })
+
+const loadPage = async (page: Page) => {
+  await page.goto('/')
+
+  const context = page.locator('#base')
+
+  // Svelte needs some time to bind handlers.
+  await wait(0.5)
+
+  return context
+}
 
 test('Has correct title.', async ({ page }) => {
   await page.goto('/')
@@ -8,9 +25,7 @@ test('Has correct title.', async ({ page }) => {
 })
 
 test('Proper styles and labels applied to initial elements.', async ({ page }) => {
-  await page.goto('/')
-
-  let context = page.locator('#base')
+  const context = await loadPage(page)
 
   const form = context.getByLabel(Label.form)
   await expect(form).toHaveCSS('display', 'flex')
@@ -29,9 +44,7 @@ test('Proper styles and labels applied to initial elements.', async ({ page }) =
 })
 
 test('Tabs working properly.', async ({ page }) => {
-  await page.goto('/')
-
-  let context = page.locator('#base')
+  const context = await loadPage(page)
 
   const tabMail = context.getByLabel(Label.tabMail)
   await expect(tabMail).toHaveCSS('font-weight', '700')
@@ -54,16 +67,16 @@ test('Tabs working properly.', async ({ page }) => {
 })
 
 test('Can open and use phone country dropdown.', async ({ page }) => {
-  await page.goto('/')
-  await page.reload()
-
-  let context = page.locator('#base')
+  const context = await loadPage(page)
 
   const tabPhone = context.getByLabel(Label.tabPhone)
   await tabPhone.click()
+
+  await wait(0.25) // Required for Svelte handlers.
+
   const phoneCountry = context.getByLabel(Label.phoneCountry)
   await expect(phoneCountry).toBeVisible()
-  await expect(phoneCountry).toHaveText('🇺🇸+1')
+  await expect(phoneCountry).toHaveText(/🇺🇸\s?\+1/)
   // Open country dropdown.
   await phoneCountry.click()
 
@@ -75,16 +88,16 @@ test('Can open and use phone country dropdown.', async ({ page }) => {
 
   await countryIndonesia.click()
 
-  await expect(phoneCountry).toHaveText('🇮🇩+62')
+  await expect(phoneCountry).toHaveText(/🇮🇩\s?\+62/)
+
+  // TODO test country filter input.
 })
 
-test('Shows an error if an invalid email inserted.', async ({ page }) => {
-  await page.goto('/')
-
-  let context = page.locator('#base')
+test('Shows an error if an invalid email address is inserted.', async ({ page }) => {
+  const context = await loadPage(page)
 
   const inputMail = context.getByLabel(Label.inputMail)
-  await inputMail.type('this-is-faulty')
+  await inputMail.type('this-is-faulty@test') // Passes browser validation for type="email"
 
   const submit = context.getByLabel(Label.submit)
   await submit.click()
@@ -92,21 +105,52 @@ test('Shows an error if an invalid email inserted.', async ({ page }) => {
   const inputError = context.getByLabel(Label.inputError)
   await expect(inputError).toBeVisible()
   await expect(inputError).toHaveText('Please enter a valid mail address.')
+  await expect(inputMail).toHaveCSS('border-color', 'rgb(255, 0, 0)')
 })
 
-test('Can successfully submit a correct mail.', async ({ page, worker }) => {
+test('Shows an error if an invalid phone number is inserted.', async ({ page }) => {
+  const context = await loadPage(page)
+
+  const tabPhone = context.getByLabel(Label.tabPhone)
+  await tabPhone.click()
+
+  const inputPhone = context.getByLabel(Label.inputPhone)
+  await expect(inputPhone).toBeVisible()
+  await inputPhone.type('this-is-faulty')
+
+  const submit = context.getByLabel(Label.submit)
+  await submit.click()
+
+  const inputError = context.getByLabel(Label.inputError)
+  await expect(inputError).toBeVisible()
+  await expect(inputError).toHaveText('Please enter a valid  phone number.')
+  const phoneWrapper = context.getByLabel(Label.phoneWrapper)
+  await expect(phoneWrapper).toHaveCSS('border-color', 'rgb(255, 0, 0)')
+})
+
+test('Can successfully submit a correct mail address.', async ({ page, worker }) => {
   let lastRequestParams = new URLSearchParams()
+  let pollRequestParams = new URLSearchParams()
 
   await worker.use(
     rest.get('https://iltio.com/api/authenticate', (request, response, context) => {
       lastRequestParams = request.url.searchParams
-      return response(context.delay(250), context.status(403))
+      return response(
+        context.delay(50),
+        context.status(200),
+        context.json({ error: false, codeToken: '123', registration: true })
+      )
     })
   )
 
-  await page.goto('/')
+  await worker.use(
+    rest.get('https://iltio.com/api/verify/poll', (request, response, context) => {
+      pollRequestParams = request.url.searchParams
+      return response(context.delay(50), context.status(200), context.json({ error: true }))
+    })
+  )
 
-  let context = await page.locator('#base')
+  const context = await loadPage(page)
 
   const inputMail = context.getByLabel(Label.inputMail)
 
@@ -118,4 +162,61 @@ test('Can successfully submit a correct mail.', async ({ page, worker }) => {
 
   expect(lastRequestParams.get('name')).toEqual('i@matthiasgiger.com')
   expect(lastRequestParams.get('token')).toEqual('demo')
+
+  const messageConfirm = context.getByLabel(Label.messageConfirm)
+  await expect(messageConfirm).toBeVisible()
+  await expect(messageConfirm).toHaveText(
+    'Enter the code received in your mail below or confirm through the link.'
+  )
+
+  const resendCode = context.getByLabel(Label.resendCode)
+  await expect(resendCode).toBeVisible()
+  await expect(resendCode).toHaveText('Resend Code')
+})
+
+test('Can successfully submit a correct phone number.', async ({ page, worker }) => {
+  let lastRequestParams = new URLSearchParams()
+
+  await worker.use(
+    rest.get('https://iltio.com/api/authenticate', (request, response, context) => {
+      lastRequestParams = request.url.searchParams
+      return response(
+        context.delay(50),
+        context.status(200),
+        context.json({ error: false, codeToken: '123', registration: true })
+      )
+    })
+  )
+
+  const context = await loadPage(page)
+
+  const tabPhone = context.getByLabel(Label.tabPhone)
+  await tabPhone.click()
+
+  const phoneCountry = context.getByLabel(Label.phoneCountry)
+  await phoneCountry.click()
+
+  const countrySwitzerland = context.getByText('Switzerland')
+  await countrySwitzerland.click()
+
+  const inputPhone = context.getByLabel(Label.inputPhone)
+
+  await inputPhone.type('799629162')
+
+  const submit = context.getByLabel(Label.submit)
+
+  await submit.click()
+
+  expect(lastRequestParams.get('name')).toEqual('+41799629162')
+  expect(lastRequestParams.get('token')).toEqual('demo')
+
+  const messageConfirm = context.getByLabel(Label.messageConfirm)
+  await expect(messageConfirm).toBeVisible()
+  await expect(messageConfirm).toHaveText(
+    'Enter the code received in your mail below or confirm through the link.'
+  )
+
+  const resendCode = context.getByLabel(Label.resendCode)
+  await expect(resendCode).toBeVisible()
+  await expect(resendCode).toHaveText('Resend Code')
 })

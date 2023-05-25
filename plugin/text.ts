@@ -13,6 +13,9 @@ export const Label = {
   phoneInputCountrySearch: 'authentication-phone-input-country-search',
   phoneCountryOption: 'authentication-phone-country-option',
   inputError: 'authentication-input-error',
+  phoneWrapper: 'authentication-phone-wrapper',
+  messageConfirm: 'authentication-message-confirm',
+  inputCode: 'authentication-input-code',
 }
 
 export const Text = {

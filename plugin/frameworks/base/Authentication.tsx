@@ -26,6 +26,7 @@ export function Authentication({
   variables = defaultVariables,
   labels = {},
   Components = components,
+  configuration = {},
 }: any) {
   const [tab, setTab] = useState(allowMail ? 'mail' : 'phone')
   const [mail, setMail] = useState('')
@@ -122,6 +123,10 @@ export function Authentication({
     }
 
     checkVerified()
+
+    if (configuration) {
+      configure(configuration)
+    }
   }, [])
 
   return (

@@ -5,15 +5,24 @@
 
   let open = false
   let filter = ''
-  const filteredCountries = filterCountries(filter)
+  $: filteredCountries = filterCountries(filter)
   $: country = countries[countryCode]
 
   const setOpen = (value) => {
     open = value
   }
+
+  const setFilter = (value) => {
+    filter = value
+  }
 </script>
 
-<Components.PhoneWrapper style={style.phoneWrapper} {variables} valid={phoneValid}>
+<Components.PhoneWrapper
+  style={style.phoneWrapper}
+  {variables}
+  valid={phoneValid}
+  aria-label={Label.phoneWrapper}
+>
   <Components.PhoneTop style={style.phoneTop} {variables}>
     <Components.PhoneCountry
       prefix={country.prefix}
@@ -27,7 +36,8 @@
     <Components.PhoneInput
       aria-label={Label.inputPhone}
       aria-invalid={!phoneValid}
-      bind:value={phone}
+      :value={phone}
+      on:input={(event) => setPhone(event.target.value)}
       style={style.phoneInput}
       {variables}
       required
@@ -40,8 +50,8 @@
     <Components.PhoneCountryOptions style={style.phoneCountryOptions} {variables}>
       <Components.Input
         aria-label={Label.phoneInputCountrySearch}
-        bind:value={filter}
-        on:input={(event) => setPhone(event.target.value)}
+        :value={filter}
+        on:input={(event) => setFilter(event.target.value)}
         {variables}
         style={style.phoneInputCountrySearch}
         placeholder={Text.FilterCountriesInputPlaceholder}

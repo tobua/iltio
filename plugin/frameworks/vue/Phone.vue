@@ -1,5 +1,10 @@
 <template>
-  <PhoneWrapper :style="style.phoneWrapper" :variables="variables" :valid="phoneValid">
+  <PhoneWrapper
+    :aria-label="Label.phoneWrapper"
+    :style="style.phoneWrapper"
+    :variables="variables"
+    :valid="phoneValid"
+  >
     <PhoneTop :style="style.phoneTop" :variables="variables">
       <PhoneCountry
         :prefix="country.prefix"
@@ -102,7 +107,6 @@ export default {
   },
   methods: {
     setOpen(value) {
-      console.log('set open', value)
       this.open = value
     },
     setFilter(value) {

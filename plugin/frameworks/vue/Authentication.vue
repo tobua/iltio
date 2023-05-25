@@ -18,7 +18,8 @@
         v-if="allowMail && (!multipleInputs || tab === 'mail')"
         :aria-label="Label.inputMail"
         :aria-invalid="!mailValid"
-        v-model="mail"
+        :value="mail"
+        @input="(event) => setMail(event.target.value)"
         required
         :valid="mailValid"
         :variables="variables"
@@ -33,10 +34,15 @@
         :countryCode="countryCode"
         :setCountryCode="setCountryCode"
         :phone="phone"
-        @setPhone="setPhone"
+        :setPhone="setPhone"
         :style="style"
       />
-      <Error v-if="error" :style="style.error" :variables="variables">
+      <Error
+        v-if="error"
+        :style="style.error"
+        :variables="variables"
+        :aria-label="Label.inputError"
+      >
         {{ error }}
       </Error>
       <Button :aria-label="Label.submit" type="submit" :style="style.button" :variables="variables">
@@ -57,7 +63,18 @@
 </template>
 
 <script>
-import { Label, Text, defaultVariables, defaultLabels, Store } from 'iltio'
+import {
+  Label,
+  Text,
+  defaultVariables,
+  defaultLabels,
+  Store,
+  countries,
+  validateEmail,
+  validatePhone,
+  authenticate,
+  configure,
+} from 'iltio'
 import Phone from './Phone.vue'
 import Tabs from './Tabs.vue'
 import Code from './Code.vue'
@@ -68,16 +85,13 @@ import Error from './components/Error.vue'
 
 export default {
   props: {
+    configuration: Object,
     allowPhone: { type: Boolean, default: true },
     allowMail: { type: Boolean, default: true },
     initialCountryCode: { type: String, default: 'us' },
     style: { type: Object, default: () => ({ phoneCountry: {}, phoneCountryOption: {} }) },
     variables: { type: Object, default: () => defaultVariables },
-    labels: { type: Object, default: () => ({}) },
-    Components: {
-      type: Object,
-      default: () => ({}),
-    },
+    labels: { type: Object, default: () => ({ ...defaultLabels }) },
   },
   data() {
     return {
@@ -94,7 +108,6 @@ export default {
       error: '',
       codeValid: true,
       Text,
-      labels: { ...defaultLabels },
       Label,
     }
   },
@@ -108,23 +121,54 @@ export default {
     Error,
   },
   methods: {
-    handleSubmit() {
-      this.loading = true
+    async handleSubmit() {
       this.error = ''
+      let name
 
-      setTimeout(() => {
-        const success = Math.random() > 0.5
-
-        this.loading = false
-        this.mailValid = success
-        this.phoneValid = success
-        this.registration = success
-        this.submitted = success
-
-        if (!success) {
-          this.error = 'Please enter a valid mail address or phone number.'
+      if (this.tab === 'mail' && this.allowMail) {
+        const currentMailValid = validateEmail(this.mail)
+        this.mailValid = currentMailValid
+        if (!currentMailValid) {
+          this.error = Text.InvalidMailError
+          return
         }
-      }, 2000)
+        name = this.mail
+      }
+
+      if (this.tab === 'phone' && this.allowPhone) {
+        const removeLeadingZeros = String(Number(this.phone))
+        const fullPhone = countries[this.countryCode].prefix + removeLeadingZeros
+        const currentPhoneValid = validatePhone(fullPhone)
+        this.phoneValid = currentPhoneValid
+        if (!currentPhoneValid) {
+          this.error = Text.InvalidPhoneNumberError
+          return
+        }
+        name = fullPhone
+      }
+
+      this.loading = true
+
+      const {
+        codeToken,
+        error: localError,
+        registration: localRegistration,
+      } = await authenticate(name)
+
+      if (codeToken) {
+        Store.codeToken = codeToken
+        Store.name = name
+      }
+
+      this.loading = false
+
+      if (localError) {
+        this.error = localError === true ? Text.UnknownError : localError
+        return
+      }
+
+      this.registration = localRegistration
+      this.submitted = true
     },
     handleCode(code) {
       console.log(code)
@@ -138,9 +182,14 @@ export default {
     setPhone(value) {
       this.phone = value
     },
+    setMail(value) {
+      this.mail = value
+    },
   },
   mounted() {
-    // TODO check verified.
+    if (this.configuration) {
+      configure(this.configuration)
+    }
   },
 }
 </script>
