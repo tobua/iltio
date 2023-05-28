@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { createRoot } from 'react-dom/client'
-import { Form, Store } from 'iltio'
+import { Store } from 'iltio'
+import { Authentication } from 'iltio/react'
 import { createClient } from './interface'
 import { Projects } from './projects'
 import { ApolloProvider } from '@apollo/client'
@@ -16,7 +17,7 @@ function App() {
     )
   }
 
-  return <Form configuration={{ token: 'demo' }} onSuccess={() => setLoggedIn(true)} />
+  return <Authentication configuration={{ token: 'demo' }} onSuccess={() => setLoggedIn(true)} />
 }
 
 export const Colors = {

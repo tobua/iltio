@@ -4,8 +4,8 @@ import { afterEach, expect, test, vi } from 'vitest'
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 import matchers from '@testing-library/jest-dom/matchers'
-import { Form } from '../index'
-import { Label } from '../label'
+import { Authentication } from '../react/Authentication'
+import { Label } from '../text'
 import { mockFetch } from './helper'
 
 expect.extend(matchers)
@@ -19,7 +19,7 @@ afterEach(() => {
 test('Invalid phone number leads to invalid input.', async () => {
   const invalidPhoneNumber = 'abc'
 
-  render(<Form allowMail={false} />)
+  render(<Authentication allowMail={false} />)
 
   expect(screen.getByLabelText(Label.form)).toBeVisible()
   expect(() => screen.getByLabelText(Label.tabMail)).toThrow('Unable to find a label')
@@ -40,7 +40,7 @@ test('Invalid phone number leads to invalid input.', async () => {
 })
 
 test('No submit with empty phone number.', async () => {
-  render(<Form allowMail={false} />)
+  render(<Authentication allowMail={false} />)
 
   expect(screen.getByLabelText(Label.inputPhone)).toHaveValue('')
 
@@ -53,7 +53,7 @@ test('No submit with empty phone number.', async () => {
 test('Valid phone number is submitted.', async () => {
   const phoneNumber = '799629162'
 
-  render(<Form allowMail={false} />)
+  render(<Authentication allowMail={false} />)
 
   await userEvent.type(screen.getByLabelText(Label.inputPhone), phoneNumber)
 
@@ -68,7 +68,7 @@ test('Valid phone number is submitted.', async () => {
 test('Country can be selected.', async () => {
   const phoneNumber = '799629162'
 
-  render(<Form allowMail={false} />)
+  render(<Authentication allowMail={false} />)
 
   expect(screen.getByLabelText(Label.phoneCountry)).toHaveAttribute('data-country', 'us')
 
@@ -91,7 +91,7 @@ test('Country can be selected.', async () => {
 })
 
 test('Countries can be filtered.', async () => {
-  render(<Form allowMail={false} />)
+  render(<Authentication allowMail={false} />)
 
   expect(screen.getByLabelText(Label.phoneCountry)).toHaveAttribute('data-country', 'us')
 

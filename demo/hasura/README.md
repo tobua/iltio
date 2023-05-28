@@ -52,7 +52,8 @@ The following app will first show the iltio `<Form />` to promt the user to auth
 import { useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { ApolloProvider } from '@apollo/client'
-import { Form, Store } from 'iltio'
+import { Store } from 'iltio'
+import { Authentication } from 'iltio/react'
 import { createClient } from './interface'
 import { Projects } from './projects'
 

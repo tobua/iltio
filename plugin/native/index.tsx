@@ -10,19 +10,15 @@ import {
   ViewStyle,
   TextStyle,
 } from 'react-native'
-import { Form } from '../react/Form'
-import type { Props, NativeStyles, NativeVariables, Styles } from '../types'
+import { Authentication, Props, Styles, ComponentTypes } from 'iltio/react'
+import type { NativeStyles, NativeVariables } from './types.js'
 
-export { configure, Store, MemoryStorage } from '../store'
-export { authenticate, poll, confirm, resend, authorize, logout, remove } from '../route'
-export type {
-  NativeVariables as Variables,
-  Styles,
-  NativeStyles,
-  Labels,
-  ComponentTypes,
-} from '../types'
-export { getNameType } from '../helper'
+export { configure, Store, MemoryStorage } from '../store.js'
+export { authenticate, poll, confirm, resend, authorize, logout, remove } from '../route.js'
+
+export { NativeVariables as Variables, Styles, NativeStyles, ComponentTypes }
+
+export { getNameType } from '../helper.js'
 
 const nativeInputTypeMap = {
   email: 'email-address',
@@ -341,5 +337,5 @@ export function NativeForm({
     ...style,
   }
 
-  return <Form Components={NativeComponents} style={style as Styles} {...props} />
+  return <Authentication Components={NativeComponents} style={style as Styles} {...props} />
 }

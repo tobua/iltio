@@ -1,11 +1,12 @@
 import { useRouter } from 'next/router'
-import { Form, CookieStorage } from 'iltio'
+import { CookieStorage } from 'iltio'
+import { Authentication } from 'iltio/react'
 
 export default function Home() {
   const router = useRouter()
 
   return (
-    <Form
+    <Authentication
       configuration={{
         url: '/api/authentication',
         token: 'demo',

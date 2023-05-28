@@ -1,17 +1,27 @@
 import React, { FormEventHandler, useCallback, useEffect, useMemo, useState } from 'react'
-import { Label, Text } from '../text'
-import { Phone } from './Phone'
-import { components } from './components'
-import { Props } from '../types'
-import { Store, app, configure } from '../store'
-import { authenticate, confirm, poll } from '../route'
-import { defaultVariables, defaultLabels, validateEmail, validatePhone } from '../helper'
-import { countries } from '../data/countries'
-import { Resend } from './Resend'
+import {
+  Store,
+  app,
+  configure,
+  Label,
+  Text,
+  authenticate,
+  confirm,
+  defaultVariables,
+  defaultLabels,
+  validateEmail,
+  validatePhone,
+  countries,
+  initializePolling,
+} from 'iltio'
+import { Phone } from './Phone.js'
+import { components } from './components.js'
+import { Props, ComponentTypes, Styles } from './types.js'
+import { Resend } from './Resend.js'
 
-// TODO rename to Authentication as well.
-// TODO export as ./react
-export function Form({
+export { ComponentTypes, Props, Styles }
+
+export function Authentication({
   configuration,
   allowPhone = true,
   allowMail = true,
@@ -138,45 +148,17 @@ export function Form({
   )
 
   useEffect(() => {
-    async function checkVerified() {
-      const { error: localError, token: userToken } = await poll()
-
-      if (localError) {
-        // Code token expired, start over.
-        if (localError === 'Code expired.') {
-          Store.removeCodeToken()
-          setSubmitted(false)
-          setError(Text.CodeExpiredError)
-        }
-        return
-      }
-
-      if (userToken) {
-        Store.token = userToken
-        Store.removeCodeToken()
-
-        if (app.pollInterval) {
-          clearInterval(app.pollInterval)
-          app.pollInterval = 0
-        }
-
-        if (onSuccess) {
-          onSuccess(Store.name, userToken, registration)
-        }
-      }
-    }
+    initializePolling(
+      onSuccess,
+      () => {
+        setSubmitted(false)
+        setError(Text.CodeExpiredError)
+      },
+      registration
+    )
 
     if (configuration) {
       configure(configuration)
-    }
-
-    // TODO refactor polling to fit into core.
-    if (submitted) {
-      // Continue polling after page reload in verification stage.
-      app.pollInterval = setInterval(checkVerified, app.pollDuration)
-    } else if (app.pollInterval) {
-      clearInterval(app.pollInterval)
-      app.pollInterval = 0
     }
   }, [submitted, registration, Store, configuration])
 

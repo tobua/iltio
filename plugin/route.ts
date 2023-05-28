@@ -1,5 +1,5 @@
-import { app, Store } from './store'
-import { joinUrl } from './helper'
+import { app, Store } from './store.js'
+import { joinUrl } from './helper.js'
 
 export const authenticate = async (name: string) => {
   const baseUrl = app.authenticateUrl || joinUrl('/authenticate')

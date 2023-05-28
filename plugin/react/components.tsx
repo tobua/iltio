@@ -1,4 +1,5 @@
 import React from 'react'
+import { Variables } from 'iltio'
 import {
   ButtonProps,
   InputProps,
@@ -8,9 +9,8 @@ import {
   ErrorProps,
   MessageProps,
   ComponentTypes,
-  Variables,
   Styles,
-} from '../types'
+} from './types.js'
 
 type ComponentProps = { style?: Styles; variables: Variables }
 

@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getCookie, setCookie, deleteCookie, hasCookie } from 'cookies-next'
-import { joinUrl } from './helper'
+import { joinUrl } from './helper.js'
 
 const inferRouteFromPath = (path: string | string[] | undefined) => {
   if (!path) return ''

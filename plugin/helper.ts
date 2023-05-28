@@ -1,6 +1,7 @@
 import urlJoin from 'url-join'
-import { app } from './store'
-import { countries } from './data/countries'
+import { app, Store } from './store.js'
+import { countries } from './data/countries.js'
+import { poll } from './route.js'
 
 export const validateEmail = (value: string) =>
   // eslint-disable-next-line no-control-regex
@@ -57,4 +58,49 @@ export const filterCountries = (filter: string) => {
   })
 
   return result as typeof countries
+}
+
+export const initializePolling = (
+  successCallback: Function,
+  expiredCallback: Function,
+  registration: boolean
+) => {
+  const submitted = Store.codeToken !== ''
+
+  async function checkVerified() {
+    const { error: localError, token: userToken } = await poll()
+
+    if (localError) {
+      // Code token expired, start over.
+      if (localError === 'Code expired.') {
+        Store.removeCodeToken()
+        expiredCallback()
+        // setSubmitted(false)
+        // setError(Text.CodeExpiredError)
+      }
+      return
+    }
+
+    if (userToken) {
+      Store.token = userToken
+      Store.removeCodeToken()
+
+      if (app.pollInterval) {
+        clearInterval(app.pollInterval)
+        app.pollInterval = 0
+      }
+
+      if (successCallback) {
+        successCallback(Store.name, userToken, registration)
+      }
+    }
+  }
+
+  if (submitted) {
+    // Continue polling after page reload in verification stage.
+    app.pollInterval = setInterval(checkVerified, app.pollDuration)
+  } else if (app.pollInterval) {
+    clearInterval(app.pollInterval)
+    app.pollInterval = 0
+  }
 }

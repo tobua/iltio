@@ -11,11 +11,11 @@ npm install iltio
 ## Usage
 
 ```tsx
-import { Form } from 'iltio'
+import { Authentication } from 'iltio/react'
 
 export function MyAuthentication() {
   return (
-    <Form
+    <Authentication
       configuration={{ token: APP_TOKEN }}
       onSuccess={(name, token) => {
         redirect('/overview', { name })

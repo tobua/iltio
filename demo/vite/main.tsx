@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
-import { Form, Store, configure, authorize, logout, remove } from 'iltio'
-import { Authentication } from 'iltio/base'
+import { Store, configure, authorize, logout, remove } from 'iltio'
+import { Authentication } from 'iltio/react'
+import { Authentication as AuthenticationBase } from 'iltio/base'
 import { CustomUIComponents } from './custom-ui-components.js'
 
 configure({
@@ -86,15 +87,15 @@ const App = () => {
       >
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <p>Regular Form</p>
-          <Form onSuccess={setName} />
+          <Authentication onSuccess={setName} />
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <p>Phone Only</p>
-          <Form allowMail={false} onSuccess={setName} />
+          <Authentication allowMail={false} onSuccess={setName} />
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <p>Custom Variables & Style</p>
-          <Form
+          <Authentication
             variables={{
               color: 'blue',
               borderRadius: 10,
@@ -122,14 +123,14 @@ const App = () => {
           }}
         >
           <p>Inherited Styles</p>
-          <Form variables={{ fontSize: 'inherit' }} onSuccess={setName} />
+          <Authentication variables={{ fontSize: 'inherit' }} onSuccess={setName} />
         </div>
       </div>
       <p style={{ margin: 0 }}>
         Enter an email address or phone number above to register or login to the demo application.
       </p>
       <div id="base">
-        <Authentication configuration={{ token: 'demo' }} onSuccess={() => alert('success')} />
+        <AuthenticationBase configuration={{ token: 'demo' }} onSuccess={() => alert('success')} />
       </div>
     </>
   )

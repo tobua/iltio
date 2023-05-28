@@ -4,8 +4,9 @@ import { expect, test, vi, afterEach } from 'vitest'
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 import matchers from '@testing-library/jest-dom/matchers'
-import { authenticate, Form } from '../index'
-import { Label } from '../label'
+import { authenticate } from '../index'
+import { Authentication } from '../react/Authentication'
+import { Label } from '../text'
 import { mockFetch, wait } from './helper'
 
 expect.extend(matchers)
@@ -20,7 +21,7 @@ test('Can successfully register with a mail address.', async () => {
   const mailAddress = 'some@person.com'
   const onSuccessMock = vi.fn()
 
-  render(<Form onSuccess={onSuccessMock} />)
+  render(<Authentication onSuccess={onSuccessMock} />)
 
   expect(screen.getByLabelText(Label.form)).toBeVisible()
   expect(screen.getByLabelText(Label.tabMail)).toHaveStyle({ fontWeight: 'bold' })
@@ -82,7 +83,7 @@ test('Can login with the same mail address.', async () => {
   const mailAddress = 'some@person.com'
   const onSuccessMock = vi.fn()
 
-  render(<Form allowPhone={false} onSuccess={onSuccessMock} />)
+  render(<Authentication allowPhone={false} onSuccess={onSuccessMock} />)
 
   await userEvent.type(screen.getByLabelText(Label.inputMail), mailAddress)
 

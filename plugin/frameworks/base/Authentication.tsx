@@ -12,10 +12,10 @@ import {
   countries,
   authenticate,
 } from 'iltio'
-import { Phone } from './Phone'
-import { components } from './Components'
-import { Tabs } from './Tabs'
-import { Code } from './Code'
+import { Phone } from './Phone.js'
+import { components } from './Components.js'
+import { Tabs } from './Tabs.js'
+import { Code } from './Code.js'
 
 export function Authentication({
   allowPhone = true,

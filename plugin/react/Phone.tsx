@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
-import { Label, Text } from '../text'
-import { Variables, Styles, ComponentTypes } from '../types'
-import { filterCountries } from '../helper'
-import { countries } from '../data/countries'
+import { Variables } from 'iltio'
+import { Label, Text } from '../text.js'
+import { Styles, ComponentTypes } from './types.js'
+import { filterCountries } from '../helper.js'
+import { countries } from '../data/countries.js'
 
 interface Props {
   phoneValid: boolean

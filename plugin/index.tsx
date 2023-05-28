@@ -1,15 +1,6 @@
-export { Form } from './react/Form'
-export { configure, Store, MemoryStorage, CookieStorage, app } from './store'
-export { authenticate, poll, confirm, resend, authorize, logout, remove } from './route'
-export type {
-  Variables,
-  Styles,
-  NativeStyles,
-  Labels,
-  ComponentTypes,
-  Props,
-  Configuration,
-} from './types'
+export { configure, Store, MemoryStorage, CookieStorage, app } from './store.js'
+export { authenticate, poll, confirm, resend, authorize, logout, remove } from './route.js'
+export type { Variables, Labels, Configuration } from './types.js'
 export {
   getNameType,
   defaultVariables,
@@ -17,6 +8,7 @@ export {
   validateEmail,
   validatePhone,
   filterCountries,
-} from './helper'
-export { countries } from './data/countries'
-export { Label, Text } from './text'
+  initializePolling,
+} from './helper.js'
+export { countries } from './data/countries.js'
+export { Label, Text } from './text.js'

@@ -5,8 +5,9 @@ import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 import matchers from '@testing-library/jest-dom/matchers'
 import styled from 'styled-components'
-import { Form, MemoryStorage, configure } from '../index'
-import { Label } from '../label'
+import { MemoryStorage, configure } from '../index'
+import { Authentication } from '../react/Authentication'
+import { Label } from '../text'
 import { mockFetch, mockInterval, wait } from './helper'
 
 expect.extend(matchers)
@@ -33,7 +34,7 @@ test('Can configure the token and the storage keys.', async () => {
     storage,
   })
 
-  render(<Form />)
+  render(<Authentication />)
 
   expect(storage.setItem.mock.calls.length).toBe(0)
 
@@ -62,7 +63,7 @@ test('Can configure the token and the storage keys.', async () => {
 })
 
 test('Can configure the initial phone country code.', async () => {
-  const { unmount } = render(<Form />)
+  const { unmount } = render(<Authentication />)
 
   await userEvent.click(screen.getByLabelText(Label.tabPhone))
 
@@ -71,7 +72,7 @@ test('Can configure the initial phone country code.', async () => {
 
   unmount()
 
-  render(<Form initialCountryCode="ch" />)
+  render(<Authentication initialCountryCode="ch" />)
 
   await userEvent.click(screen.getByLabelText(Label.tabPhone))
 
@@ -88,7 +89,7 @@ test('Can add React components to override default elements.', async () => {
     )
   }
 
-  const { unmount } = render(<Form Components={{ Button: MyButton }} />)
+  const { unmount } = render(<Authentication Components={{ Button: MyButton }} />)
 
   expect(screen.getByLabelText(Label.submit)).toBeVisible()
   expect(screen.getByLabelText(Label.submit)).toHaveAttribute('data-hello', 'world')
@@ -105,7 +106,7 @@ test('Can add React components to override default elements.', async () => {
   }
 
   render(
-    <Form
+    <Authentication
       variables={{ color: 'blue' }}
       labels={{ submit: 'Submit Button' }}
       Components={{ Button: MyVariablesButton }}
@@ -122,7 +123,7 @@ test('Can configure styled-components without type errors.', async () => {
     borderRadius: 20,
   })
 
-  render(<Form Components={{ Button: StyledButton }} />)
+  render(<Authentication Components={{ Button: StyledButton }} />)
 
   expect(screen.getByLabelText(Label.submit)).toBeVisible()
   expect(screen.getByLabelText(Label.submit)).toHaveStyle({
@@ -140,7 +141,7 @@ test('Polling interval can be configured.', async () => {
   // Poll every 200ms, reset previously changed storage.
   configure({ pollDuration: 200, token: 'test', storage: MemoryStorage })
 
-  render(<Form onSuccess={onSuccessMock} />)
+  render(<Authentication onSuccess={onSuccessMock} />)
 
   await userEvent.type(screen.getByLabelText(Label.inputMail), mailAddress)
 
@@ -191,7 +192,7 @@ test('Can configure the token on the JSX tag as well.', async () => {
   const mailAddress = 'some@person.com'
   const appTokenModified = 'test-token-modified'
 
-  render(<Form configuration={{ token: appTokenModified }} />)
+  render(<Authentication configuration={{ token: appTokenModified }} />)
 
   await userEvent.type(screen.getByLabelText(Label.inputMail), mailAddress)
 

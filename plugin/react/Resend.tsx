@@ -1,7 +1,8 @@
 import React, { useCallback, useState } from 'react'
-import { Variables, Styles, Labels, ComponentTypes } from '../types'
-import { Label, Text } from '../text'
-import { resend } from '../route'
+import { Variables, Labels } from 'iltio'
+import { Styles, ComponentTypes } from './types.js'
+import { Label, Text } from '../text.js'
+import { resend } from '../route.js'
 
 export function Resend({
   Components,

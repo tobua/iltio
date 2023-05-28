@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Form } from 'iltio'
+import { Authentication } from 'iltio/react'
 
 const MyButton = ({ variables, style, ...props }: any) => {
   const [active, setActive] = useState(false)
@@ -81,7 +81,7 @@ const MyPhoneWrapper = ({ variables, style, valid, ...props }: any) => (
 )
 
 export const CustomUIComponents = ({ onSuccess }: any) => (
-  <Form
+  <Authentication
     style={{
       form: { width: 300, border: '1px dashed hsl(0, 0%, 78.0%)', padding: 20 },
       tabWrapper: { color: 'hsl(0, 0%, 43.5%)' },

@@ -4,8 +4,8 @@ import { afterEach, expect, test, vi } from 'vitest'
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 import matchers from '@testing-library/jest-dom/matchers'
-import { Form } from '../index'
-import { Label } from '../label'
+import { Authentication } from '../react/Authentication'
+import { Label } from '../text'
 import { mockFetch } from './helper'
 
 expect.extend(matchers)
@@ -20,7 +20,7 @@ test('Invalid mail address leads to invalid input.', async () => {
   const mailAddress = 'some@person'
   const onSuccessMock = vi.fn()
 
-  render(<Form allowPhone={false} onSuccess={onSuccessMock} />)
+  render(<Authentication allowPhone={false} onSuccess={onSuccessMock} />)
 
   expect(screen.getByLabelText(Label.form)).toBeVisible()
   expect(() => screen.getByLabelText(Label.tabMail)).toThrow('Unable to find a label')
@@ -41,7 +41,7 @@ test('Invalid mail address leads to invalid input.', async () => {
 })
 
 test('No submit with empty mail address.', async () => {
-  render(<Form allowPhone={false} />)
+  render(<Authentication allowPhone={false} />)
 
   expect(screen.getByLabelText(Label.inputMail)).toHaveValue('')
 

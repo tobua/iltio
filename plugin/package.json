@@ -15,7 +15,9 @@
   "padua": {
     "tsconfig": {
       "compilerOptions": {
-        "target": "esnext"
+        "target": "esnext",
+        "moduleResolution": "nodenext",
+        "module": "esnext"
       }
     },
     "esbuild": {
@@ -25,6 +27,7 @@
     },
     "entry": [
       "index.tsx",
+      "react/Authentication.tsx",
       "native/index.tsx",
       "next.tsx",
       "frameworks/base/Authentication.tsx"
@@ -56,6 +59,16 @@
         "default": "./dist/index.js"
       }
     },
+    "./react": {
+      "import": {
+        "types": "./dist/react/Authentication.d.ts",
+        "default": "./dist/react/Authentication.js"
+      },
+      "default": {
+        "types": "./dist/react/Authentication.d.ts",
+        "default": "./dist/react/Authentication.js"
+      }
+    },
     "./package.json": "./package.json",
     "./dist/native/index.js": "./dist/native/index.js",
     "./native": "./dist/native/index.js",
@@ -75,7 +88,7 @@
       }
     }
   },
-  "types": "dist/index.d.ts",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist",
     "frameworks"
@@ -96,14 +109,14 @@
     "@types/cookie": "^0.5.1",
     "@types/styled-components": "^5.1.26",
     "cpx": "^1.5.0",
-    "happy-dom": "^9.19.2",
-    "next": "^13.4.3",
-    "padua": "^1.2.4",
-    "prettier-plugin-svelte": "^2.10.0",
+    "happy-dom": "^9.20.3",
+    "next": "^13.4.4",
+    "padua": "^1.3.0",
+    "prettier-plugin-svelte": "^2.10.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-native": "^0.71.8",
-    "styled-components": "^5.3.10",
+    "styled-components": "^5.3.11",
     "vitest": "^0.31.1"
   },
   "prettier": "padua/configuration/.prettierrc.json",
