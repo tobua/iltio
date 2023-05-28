@@ -26,7 +26,7 @@ jobs:
         working-directory: test
     steps:
       - uses: actions/checkout@v3
-      - run: npm install --legacy-peer-deps
+      - run: npm install --legacy-peer-deps --prefix .. # Install in root to ensure all workspace dependencies installed.
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - name: Run Playwright tests

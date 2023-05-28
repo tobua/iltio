@@ -19,6 +19,11 @@ const loadPage = async (page: Page) => {
   return context
 }
 
+test.afterEach(async ({ page }) => {
+  await page.evaluate(() => window.localStorage.clear())
+  await page.evaluate(() => window.sessionStorage.clear())
+})
+
 test('Has correct title.', async ({ page }) => {
   await page.goto('/')
   await expect(page).toHaveTitle(/iltio/)
@@ -138,7 +143,7 @@ test('Can successfully submit a correct mail address.', async ({ page, worker })
       return response(
         context.delay(50),
         context.status(200),
-        context.json({ error: false, codeToken: '123', registration: true })
+        context.json({ error: false, codeToken: 'code-token-123', registration: true })
       )
     })
   )
@@ -172,6 +177,8 @@ test('Can successfully submit a correct mail address.', async ({ page, worker })
   const resendCode = context.getByLabel(Label.resendCode)
   await expect(resendCode).toBeVisible()
   await expect(resendCode).toHaveText('Resend Code')
+
+  expect(pollRequestParams.get('token')).toEqual('code-token-123')
 })
 
 test('Can successfully submit a correct phone number.', async ({ page, worker }) => {

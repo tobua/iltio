@@ -11,6 +11,7 @@
     validatePhone,
     authenticate,
     countries,
+    initializePolling,
   } from 'iltio'
   import Phone from './Phone.svelte'
   import Tabs from './Tabs.svelte'
@@ -36,6 +37,7 @@
   export let variables = defaultVariables
   export let labels = defaultLabels
   export let configuration = {}
+  export let onSuccess
 
   let tab = allowMail ? 'mail' : 'phone'
   let mail = ''
@@ -114,6 +116,15 @@
 
     registration = localRegistration
     submitted = true
+
+    initializePolling(
+      onSuccess,
+      () => {
+        submitted = false
+        error = Text.CodeExpiredError
+      },
+      registration
+    )
   }
 
   const handleCode = (code) => {
@@ -138,6 +149,15 @@
   }
 
   onMount(() => {
+    initializePolling(
+      onSuccess,
+      () => {
+        submitted = false
+        error = Text.CodeExpiredError
+      },
+      registration
+    )
+
     if (configuration) {
       configure(configuration)
     }

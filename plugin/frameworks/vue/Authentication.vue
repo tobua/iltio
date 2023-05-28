@@ -74,6 +74,7 @@ import {
   validatePhone,
   authenticate,
   configure,
+  initializePolling,
 } from 'iltio'
 import Phone from './Phone.vue'
 import Tabs from './Tabs.vue'
@@ -92,6 +93,7 @@ export default {
     style: { type: Object, default: () => ({ phoneCountry: {}, phoneCountryOption: {} }) },
     variables: { type: Object, default: () => defaultVariables },
     labels: { type: Object, default: () => ({ ...defaultLabels }) },
+    onSuccess: { type: Function, required: true },
   },
   data() {
     return {
@@ -169,6 +171,15 @@ export default {
 
       this.registration = localRegistration
       this.submitted = true
+
+      initializePolling(
+        this.onSuccess,
+        () => {
+          this.submitted = false
+          this.error = Text.CodeExpiredError
+        },
+        this.registration
+      )
     },
     handleCode(code) {
       console.log(code)
@@ -187,6 +198,15 @@ export default {
     },
   },
   mounted() {
+    initializePolling(
+      this.onSuccess,
+      () => {
+        this.submitted = false
+        this.error = Text.CodeExpiredError
+      },
+      this.registration
+    )
+
     if (this.configuration) {
       configure(this.configuration)
     }

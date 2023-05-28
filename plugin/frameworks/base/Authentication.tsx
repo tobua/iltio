@@ -11,6 +11,7 @@ import {
   validatePhone,
   countries,
   authenticate,
+  initializePolling,
 } from 'iltio'
 import { Phone } from './Phone.js'
 import { components } from './Components.js'
@@ -118,16 +119,19 @@ export function Authentication({
   }, [])
 
   useEffect(() => {
-    async function checkVerified() {
-      console.log('check verified')
-    }
-
-    checkVerified()
+    initializePolling(
+      onSuccess,
+      () => {
+        setSubmitted(false)
+        setError(Text.CodeExpiredError)
+      },
+      registration
+    )
 
     if (configuration) {
       configure(configuration)
     }
-  }, [])
+  }, [registration, configuration, onSuccess, submitted]) // submitted necessary!
 
   return (
     <Components.Form

@@ -160,7 +160,7 @@ export function Authentication({
     if (configuration) {
       configure(configuration)
     }
-  }, [submitted, registration, Store, configuration])
+  }, [registration, configuration, onSuccess, submitted])
 
   return (
     <Components.Form

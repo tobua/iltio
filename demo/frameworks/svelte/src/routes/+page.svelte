@@ -4,5 +4,5 @@
 
 <h1>iltio Svelte Demo</h1>
 <div id="base" style="display: flex; justify-content: center;">
-  <Authentication configuration={{ token: 'demo' }} />
+  <Authentication configuration={{ token: 'demo' }} onSuccess={() => console.log('success')} />
 </div>

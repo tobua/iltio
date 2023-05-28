@@ -99,6 +99,7 @@ export const initializePolling = (
   if (submitted) {
     // Continue polling after page reload in verification stage.
     app.pollInterval = setInterval(checkVerified, app.pollDuration)
+    checkVerified()
   } else if (app.pollInterval) {
     clearInterval(app.pollInterval)
     app.pollInterval = 0
