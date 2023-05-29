@@ -15,7 +15,7 @@
 </Components.Message>
 <Components.Input
   aria-label={Label.inputCode}
-  on:change={(event) => handleCode(event.target.value)}
+  on:input={(event) => handleCode(event.target.value)}
   valid={codeValid}
   required
   placeholder={Text.CodeInputPlaceholder}

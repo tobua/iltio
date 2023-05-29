@@ -6,6 +6,9 @@
     "postinstall": "npm run build --workspace=plugin"
   },
   "type": "module",
+  "dependencies": {
+    "ajv": "^7"
+  },
   "workspaces": [
     "demo/*",
     "demo/frameworks/*",

@@ -12,6 +12,8 @@
     authenticate,
     countries,
     initializePolling,
+    confirm,
+    app,
   } from 'iltio'
   import Phone from './Phone.svelte'
   import Tabs from './Tabs.svelte'
@@ -127,8 +129,39 @@
     )
   }
 
-  const handleCode = (code) => {
-    console.log(code)
+  const handleCode = async (code) => {
+    if (code.length === 4) {
+      error = ''
+      const { error: localError, token: userToken } = await confirm(code)
+
+      if (localError) {
+        if (localError === 'Code invalid or expired.') {
+          Store.removeCodeToken()
+          submitted = false
+          error = Text.CodeExpiredError
+        }
+
+        if (localError === 'Wrong code entered.') {
+          codeValid = false
+        }
+        return
+      }
+
+      if (app.pollInterval) {
+        clearInterval(app.pollInterval)
+        app.pollInterval = 0
+      }
+
+      if (userToken) {
+        Store.token = userToken
+        Store.removeCodeToken()
+        if (onSuccess) {
+          onSuccess(Store.name, userToken, registration)
+        }
+      }
+    } else {
+      codeValid = true
+    }
   }
 
   const setTab = (newTab) => {
@@ -140,7 +173,6 @@
   }
 
   const setPhone = (value) => {
-    console.log('pheon', value)
     phone = value
   }
 

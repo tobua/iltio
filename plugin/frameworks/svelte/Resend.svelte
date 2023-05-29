@@ -1,33 +1,31 @@
 <script>
-  import { Label, Text } from 'iltio'
+  import { Label, Text, resend } from 'iltio'
 
   export let Components, style, variables, labels
   let loading = false
   let error = ''
   let success = ''
 
-  const handleReset = async () => {
+  const handleResend = async () => {
     loading = true
     error = ''
     success = ''
 
-    setTimeout(() => {
-      const isSuccess = Math.random() > 0.5
+    const { error: localError } = await resend()
 
-      loading = false
+    if (localError) {
+      error = typeof localError === 'string' ? localError : Text.UnknownError
+    } else {
+      success = Text.CodeResentMessage
+    }
 
-      if (!isSuccess) {
-        error = 'Failed to resend code, please try again.'
-      } else {
-        success = 'A new code is being sent to you.'
-      }
-    }, 2000)
+    loading = false
   }
 </script>
 
 <Components.Button
   aria-label={Label.resendCode}
-  on:click={handleReset}
+  on:click={handleResend}
   type="button"
   style={style.button}
   {variables}

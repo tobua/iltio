@@ -12,7 +12,7 @@
   </Message>
   <Input
     :aria-label="Label.inputCode"
-    @change="handleCode"
+    @input="(event) => handleCode(event.target.value)"
     :valid="codeValid"
     required
     :placeholder="Text.CodeInputPlaceholder"

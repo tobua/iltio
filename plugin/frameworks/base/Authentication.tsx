@@ -12,7 +12,9 @@ import {
   countries,
   authenticate,
   initializePolling,
+  confirm,
 } from 'iltio'
+import { Props } from 'iltio/react'
 import { Phone } from './Phone.js'
 import { components } from './Components.js'
 import { Tabs } from './Tabs.js'
@@ -28,7 +30,7 @@ export function Authentication({
   labels = {},
   Components = components,
   configuration = {},
-}: any) {
+}: Props) {
   const [tab, setTab] = useState(allowMail ? 'mail' : 'phone')
   const [mail, setMail] = useState('')
   const [phone, setPhone] = useState('')
@@ -101,22 +103,43 @@ export function Authentication({
     [mail, phone, allowMail, allowPhone, tab]
   )
 
-  const handleCode = useCallback((code) => {
-    setCodeValid(true)
+  const handleCode = useCallback(
+    async (code: string) => {
+      if (code.length === 4) {
+        setError('')
+        const { error: localError, token: userToken } = await confirm(code)
 
-    const success = Math.random() > 0.5
-    if (success && code.length === 4) {
-      onSuccess(Store.name, '123', true)
-    }
+        if (localError) {
+          if (localError === 'Code invalid or expired.') {
+            Store.removeCodeToken()
+            setSubmitted(false)
+            setError(Text.CodeExpiredError)
+          }
 
-    if (!success && code.length === 4) {
-      setCodeValid(false)
-    }
+          if (localError === 'Wrong code entered.') {
+            setCodeValid(false)
+          }
+          return
+        }
 
-    if (code.length > 4) {
-      setCodeValid(false)
-    }
-  }, [])
+        if (app.pollInterval) {
+          clearInterval(app.pollInterval)
+          app.pollInterval = 0
+        }
+
+        if (userToken) {
+          Store.token = userToken
+          Store.removeCodeToken()
+          if (onSuccess) {
+            onSuccess(Store.name, userToken, registration)
+          }
+        }
+      } else {
+        setCodeValid(true)
+      }
+    },
+    [registration]
+  )
 
   useEffect(() => {
     initializePolling(

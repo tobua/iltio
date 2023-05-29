@@ -19,7 +19,7 @@ export function Resend({
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
 
-  const handleReset = useCallback(async () => {
+  const handleResend = useCallback(async () => {
     setLoading(true)
     setError('')
     setSuccess('')
@@ -39,7 +39,7 @@ export function Resend({
     <>
       <Components.Button
         aria-label={Label.resendCode}
-        onClick={handleReset}
+        onClick={handleResend}
         type="button"
         style={style.button}
         variables={variables}

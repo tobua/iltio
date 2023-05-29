@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { Label } from 'iltio'
+import { Label, Text, resend } from 'iltio'
 import Button from './components/Button.vue'
 import Error from './components/Error.vue'
 import Message from './components/Message.vue'
@@ -48,17 +48,15 @@ export default {
       this.error = ''
       this.success = ''
 
-      setTimeout(() => {
-        const success = Math.random() > 0.5
+      const { error: localError } = await resend()
 
-        this.loading = false
+      if (localError) {
+        this.error = typeof localError === 'string' ? localError : Text.UnknownError
+      } else {
+        this.success = Text.CodeResentMessage
+      }
 
-        if (!success) {
-          this.error = 'Failed to resend code, please try again.'
-        } else {
-          this.success = 'A new code is being sent to you.'
-        }
-      }, 2000)
+      this.loading = false
     },
   },
 }

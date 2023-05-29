@@ -136,6 +136,12 @@ test('Shows an error if an invalid phone number is inserted.', async ({ page }) 
 test('Can successfully submit a correct mail address.', async ({ page, worker }) => {
   let lastRequestParams = new URLSearchParams()
   let pollRequestParams = new URLSearchParams()
+  let resendCodeRequestParams = new URLSearchParams()
+  let confirmRequestParams = new URLSearchParams()
+  const codeToken = 'code-token-123'
+  const mailAddress = 'i@matthiasgiger.com'
+  const confirmToken = 'confirm-123'
+  const userId = '123456'
 
   await worker.use(
     rest.get('https://iltio.com/api/authenticate', (request, response, context) => {
@@ -143,7 +149,7 @@ test('Can successfully submit a correct mail address.', async ({ page, worker })
       return response(
         context.delay(50),
         context.status(200),
-        context.json({ error: false, codeToken: 'code-token-123', registration: true })
+        context.json({ error: false, codeToken: codeToken, registration: true })
       )
     })
   )
@@ -155,17 +161,35 @@ test('Can successfully submit a correct mail address.', async ({ page, worker })
     })
   )
 
+  await worker.use(
+    rest.get('https://iltio.com/api/resend-code', (request, response, context) => {
+      resendCodeRequestParams = request.url.searchParams
+      return response(context.delay(50), context.status(200), context.json({ error: false }))
+    })
+  )
+
+  await worker.use(
+    rest.get('https://iltio.com/api/verify/confirm', (request, response, context) => {
+      confirmRequestParams = request.url.searchParams
+      return response(
+        context.delay(50),
+        context.status(200),
+        context.json({ error: false, token: confirmToken, userId })
+      )
+    })
+  )
+
   const context = await loadPage(page)
 
   const inputMail = context.getByLabel(Label.inputMail)
 
-  await inputMail.type('i@matthiasgiger.com')
+  await inputMail.type(mailAddress)
 
   const submit = context.getByLabel(Label.submit)
 
   await submit.click()
 
-  expect(lastRequestParams.get('name')).toEqual('i@matthiasgiger.com')
+  expect(lastRequestParams.get('name')).toEqual(mailAddress)
   expect(lastRequestParams.get('token')).toEqual('demo')
 
   const messageConfirm = context.getByLabel(Label.messageConfirm)
@@ -178,7 +202,28 @@ test('Can successfully submit a correct mail address.', async ({ page, worker })
   await expect(resendCode).toBeVisible()
   await expect(resendCode).toHaveText('Resend Code')
 
-  expect(pollRequestParams.get('token')).toEqual('code-token-123')
+  expect(pollRequestParams.get('token')).toEqual(codeToken)
+
+  await resendCode.click()
+
+  expect(resendCodeRequestParams.get('token')).toEqual(codeToken)
+  expect(resendCodeRequestParams.get('name')).toEqual(mailAddress)
+
+  const inputCode = context.getByLabel(Label.inputCode)
+
+  await inputCode.type('1234')
+
+  const consoleWait = page.waitForEvent('console')
+
+  expect(confirmRequestParams.get('token')).toEqual(codeToken)
+  expect(confirmRequestParams.get('code')).toEqual('1234')
+
+  const message = (await consoleWait).text()
+
+  expect(message).toContain('success')
+  expect(message).toContain('i@matthiasgiger.com')
+  expect(message).toContain(confirmToken)
+  expect(message).toContain('true')
 })
 
 test('Can successfully submit a correct phone number.', async ({ page, worker }) => {

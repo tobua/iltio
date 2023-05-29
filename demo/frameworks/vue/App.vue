@@ -8,7 +8,9 @@ import Authentication from 'iltio/vue'
     <div id="base" :style="{ display: 'flex', justifyContent: 'center' }">
       <Authentication
         :configuration="{ token: 'demo' }"
-        :on-success="() => console.log('success')"
+        :on-success="
+          (name, token, registration) => console.log('success', name, token, registration)
+        "
       />
     </div>
   </main>

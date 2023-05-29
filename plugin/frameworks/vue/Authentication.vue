@@ -75,6 +75,8 @@ import {
   authenticate,
   configure,
   initializePolling,
+  confirm,
+  app,
 } from 'iltio'
 import Phone from './Phone.vue'
 import Tabs from './Tabs.vue'
@@ -181,8 +183,39 @@ export default {
         this.registration
       )
     },
-    handleCode(code) {
-      console.log(code)
+    async handleCode(code) {
+      if (code.length === 4) {
+        this.error = ''
+        const { error: localError, token: userToken } = await confirm(code)
+
+        if (localError) {
+          if (localError === 'Code invalid or expired.') {
+            Store.removeCodeToken()
+            this.submitted = false
+            this.error = Text.CodeExpiredError
+          }
+
+          if (localError === 'Wrong code entered.') {
+            this.codeValid = false
+          }
+          return
+        }
+
+        if (app.pollInterval) {
+          clearInterval(app.pollInterval)
+          app.pollInterval = 0
+        }
+
+        if (userToken) {
+          Store.token = userToken
+          Store.removeCodeToken()
+          if (this.onSuccess) {
+            this.onSuccess(Store.name, userToken, this.registration)
+          }
+        }
+      } else {
+        this.codeValid = true
+      }
     },
     setTab(value) {
       this.tab = value
