@@ -1,10 +1,10 @@
 import React from 'react'
-import { render, screen } from '@testing-library/react'
+import { act, render, screen } from '@testing-library/react'
 import { expect, test, vi, afterEach } from 'vitest'
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 import matchers from '@testing-library/jest-dom/matchers'
-import { authenticate } from '../index'
+import { authenticate, stopPolling } from '../index'
 import { Authentication } from '../react/Authentication'
 import { Label } from '../text'
 import { mockFetch, wait } from './helper'
@@ -14,6 +14,7 @@ expect.extend(matchers)
 const { fetchMockCalls, setResponse, getResponse } = mockFetch()
 
 afterEach(() => {
+  stopPolling()
   vi.restoreAllMocks()
 })
 
@@ -44,9 +45,11 @@ test('Can successfully register with a mail address.', async () => {
     registration: true,
   })
 
-  await userEvent.click(screen.getByLabelText(Label.submit))
+  await act(async () => {
+    await userEvent.click(screen.getByLabelText(Label.submit))
+  })
 
-  expect(fetchMockCalls().length).toBe(1)
+  expect(fetchMockCalls().length).toBe(2)
 
   expect(fetchMockCalls()[0][0]).toContain(`authenticate?name=${encodeURIComponent(mailAddress)}`)
 
@@ -67,9 +70,9 @@ test('Can successfully register with a mail address.', async () => {
 
   expect(screen.getByLabelText(Label.inputNumber)).toHaveValue(Number(correctVerificationCode))
 
-  expect(fetchMockCalls().length).toBe(2)
+  expect(fetchMockCalls().length).toBe(3)
 
-  expect(fetchMockCalls()[1][0]).toContain(
+  expect(fetchMockCalls()[2][0]).toContain(
     `verify/confirm?code=${correctVerificationCode}&token=${codeToken}`
   )
 
@@ -80,6 +83,7 @@ test('Can successfully register with a mail address.', async () => {
 })
 
 test('Can login with the same mail address.', async () => {
+  console.log(fetchMockCalls().length, fetchMockCalls())
   const mailAddress = 'some@person.com'
   const onSuccessMock = vi.fn()
 
@@ -95,9 +99,11 @@ test('Can login with the same mail address.', async () => {
     registration: false,
   })
 
-  await userEvent.click(screen.getByLabelText(Label.submit))
+  await act(async () => {
+    await userEvent.click(screen.getByLabelText(Label.submit))
+  })
 
-  expect(fetchMockCalls().length).toBe(1)
+  expect(fetchMockCalls().length).toBe(2)
 
   expect(fetchMockCalls()[0][0]).toContain(`authenticate?name=${encodeURIComponent(mailAddress)}`)
 

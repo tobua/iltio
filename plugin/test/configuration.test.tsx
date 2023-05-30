@@ -1,11 +1,12 @@
 import React from 'react'
-import { render, screen } from '@testing-library/react'
+import { act, render, screen } from '@testing-library/react'
 import { afterEach, expect, test, vi } from 'vitest'
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 import matchers from '@testing-library/jest-dom/matchers'
 import styled from 'styled-components'
-import { MemoryStorage, configure } from '../index'
+// Ensures same configuration used as regular implementation.
+import { MemoryStorage, configure, reset } from 'iltio'
 import { Authentication } from '../react/Authentication'
 import { Label } from '../text'
 import { mockFetch, mockInterval, wait } from './helper'
@@ -15,6 +16,7 @@ expect.extend(matchers)
 const { fetchMockCalls, setResponse } = mockFetch()
 
 afterEach(() => {
+  reset()
   vi.restoreAllMocks()
 })
 
@@ -22,21 +24,27 @@ test('Can configure the token and the storage keys.', async () => {
   const mailAddress = 'some@person.com'
   const codeTokenStorageKey = 'test-key'
   const appToken = 'test-token'
-  const storage = {
-    getItem: vi.fn(),
-    setItem: vi.fn(),
-    removeItem: vi.fn(),
+
+  const MockStorage = {
+    data: {} as { [key: string]: string },
+    getItem: vi.fn((key: string) => MemoryStorage.data[key]),
+    setItem: vi.fn((key: string, value: any) => {
+      MemoryStorage.data[key] = value
+    }),
+    removeItem: vi.fn((key: string) => {
+      delete MemoryStorage.data[key]
+    }),
   }
 
   configure({
     token: appToken,
     codeTokenStorageKey,
-    storage,
+    storage: MockStorage,
   })
 
   render(<Authentication />)
 
-  expect(storage.setItem.mock.calls.length).toBe(0)
+  expect(MockStorage.setItem.mock.calls.length).toBe(0)
 
   await userEvent.type(screen.getByLabelText(Label.inputMail), mailAddress)
 
@@ -48,13 +56,14 @@ test('Can configure the token and the storage keys.', async () => {
     registration: true,
   })
 
-  await userEvent.click(screen.getByLabelText(Label.submit))
+  await act(async () => {
+    await userEvent.click(screen.getByLabelText(Label.submit))
+  })
 
-  expect(fetchMockCalls().length).toBe(1)
-
+  expect(fetchMockCalls().length).toBe(2)
   expect(fetchMockCalls()[0][0]).toContain(`token=${appToken}`)
 
-  const storageCalls = storage.setItem.mock.calls
+  const storageCalls = MockStorage.setItem.mock.calls
 
   expect(storageCalls.length).toBe(2)
 
@@ -153,11 +162,11 @@ test('Polling interval can be configured.', async () => {
     registration: true,
   })
 
-  await userEvent.click(screen.getByLabelText(Label.submit))
+  await act(async () => {
+    await userEvent.click(screen.getByLabelText(Label.submit))
+  })
 
-  expect(fetchMockCalls().length).toBe(1)
-
-  await wait()
+  expect(fetchMockCalls().length).toBe(2)
 
   expect(() => screen.getByLabelText(Label.submit)).toThrow('Unable to find a label')
 
@@ -170,9 +179,9 @@ test('Polling interval can be configured.', async () => {
   runInterval()
   await wait()
 
-  expect(fetchMockCalls().length).toBe(2)
-  expect(fetchMockCalls()[1][0]).toContain('verify/poll')
-  expect(fetchMockCalls()[1][0]).toContain(`token=${codeToken}`)
+  expect(fetchMockCalls().length).toBe(3)
+  expect(fetchMockCalls()[fetchMockCalls().length - 1][0]).toContain('verify/poll')
+  expect(fetchMockCalls()[fetchMockCalls().length - 1][0]).toContain(`token=${codeToken}`)
 
   setResponse({
     error: false,
@@ -184,7 +193,8 @@ test('Polling interval can be configured.', async () => {
   runInterval()
   await wait()
 
-  expect(fetchMockCalls().length).toBe(3)
+  expect(fetchMockCalls().length).toBe(4)
+  expect(fetchMockCalls()[fetchMockCalls().length - 1][0]).toContain('verify/poll')
   expect(onSuccessMock.mock.calls.length).toBe(1)
 })
 
@@ -204,9 +214,11 @@ test('Can configure the token on the JSX tag as well.', async () => {
     registration: true,
   })
 
-  await userEvent.click(screen.getByLabelText(Label.submit))
+  await act(async () => {
+    await userEvent.click(screen.getByLabelText(Label.submit))
+  })
 
-  expect(fetchMockCalls().length).toBe(1)
+  expect(fetchMockCalls().length).toBe(2)
 
   expect(fetchMockCalls()[0][0]).toContain(`token=${appTokenModified}`)
 })

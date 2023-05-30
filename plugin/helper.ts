@@ -75,8 +75,6 @@ export const initializePolling = (
       if (localError === 'Code expired.') {
         Store.removeCodeToken()
         expiredCallback()
-        // setSubmitted(false)
-        // setError(Text.CodeExpiredError)
       }
       return
     }
@@ -96,11 +94,20 @@ export const initializePolling = (
     }
   }
 
+  // Continue polling after page reload in verification stage.
   if (submitted) {
-    // Continue polling after page reload in verification stage.
-    app.pollInterval = setInterval(checkVerified, app.pollDuration)
+    // Avoid registering multiple listeners.
+    if (!app.pollInterval) {
+      app.pollInterval = setInterval(checkVerified, app.pollDuration)
+    }
     checkVerified()
-  } else if (app.pollInterval) {
+  } else {
+    stopPolling()
+  }
+}
+
+export const stopPolling = () => {
+  if (app.pollInterval) {
     clearInterval(app.pollInterval)
     app.pollInterval = 0
   }

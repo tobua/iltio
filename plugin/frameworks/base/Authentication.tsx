@@ -13,6 +13,7 @@ import {
   authenticate,
   initializePolling,
   confirm,
+  stopPolling,
 } from 'iltio'
 import { Props } from 'iltio/react'
 import { Phone } from './Phone.js'
@@ -122,10 +123,7 @@ export function Authentication({
           return
         }
 
-        if (app.pollInterval) {
-          clearInterval(app.pollInterval)
-          app.pollInterval = 0
-        }
+        stopPolling()
 
         if (userToken) {
           Store.token = userToken

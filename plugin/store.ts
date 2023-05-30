@@ -40,7 +40,7 @@ function getInitialStorage() {
   return window.sessionStorage as BasicStorage
 }
 
-export const app = {
+const getInitialConfiguration = () => ({
   apiUrl: 'https://iltio.com/api',
   authenticateUrl: '',
   apiToken: '',
@@ -50,10 +50,16 @@ export const app = {
   storage: getInitialStorage(),
   pollDuration: 10000,
   pollInterval: null,
-}
+})
+
+export const app = getInitialConfiguration()
 
 export const configure = ({ url, token, ...options }: Configuration) =>
   Object.assign(app, { ...options, apiUrl: url || app.apiUrl, apiToken: token || app.apiToken })
+
+export const reset = () => {
+  Object.assign(app, getInitialConfiguration())
+}
 
 export const Store = {
   get token() {

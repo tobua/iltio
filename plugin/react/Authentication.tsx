@@ -13,6 +13,7 @@ import {
   validatePhone,
   countries,
   initializePolling,
+  stopPolling,
 } from 'iltio'
 import { Phone } from './Phone.js'
 import { components } from './components.js'
@@ -101,7 +102,6 @@ export function Authentication({
         setError(localError === true ? Text.UnknownError : localError)
         return
       }
-
       setRegistration(localRegistration)
       setSubmitted(true)
     },
@@ -128,10 +128,7 @@ export function Authentication({
           return
         }
 
-        if (app.pollInterval) {
-          clearInterval(app.pollInterval)
-          app.pollInterval = 0
-        }
+        stopPolling()
 
         if (userToken) {
           Store.token = userToken
@@ -226,8 +223,6 @@ export function Authentication({
           )}
           <Components.Button
             aria-label={Label.submit}
-            // @ts-ignore NOTE form submit not working with testing-library.
-            onClick={handleSubmit}
             type="submit"
             style={style.button}
             variables={variables}

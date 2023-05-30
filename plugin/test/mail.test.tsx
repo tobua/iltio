@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, screen } from '@testing-library/react'
+import { act, render, screen } from '@testing-library/react'
 import { afterEach, expect, test, vi } from 'vitest'
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
@@ -33,7 +33,9 @@ test('Invalid mail address leads to invalid input.', async () => {
   expect(screen.getByLabelText(Label.inputMail)).toHaveAttribute('aria-invalid', 'false')
   expect(screen.getByLabelText(Label.submit)).toHaveTextContent('Submit')
 
-  await userEvent.click(screen.getByLabelText(Label.submit))
+  await act(async () => {
+    await userEvent.click(screen.getByLabelText(Label.submit))
+  })
 
   expect(fetchMockCalls().length).toBe(0)
   expect(screen.getByLabelText(Label.submit)).toHaveTextContent('Submit')
@@ -43,10 +45,16 @@ test('Invalid mail address leads to invalid input.', async () => {
 test('No submit with empty mail address.', async () => {
   render(<Authentication allowPhone={false} />)
 
-  expect(screen.getByLabelText(Label.inputMail)).toHaveValue('')
+  const inputMail = screen.getByLabelText(Label.inputMail)
 
-  await userEvent.click(screen.getByLabelText(Label.submit))
+  expect(inputMail).toHaveValue('')
+  // Type something to avoid "required" attribute preventing submit.
+  await userEvent.type(inputMail, 'test@test')
+
+  await act(async () => {
+    await userEvent.click(screen.getByLabelText(Label.submit))
+  })
 
   expect(fetchMockCalls().length).toBe(0)
-  expect(screen.getByLabelText(Label.inputMail)).toHaveAttribute('aria-invalid', 'true')
+  expect(inputMail).toHaveAttribute('aria-invalid', 'true')
 })
