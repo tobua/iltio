@@ -82,8 +82,7 @@ test('Can open and use phone country dropdown.', async ({ page }) => {
   const phoneCountry = context.getByLabel(Label.phoneCountry)
   await expect(phoneCountry).toBeVisible()
   await expect(phoneCountry).toHaveText(/🇺🇸\s?\+1/)
-  // Open country dropdown.
-  await phoneCountry.click()
+  await phoneCountry.click() // Open country dropdown.
 
   const phoneInputCountrySearch = context.getByLabel(Label.phoneInputCountrySearch)
   await expect(phoneInputCountrySearch).toBeVisible()
@@ -95,7 +94,23 @@ test('Can open and use phone country dropdown.', async ({ page }) => {
 
   await expect(phoneCountry).toHaveText(/🇮🇩\s?\+62/)
 
-  // TODO test country filter input.
+  await phoneCountry.click() // Open country dropdown again.
+
+  await wait(0.25)
+
+  await expect(phoneInputCountrySearch).toBeVisible()
+
+  await phoneInputCountrySearch.type('Switz')
+
+  await expect(context.getByText('Indonesia')).not.toBeAttached()
+  await expect(context.getByText('United States')).not.toBeAttached()
+
+  const countrySwitzerland = context.getByText('Switzerland')
+  await expect(countrySwitzerland).toHaveText('🇨🇭 Switzerland')
+
+  await countrySwitzerland.click()
+
+  await expect(phoneCountry).toHaveText(/🇨🇭\s?\+41/)
 })
 
 test('Shows an error if an invalid email address is inserted.', async ({ page }) => {
