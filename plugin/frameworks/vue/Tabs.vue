@@ -1,5 +1,5 @@
 <template>
-  <TabWrapper :style="style.tabWrapper" :variables="variables">
+  <TabWrapper v-if="multipleInputs" :style="style.tabWrapper" :variables="variables">
     <Tab
       :aria-label="Label.tabMail"
       :active="tab === 'mail'"

@@ -6,7 +6,7 @@
       borderColor: valid ? variables.color : 'red',
       padding: '9px',
       outline: 'none',
-      borderRadius: variables.borderRadius,
+      borderRadius: `${variables.borderRadius}px`,
       fontSize: `${variables.fontSize}px`,
       fontFamily: variables.fontFamily,
       backgroundColor: 'inherit',

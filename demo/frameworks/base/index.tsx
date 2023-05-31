@@ -4,11 +4,42 @@ import { Authentication } from 'iltio/base'
 createRoot(document.body).render(
   <div style={{ fontFamily: 'sans-serif' }}>
     <h1>iltio React Base Demo</h1>
-    <div id="base" style={{ display: 'flex', justifyContent: 'center' }}>
-      <Authentication
-        configuration={{ token: 'demo' }}
-        onSuccess={(name, token, registration) => console.log('success', name, token, registration)}
-      />
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        gap: 40,
+        justifyContent: 'center',
+      }}
+    >
+      <div id="base" style={{ display: 'flex', justifyContent: 'center' }}>
+        <Authentication
+          configuration={{ token: 'demo' }}
+          onSuccess={(name, token, registration) =>
+            console.log('success', name, token, registration)
+          }
+        />
+      </div>
+      <div id="phone" style={{ display: 'flex', justifyContent: 'center' }}>
+        <Authentication allowMail={false} />
+      </div>
+      <div
+        id="properties"
+        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+      >
+        <Authentication
+          variables={{
+            color: 'blue',
+            borderRadius: 10,
+          }}
+          style={{
+            form: {
+              width: 130,
+            },
+          }}
+        />
+      </div>
     </div>
   </div>
 )

@@ -36,10 +36,14 @@
   export let allowMail = true
   export let initialCountryCode = 'us'
   export let style = { phoneCountry: {}, phoneCountryOption: {} }
-  export let variables = defaultVariables
-  export let labels = defaultLabels
+  export let variables = {}
+  export let labels = {}
   export let configuration = {}
   export let onSuccess
+
+  variables = { ...defaultVariables, ...variables }
+  labels = { ...defaultLabels, ...labels }
+  style = { phoneCountry: {}, phoneCountryOption: {}, ...style }
 
   let tab = allowMail ? 'mail' : 'phone'
   let mail = ''

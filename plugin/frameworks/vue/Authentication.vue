@@ -113,6 +113,8 @@ export default {
       codeValid: true,
       Text,
       Label,
+      style: Object.assign({ phoneCountry: {}, phoneCountryOption: {} }, this.style),
+      variables: Object.assign({ ...defaultVariables }, this.variables),
     }
   },
   components: {

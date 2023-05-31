@@ -95,11 +95,14 @@ const App = () => {
             }}
           />
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <div id="phone" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <p>Phone Only</p>
           <Authentication allowMail={false} onSuccess={setName} />
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <div
+          id="properties"
+          style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+        >
           <p>Custom Variables & Style</p>
           <Authentication
             variables={{

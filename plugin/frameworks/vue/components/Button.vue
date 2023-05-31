@@ -7,7 +7,7 @@
       // TODO use toPx helper.
       padding: `${variables.smallSpace}px`,
       cursor: 'pointer',
-      borderRadius: variables.borderRadius,
+      borderRadius: `${variables.borderRadius}px`,
       fontSize: `${variables.fontSize}px`,
       fontFamily: variables.fontFamily,
       ...style,
