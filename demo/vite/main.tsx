@@ -85,9 +85,15 @@ const App = () => {
           justifyContent: 'center',
         }}
       >
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <div id="base" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <p>Regular Form</p>
-          <Authentication onSuccess={setName} />
+          <Authentication
+            configuration={{ token: 'demo' }}
+            onSuccess={(name, token, registration) => {
+              console.log('success', name, token, registration)
+              setName(name)
+            }}
+          />
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <p>Phone Only</p>
@@ -129,14 +135,6 @@ const App = () => {
       <p style={{ margin: 0 }}>
         Enter an email address or phone number above to register or login to the demo application.
       </p>
-      <div id="base">
-        <AuthenticationBase
-          configuration={{ token: 'demo' }}
-          onSuccess={(name, token, registration) =>
-            console.log('success', name, token, registration)
-          }
-        />
-      </div>
     </>
   )
 }

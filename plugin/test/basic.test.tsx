@@ -66,9 +66,9 @@ test('Can successfully register with a mail address.', async () => {
     token: userToken,
   })
 
-  await userEvent.type(screen.getByLabelText(Label.inputNumber), correctVerificationCode)
+  await userEvent.type(screen.getByLabelText(Label.inputCode), correctVerificationCode)
 
-  expect(screen.getByLabelText(Label.inputNumber)).toHaveValue(Number(correctVerificationCode))
+  expect(screen.getByLabelText(Label.inputCode)).toHaveValue(Number(correctVerificationCode))
 
   expect(fetchMockCalls().length).toBe(3)
 

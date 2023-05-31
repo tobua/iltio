@@ -1,9 +1,6 @@
 import React, { useState } from 'react'
-import { Variables } from 'iltio'
-import { Label, Text } from '../text.js'
+import { Variables, Label, Text, filterCountries, countries } from 'iltio'
 import { Styles, ComponentTypes } from './types.js'
-import { filterCountries } from '../helper.js'
-import { countries } from '../data/countries.js'
 
 interface Props {
   phoneValid: boolean
@@ -32,7 +29,12 @@ export function Phone({
   const country = countries[countryCode]
 
   return (
-    <Components.PhoneWrapper style={style.phoneWrapper} variables={variables} valid={phoneValid}>
+    <Components.PhoneWrapper
+      aria-label={Label.phoneWrapper}
+      style={style.phoneWrapper}
+      variables={variables}
+      valid={phoneValid}
+    >
       <Components.PhoneTop style={style.phoneTop} variables={variables}>
         <Components.PhoneCountry
           prefix={country.prefix}

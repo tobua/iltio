@@ -1,5 +1,6 @@
 {
   "papua": {
+    "title": "iltio React Demo",
     "tsconfig": {
       "compilerOptions": {
         "moduleResolution": "nodenext"

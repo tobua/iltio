@@ -11,9 +11,9 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
   projects: [
-    // React Base
+    // React
     {
-      name: 'chromium-base',
+      name: 'chromium-react',
       use: {
         ...devices['Desktop Chrome'],
         baseURL: 'http://localhost:3000',
@@ -33,6 +33,14 @@ export default defineConfig({
       use: {
         ...devices['Desktop Chrome'],
         baseURL: 'http://localhost:3002',
+      },
+    },
+    // React Base
+    {
+      name: 'chromium-base',
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: 'http://localhost:3003',
       },
     },
     // {
@@ -61,6 +69,12 @@ export default defineConfig({
     {
       command: 'npm run dev --prefix ../demo/frameworks/svelte -- --port 3002',
       url: 'http://localhost:3002',
+      reuseExistingServer: !process.env.CI,
+    },
+    // React Base
+    {
+      command: 'npm start --prefix ../demo/frameworks/base -- --port 3003 --headless',
+      url: 'http://localhost:3003',
       reuseExistingServer: !process.env.CI,
     },
   ],

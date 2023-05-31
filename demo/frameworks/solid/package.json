@@ -6,7 +6,7 @@
     "serve": "vite preview"
   },
   "dependencies": {
-    "solid-js": "^1.7.5",
+    "solid-js": "^1.7.6",
     "iltio": "*"
   },
   "devDependencies": {

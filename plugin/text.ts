@@ -6,7 +6,6 @@ export const Label = {
   inputMail: 'authentication-input-mail',
   inputPhone: 'authentication-input-phone',
   submit: 'authentication-submit',
-  inputNumber: 'authentication-input-number',
   phoneCountry: 'authentication-phone-country',
   resendCode: 'authentication-resend-code',
   registration: 'authentication-registration',

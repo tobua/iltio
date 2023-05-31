@@ -117,7 +117,7 @@
     "react-dom": "^18.2.0",
     "react-native": "^0.71.8",
     "styled-components": "^5.3.11",
-    "vitest": "^0.31.1"
+    "vitest": "^0.31.3"
   },
   "prettier": "padua/configuration/.prettierrc.json",
   "eslintConfig": {
