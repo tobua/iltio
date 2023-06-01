@@ -3,6 +3,7 @@ export const Label = {
   title: 'authentication-title',
   tabMail: 'authentication-tab-mail',
   tabPhone: 'authentication-tab-phone',
+  tabWrapper: 'authentication-tab-wrapper',
   inputMail: 'authentication-input-mail',
   inputPhone: 'authentication-input-phone',
   submit: 'authentication-submit',

@@ -1,16 +1,23 @@
 <template>
-  <Message
+  <component
+    :is="Message"
     v-if="registration"
     :aria-label="Label.registration"
     :style="style.message"
     :variables="variables"
   >
     {{ Text.RegistrationMessage }}
-  </Message>
-  <Message :aria-label="Label.messageConfirm" :style="style.message" :variables="variables">
+  </component>
+  <component
+    :is="Message"
+    :aria-label="Label.messageConfirm"
+    :style="style.message"
+    :variables="variables"
+  >
     {{ Text.CodeSentMessage }}
-  </Message>
-  <Input
+  </component>
+  <component
+    :is="Input"
     :aria-label="Label.inputCode"
     @input="(event) => handleCode(event.target.value)"
     :valid="codeValid"
@@ -21,14 +28,19 @@
     :style="{ textAlign: 'center', ...style.inputCode }"
     :variables="variables"
   />
-  <Resend :labels="labels" :variables="variables" :style="style" />
+  <Resend
+    :labels="labels"
+    :variables="variables"
+    :style="style"
+    :Button="Button"
+    :Error="Error"
+    :Message="Message"
+  />
 </template>
 
 <script>
 import { Label, Text } from 'iltio'
 import Resend from './Resend.vue'
-import Message from './components/Message.vue'
-import Input from './components/Input.vue'
 
 export default {
   props: {
@@ -38,12 +50,10 @@ export default {
     registration: Boolean,
     codeValid: Boolean,
     handleCode: Function,
+    Message: Object,
+    Input: Object,
   },
-  components: {
-    Resend,
-    Input,
-    Message,
-  },
+  components: { Resend },
   data() {
     return {
       Text,

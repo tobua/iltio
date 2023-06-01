@@ -1,5 +1,6 @@
 import { createRoot } from 'react-dom/client'
 import { Authentication } from 'iltio/base'
+import { CustomUIComponents } from './custom'
 
 createRoot(document.body).render(
   <div style={{ fontFamily: 'sans-serif' }}>
@@ -38,6 +39,27 @@ createRoot(document.body).render(
               width: 130,
             },
           }}
+        />
+      </div>
+      <div id="custom" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <CustomUIComponents />
+      </div>
+      <div
+        id="styles"
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          color: 'green',
+          fontSize: 14,
+          fontFamily: 'monospace',
+          backgroundColor: 'lightgray',
+          padding: 10,
+        }}
+      >
+        <Authentication
+          variables={{ fontSize: 'inherit', color: 'inherit', contrast: 'red' }}
+          labels={{ submit: 'Inherited Background??', tabMail: 'E-Mail' }}
         />
       </div>
     </div>

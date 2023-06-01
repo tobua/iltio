@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { Store, configure, authorize, logout, remove } from 'iltio'
 import { Authentication } from 'iltio/react'
-import { Authentication as AuthenticationBase } from 'iltio/base'
 import { CustomUIComponents } from './custom-ui-components.js'
 
 configure({
@@ -117,11 +116,12 @@ const App = () => {
             onSuccess={setName}
           />
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <div id="custom" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <p>Custom UI Components</p>
           <CustomUIComponents onSuccess={setName} />
         </div>
         <div
+          id="styles"
           style={{
             display: 'flex',
             flexDirection: 'column',
@@ -129,10 +129,16 @@ const App = () => {
             color: 'green',
             fontSize: 14,
             fontFamily: 'monospace',
+            backgroundColor: 'lightgray',
+            padding: 10,
           }}
         >
           <p>Inherited Styles</p>
-          <Authentication variables={{ fontSize: 'inherit' }} onSuccess={setName} />
+          <Authentication
+            variables={{ fontSize: 'inherit', color: 'inherit', contrast: 'red' }}
+            labels={{ submit: 'Inherited Background??', tabMail: 'E-Mail' }}
+            onSuccess={setName}
+          />
         </div>
       </div>
       <p style={{ margin: 0 }}>

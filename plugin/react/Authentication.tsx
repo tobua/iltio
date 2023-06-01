@@ -168,7 +168,11 @@ export function Authentication({
       {!submitted && (
         <>
           {multipleInputs && (
-            <Components.TabWrapper style={style.tabWrapper} variables={variables}>
+            <Components.TabWrapper
+              style={style.tabWrapper}
+              variables={variables}
+              aria-label={Label.tabWrapper}
+            >
               <Components.Tab
                 aria-label={Label.tabMail}
                 active={tab === 'mail'}

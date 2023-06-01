@@ -1,12 +1,14 @@
 <template>
-  <PhoneWrapper
+  <component
+    :is="PhoneWrapper"
     :aria-label="Label.phoneWrapper"
     :style="style.phoneWrapper"
     :variables="variables"
     :valid="phoneValid"
   >
-    <PhoneTop :style="style.phoneTop" :variables="variables">
-      <PhoneCountry
+    <component :is="PhoneTop" :style="style.phoneTop" :variables="variables">
+      <component
+        :is="PhoneCountry"
         :prefix="country.prefix"
         :flag="country.flag"
         :variables="variables"
@@ -15,7 +17,8 @@
         :data-country="countryCode"
         :style="style.phoneCountry"
       />
-      <PhoneInput
+      <component
+        :is="PhoneInput"
         :aria-label="Label.inputPhone"
         :aria-invalid="!phoneValid"
         :value="phone"
@@ -27,9 +30,15 @@
         :placeholder="Text.PhoneInputPlaceholder"
         type="tel"
       />
-    </PhoneTop>
-    <PhoneCountryOptions v-if="open" :style="style.phoneCountryOptions" :variables="variables">
-      <Input
+    </component>
+    <component
+      :is="PhoneCountryOptions"
+      v-if="open"
+      :style="style.phoneCountryOptions"
+      :variables="variables"
+    >
+      <component
+        :is="Input"
         :aria-label="Label.phoneInputCountrySearch"
         :value="filter"
         @input="(event) => setFilter(event.target.value)"
@@ -39,7 +48,8 @@
         type="text"
       />
       <template v-for="item in Object.values(filteredCountries)" :key="item.abbreviation">
-        <PhoneCountryOption
+        <component
+          :is="PhoneCountryOption"
           aria-label="phoneCountryOption"
           :data-testid="item.abbreviation"
           :variables="variables"
@@ -53,21 +63,14 @@
           "
         >
           {{ item.flag }} {{ item.name }}
-        </PhoneCountryOption>
+        </component>
       </template>
-    </PhoneCountryOptions>
-  </PhoneWrapper>
+    </component>
+  </component>
 </template>
 
 <script>
 import { countries, Text, Label, filterCountries } from 'iltio'
-import Input from './components/Input.vue'
-import PhoneWrapper from './components/PhoneWrapper.vue'
-import PhoneTop from './components/PhoneTop.vue'
-import PhoneInput from './components/PhoneInput.vue'
-import PhoneCountryOptions from './components/PhoneCountryOptions.vue'
-import PhoneCountryOption from './components/PhoneCountryOption.vue'
-import PhoneCountry from './components/PhoneCountry.vue'
 
 export default {
   props: {
@@ -77,7 +80,13 @@ export default {
     setCountryCode: Function,
     phone: String,
     setPhone: Function,
-    Components: Object,
+    Input: Function,
+    PhoneWrapper: Function,
+    PhoneTop: Function,
+    PhoneInput: Function,
+    PhoneCountryOptions: Function,
+    PhoneCountryOption: Function,
+    PhoneCountry: Function,
     style: Object,
   },
   data() {
@@ -87,15 +96,6 @@ export default {
       Text,
       Label,
     }
-  },
-  components: {
-    Input,
-    PhoneWrapper,
-    PhoneTop,
-    PhoneInput,
-    PhoneCountryOptions,
-    PhoneCountryOption,
-    PhoneCountry,
   },
   computed: {
     filteredCountries() {

@@ -1,5 +1,6 @@
 <template>
-  <Button
+  <component
+    :is="Button"
     :aria-label="Label.resendCode"
     @click="handleResend"
     type="button"
@@ -7,27 +8,26 @@
     :variables="variables"
   >
     {{ loading ? 'Loading...' : labels.resend }}
-  </Button>
-  <Error v-if="error" :style="style.error" :variables="variables">
+  </component>
+  <component :is="Error" v-if="error" :style="style.error" :variables="variables">
     {{ error }}
-  </Error>
-  <Message v-if="success" :style="style.message" :variables="variables">
+  </component>
+  <component :is="Message" v-if="success" :style="style.message" :variables="variables">
     {{ success }}
-  </Message>
+  </component>
 </template>
 
 <script>
 import { Label, Text, resend } from 'iltio'
-import Button from './components/Button.vue'
-import Error from './components/Error.vue'
-import Message from './components/Message.vue'
 
 export default {
-  name: 'Resend',
   props: {
     style: Object,
     variables: Object,
     labels: Object,
+    Button: Function,
+    Error: Function,
+    Message: Function,
   },
   data() {
     return {
@@ -36,11 +36,6 @@ export default {
       success: '',
       Label,
     }
-  },
-  components: {
-    Button,
-    Error,
-    Message,
   },
   methods: {
     async handleResend() {

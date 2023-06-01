@@ -35,15 +35,41 @@
   export let allowPhone = true
   export let allowMail = true
   export let initialCountryCode = 'us'
-  export let style = { phoneCountry: {}, phoneCountryOption: {} }
+  export let style = {}
   export let variables = {}
   export let labels = {}
   export let configuration = {}
   export let onSuccess
+  export let Components = {}
 
-  variables = { ...defaultVariables, ...variables }
-  labels = { ...defaultLabels, ...labels }
-  style = { phoneCountry: {}, phoneCountryOption: {}, ...style }
+  let MergedComponents
+  let mergedStyle
+  let mergedVariables
+  let mergedLabels
+
+  $: {
+    MergedComponents = {
+      ...{
+        TabWrapper,
+        Tab,
+        Input,
+        Button,
+        Form,
+        Message,
+        Error,
+        PhoneCountry,
+        PhoneCountryOptions,
+        PhoneCountryOption,
+        PhoneInput,
+        PhoneTop,
+        PhoneWrapper,
+      },
+      ...Components,
+    }
+    mergedStyle = { ...{ phoneCountry: {}, phoneCountryOption: {} }, ...style }
+    mergedVariables = { ...defaultVariables, ...variables }
+    mergedLabels = { ...defaultLabels, ...labels }
+  }
 
   let tab = allowMail ? 'mail' : 'phone'
   let mail = ''
@@ -57,21 +83,6 @@
   let registration = false
   let error = ''
   let codeValid = true
-  let Components = {
-    TabWrapper,
-    Tab,
-    Input,
-    Button,
-    Form,
-    Message,
-    Error,
-    PhoneCountry,
-    PhoneCountryOptions,
-    PhoneCountryOption,
-    PhoneInput,
-    PhoneTop,
-    PhoneWrapper,
-  }
 
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -200,21 +211,34 @@
   })
 </script>
 
-<Components.Form aria-label={Label.form} on:submit={handleSubmit} style={style.form} {variables}>
+<MergedComponents.Form
+  aria-label={Label.form}
+  on:submit={handleSubmit}
+  styles={mergedStyle.form}
+  variables={mergedVariables}
+>
   {#if !submitted}
-    <Tabs {multipleInputs} {tab} {setTab} {style} {labels} {variables} {Components} />
+    <Tabs
+      {multipleInputs}
+      {tab}
+      {setTab}
+      style={mergedStyle}
+      labels={mergedLabels}
+      variables={mergedVariables}
+      Components={MergedComponents}
+    />
     {#if allowMail && (!multipleInputs || tab === 'mail')}
-      <Components.Input
+      <MergedComponents.Input
         aria-label={Label.inputMail}
         aria-invalid={!mailValid}
         bind:value={mail}
         on:input={(event) => setMail(event.target.value)}
         required
         valid={mailValid}
-        style={style.inputMail}
+        style={mergedStyle.inputMail}
         placeholder={Text.MailInputPlaceholder}
         type="email"
-        {variables}
+        variables={mergedVariables}
       />
     {/if}
     {#if allowPhone && (!multipleInputs || tab === 'phone')}
@@ -223,28 +247,40 @@
         {setCountryCode}
         {phone}
         {setPhone}
-        {variables}
+        variables={mergedVariables}
         {phoneValid}
-        {Components}
-        {style}
+        Components={MergedComponents}
+        style={mergedStyle}
       />
     {/if}
     {#if error}
-      <Components.Error style={style.error} {variables} aria-label={Label.inputError}>
+      <MergedComponents.Error
+        style={mergedStyle.error}
+        variables={mergedVariables}
+        aria-label={Label.inputError}
+      >
         {error}
-      </Components.Error>
+      </MergedComponents.Error>
     {/if}
-    <Components.Button
+    <MergedComponents.Button
       aria-label={Label.submit}
       on:click={handleSubmit}
       type="submit"
-      {variables}
-      style={style.button}
+      variables={mergedVariables}
+      style={mergedStyle.button}
     >
-      {loading ? Text.LoadingButton : labels.submit}
-    </Components.Button>
+      {loading ? Text.LoadingButton : mergedLabels.submit}
+    </MergedComponents.Button>
   {/if}
   {#if submitted}
-    <Code {style} {variables} {labels} {registration} {codeValid} {Components} {handleCode} />
+    <Code
+      style={mergedStyle}
+      variables={mergedVariables}
+      labels={mergedLabels}
+      {registration}
+      {codeValid}
+      Components={MergedComponents}
+      {handleCode}
+    />
   {/if}
-</Components.Form>
+</MergedComponents.Form>

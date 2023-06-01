@@ -7,7 +7,11 @@ export function Tabs({ multipleInputs, tab, Components, setTab, style, variables
   }
 
   return (
-    <Components.TabWrapper style={style.tabWrapper} variables={variables}>
+    <Components.TabWrapper
+      style={style.tabWrapper}
+      variables={variables}
+      aria-label={Label.tabWrapper}
+    >
       <Components.Tab
         aria-label={Label.tabMail}
         active={tab === 'mail'}

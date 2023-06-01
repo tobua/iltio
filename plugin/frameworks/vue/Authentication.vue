@@ -1,20 +1,24 @@
 <template>
-  <Form
+  <component
+    :is="Form"
     :aria-label="Label.form"
     @submit.prevent="handleSubmit"
-    :style="style.form"
-    :variables="variables"
+    :style="mergedStyle.form"
+    :variables="mergedVariables"
   >
     <template v-if="!submitted">
       <Tabs
         :multipleInputs="multipleInputs"
         :tab="tab"
         :setTab="setTab"
-        :style="style"
-        :variables="variables"
-        :labels="labels"
+        :style="mergedStyle"
+        :variables="mergedVariables"
+        :labels="mergedLabels"
+        :Tab="Tab"
+        :TabWrapper="TabWrapper"
       />
-      <Input
+      <component
+        :is="Input"
         v-if="allowMail && (!multipleInputs || tab === 'mail')"
         :aria-label="Label.inputMail"
         :aria-invalid="!mailValid"
@@ -22,44 +26,62 @@
         @input="(event) => setMail(event.target.value)"
         required
         :valid="mailValid"
-        :variables="variables"
-        :style="style.inputMail"
+        :variables="mergedVariables"
+        :style="mergedStyle.inputMail"
         :placeholder="Text.MailInputPlaceholder"
         type="email"
       />
       <Phone
         v-if="allowPhone && (!multipleInputs || tab === 'phone')"
-        :variables="variables"
+        :variables="mergedVariables"
         :phoneValid="phoneValid"
         :countryCode="countryCode"
         :setCountryCode="setCountryCode"
         :phone="phone"
         :setPhone="setPhone"
-        :style="style"
+        :style="mergedStyle"
+        :Input="Input"
+        :PhoneWrapper="PhoneWrapper"
+        :PhoneTop="PhoneTop"
+        :PhoneInput="PhoneInput"
+        :PhoneCountryOptions="PhoneCountryOptions"
+        :PhoneCountryOption="PhoneCountryOption"
+        :PhoneCountry="PhoneCountry"
       />
-      <Error
+      <component
+        :is="Error"
         v-if="error"
-        :style="style.error"
-        :variables="variables"
+        :style="mergedStyle.error"
+        :variables="mergedVariables"
         :aria-label="Label.inputError"
       >
         {{ error }}
-      </Error>
-      <Button :aria-label="Label.submit" type="submit" :style="style.button" :variables="variables">
-        {{ loading ? Text.LoadingButton : labels.submit }}
-      </Button>
+      </component>
+      <component
+        :is="Button"
+        :aria-label="Label.submit"
+        type="submit"
+        :style="mergedStyle.button"
+        :variables="mergedVariables"
+      >
+        {{ loading ? Text.LoadingButton : mergedLabels.submit }}
+      </component>
     </template>
     <template v-else>
       <Code
-        :style="style"
-        :variables="variables"
-        :labels="labels"
+        :style="mergedStyle"
+        :variables="mergedVariables"
+        :labels="mergedLabels"
         :registration="registration"
         :codeValid="codeValid"
         :handleCode="handleCode"
+        :Input="Input"
+        :Message="Message"
+        :Button="Button"
+        :Error="Error"
       />
     </template>
-  </Form>
+  </component>
 </template>
 
 <script>
@@ -85,6 +107,14 @@ import Form from './components/Form.vue'
 import Input from './components/Input.vue'
 import Button from './components/Button.vue'
 import Error from './components/Error.vue'
+import PhoneWrapper from './components/PhoneWrapper.vue'
+import PhoneTop from './components/PhoneTop.vue'
+import PhoneInput from './components/PhoneInput.vue'
+import PhoneCountryOptions from './components/PhoneCountryOptions.vue'
+import PhoneCountryOption from './components/PhoneCountryOption.vue'
+import PhoneCountry from './components/PhoneCountry.vue'
+import TabWrapper from './components/TabWrapper.vue'
+import Tab from './components/Tab.vue'
 
 export default {
   props: {
@@ -93,19 +123,18 @@ export default {
     allowMail: { type: Boolean, default: true },
     initialCountryCode: { type: String, default: 'us' },
     style: { type: Object, default: () => ({ phoneCountry: {}, phoneCountryOption: {} }) },
-    variables: { type: Object, default: () => defaultVariables },
+    variables: { type: Object, default: () => ({ ...defaultVariables }) },
     labels: { type: Object, default: () => ({ ...defaultLabels }) },
     onSuccess: { type: Function, required: true },
+    Components: { type: Object, default: () => ({}) },
   },
   data() {
     return {
       tab: this.allowMail ? 'mail' : 'phone',
       mail: '',
       phone: '',
-      countryCode: this.initialCountryCode.toLowerCase(),
       mailValid: true,
       phoneValid: true,
-      multipleInputs: this.allowMail && this.allowPhone,
       loading: false,
       submitted: Store.codeToken !== '',
       registration: false,
@@ -113,18 +142,41 @@ export default {
       codeValid: true,
       Text,
       Label,
-      style: Object.assign({ phoneCountry: {}, phoneCountryOption: {} }, this.style),
-      variables: Object.assign({ ...defaultVariables }, this.variables),
+      Input: this.Components.Input || Input,
+      Form: this.Components.Form || Form,
+      Button: this.Components.Button || Button,
+      Error: this.Components.Error || Error,
+      PhoneWrapper: this.Components.PhoneWrapper || PhoneWrapper,
+      PhoneTop: this.Components.PhoneTop || PhoneTop,
+      PhoneInput: this.Components.PhoneInput || PhoneInput,
+      PhoneCountryOptions: this.Components.PhoneCountryOptions || PhoneCountryOptions,
+      PhoneCountryOption: this.Components.PhoneCountryOption || PhoneCountryOption,
+      PhoneCountry: this.Components.PhoneCountry || PhoneCountry,
+      TabWrapper: this.Components.TabWrapper || TabWrapper,
+      Tab: this.Components.Tab || Tab,
     }
   },
   components: {
-    Tabs,
     Code,
+    Tabs,
     Phone,
-    Form,
-    Input,
-    Button,
-    Error,
+  },
+  computed: {
+    mergedStyle() {
+      return Object.assign({ phoneCountry: {}, phoneCountryOption: {} }, this.style)
+    },
+    mergedVariables() {
+      return Object.assign({ ...defaultVariables }, this.variables)
+    },
+    mergedLabels() {
+      return Object.assign({ ...defaultLabels }, this.labels)
+    },
+    multipleInputs() {
+      return this.allowMail && this.allowPhone
+    },
+    countryCode() {
+      return this.initialCountryCode.toLowerCase()
+    },
   },
   methods: {
     async handleSubmit() {

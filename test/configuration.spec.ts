@@ -70,3 +70,37 @@ test('Variables and style configuration properties are applied.', async ({ page 
   await expect(submit).toHaveCSS('background-color', 'rgb(0, 0, 255)')
   await expect(submit).toHaveCSS('border-radius', '10px')
 })
+
+test.only('Custom components can be inserted for every framework and lead to the same result.', async ({
+  page,
+}) => {
+  const context = await loadPage(page, '#custom')
+
+  const form = context.getByLabel(Label.form)
+  await expect(form).toHaveCSS('border', '1px dashed rgb(199, 199, 199)')
+  await expect(form).toHaveCSS('width', '300px')
+  await expect(form).toHaveCSS('padding', '20px')
+
+  const tabWrapper = context.getByLabel(Label.tabWrapper)
+  await expect(tabWrapper).toHaveCSS('background-color', 'rgb(204, 204, 204)')
+  await expect(tabWrapper).toHaveCSS('padding', '10px')
+  await expect(tabWrapper).toHaveCSS('border-radius', '10px')
+
+  const inputMail = context.getByLabel(Label.inputMail)
+  await expect(inputMail).toHaveCSS('border-top', '0px none rgb(0, 0, 0)')
+  await expect(inputMail).toHaveCSS('border-bottom', '1px solid rgb(0, 0, 0)')
+})
+
+test('Styles are properly inherited from page.', async ({ page }) => {
+  const context = await loadPage(page, '#styles')
+
+  const tabMail = context.getByLabel(Label.tabMail)
+  await expect(tabMail).toHaveCSS('font-family', 'monospace')
+  await expect(tabMail).toHaveCSS('color', 'rgb(0, 128, 0)')
+  await expect(tabMail).toHaveText('E-Mail')
+
+  const submit = context.getByLabel(Label.submit)
+  await expect(submit).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)') // Default browser background is transparent.
+  await expect(submit).toHaveCSS('color', 'rgb(255, 0, 0)')
+  await expect(submit).toHaveText('Inherited Background??')
+})

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Authentication } from 'iltio/react'
+import { Authentication } from 'iltio/base'
 
 const MyButton = ({ variables, style, ...props }: any) => {
   const [active, setActive] = useState(false)

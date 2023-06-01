@@ -83,7 +83,6 @@ test('Can successfully register with a mail address.', async () => {
 })
 
 test('Can login with the same mail address.', async () => {
-  console.log(fetchMockCalls().length, fetchMockCalls())
   const mailAddress = 'some@person.com'
   const onSuccessMock = vi.fn()
 
