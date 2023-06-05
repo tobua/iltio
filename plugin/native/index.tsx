@@ -10,7 +10,7 @@ import {
   ViewStyle,
   TextStyle,
 } from 'react-native'
-import { Authentication, Props, Styles, ComponentTypes } from 'iltio/react'
+import { Authentication, Props, Styles, ComponentTypes } from '../react/Authentication.js'
 import type { NativeStyles, NativeVariables } from './types.js'
 
 export { configure, Store, MemoryStorage } from '../store.js'

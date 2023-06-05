@@ -69,20 +69,31 @@
         "default": "./dist/react/Authentication.js"
       }
     },
-    "./package.json": "./package.json",
     "./dist/native/index.js": "./dist/native/index.js",
-    "./native": "./dist/native/index.js",
-    "./next": "./dist/next.js",
-    "./solid": "./frameworks/solid/Authentication.jsx",
+    "./native": {
+      "default": {
+        "types": "./dist/native/index.d.ts",
+        "default": "./dist/native/index.js"
+      }
+    },
+    "./next": {
+      "default": {
+        "types": "./dist/next.d.ts",
+        "default": "./dist/next.js"
+      }
+    },
     "./vue": {
-      "import": {
+      "default": {
         "default": "./frameworks/vue/Authentication.vue"
       }
     },
-    "./svelte": "./frameworks/svelte/Authentication.svelte",
-    "./qwik": "./frameworks/qwik/Authentication.jsx",
+    "./svelte": {
+      "default": {
+        "default": "./frameworks/svelte/Authentication.svelte"
+      }
+    },
     "./base": {
-      "import": {
+      "default": {
         "types": "./dist/frameworks/base/Authentication.d.ts",
         "default": "./dist/frameworks/base/Authentication.js"
       }
@@ -117,7 +128,7 @@
     "react-dom": "^18.2.0",
     "react-native": "^0.71.8",
     "styled-components": "^5.3.11",
-    "vitest": "^0.31.3"
+    "vitest": "^0.31.4"
   },
   "prettier": "padua/configuration/.prettierrc.json",
   "eslintConfig": {

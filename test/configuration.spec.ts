@@ -71,7 +71,7 @@ test('Variables and style configuration properties are applied.', async ({ page 
   await expect(submit).toHaveCSS('border-radius', '10px')
 })
 
-test.only('Custom components can be inserted for every framework and lead to the same result.', async ({
+test('Custom components can be inserted for every framework and lead to the same result.', async ({
   page,
 }) => {
   const context = await loadPage(page, '#custom')
