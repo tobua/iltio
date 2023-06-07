@@ -25,9 +25,9 @@ export default {
     style: Object,
     variables: Object,
     labels: Object,
-    Button: Function,
-    Error: Function,
-    Message: Function,
+    Button: Object,
+    Error: Object,
+    Message: Object,
   },
   data() {
     return {

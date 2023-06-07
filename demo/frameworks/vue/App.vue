@@ -26,7 +26,7 @@ import MyButton from './components/MyButton.vue'
         />
       </div>
       <div id="phone" :style="{ display: 'flex', justifyContent: 'center' }">
-        <Authentication :allowMail="false" />
+        <Authentication :allowMail="false" :on-success="() => {}" />
       </div>
       <div
         id="properties"
@@ -42,6 +42,7 @@ import MyButton from './components/MyButton.vue'
               width: '130px',
             },
           }"
+          :on-success="() => {}"
         />
       </div>
       <div id="custom">
@@ -60,6 +61,7 @@ import MyButton from './components/MyButton.vue'
             Input: MyInput,
             PhoneWrapper: MyPhoneWrapper,
           }"
+          :on-success="() => {}"
         />
       </div>
       <div
@@ -78,6 +80,7 @@ import MyButton from './components/MyButton.vue'
         <Authentication
           :variables="{ fontSize: 'inherit', color: 'inherit', contrast: 'red' }"
           :labels="{ submit: 'Inherited Background??', tabMail: 'E-Mail' }"
+          :on-success="() => {}"
         />
       </div>
     </div>

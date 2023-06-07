@@ -85,6 +85,7 @@
 </template>
 
 <script>
+import { markRaw } from 'vue'
 import {
   Label,
   Text,
@@ -106,6 +107,7 @@ import Code from './Code.vue'
 import Form from './components/Form.vue'
 import Input from './components/Input.vue'
 import Button from './components/Button.vue'
+import Message from './components/Message.vue'
 import Error from './components/Error.vue'
 import PhoneWrapper from './components/PhoneWrapper.vue'
 import PhoneTop from './components/PhoneTop.vue'
@@ -142,18 +144,20 @@ export default {
       codeValid: true,
       Text,
       Label,
-      Input: this.Components.Input || Input,
-      Form: this.Components.Form || Form,
-      Button: this.Components.Button || Button,
-      Error: this.Components.Error || Error,
-      PhoneWrapper: this.Components.PhoneWrapper || PhoneWrapper,
-      PhoneTop: this.Components.PhoneTop || PhoneTop,
-      PhoneInput: this.Components.PhoneInput || PhoneInput,
-      PhoneCountryOptions: this.Components.PhoneCountryOptions || PhoneCountryOptions,
-      PhoneCountryOption: this.Components.PhoneCountryOption || PhoneCountryOption,
-      PhoneCountry: this.Components.PhoneCountry || PhoneCountry,
-      TabWrapper: this.Components.TabWrapper || TabWrapper,
-      Tab: this.Components.Tab || Tab,
+      Input: markRaw(this.Components.Input || Input),
+      Form: markRaw(this.Components.Form || Form),
+      Button: markRaw(this.Components.Button || Button),
+      Message: markRaw(this.Components.Message || Message),
+      Error: markRaw(this.Components.Error || Error),
+      PhoneWrapper: markRaw(this.Components.PhoneWrapper || PhoneWrapper),
+      PhoneTop: markRaw(this.Components.PhoneTop || PhoneTop),
+      PhoneInput: markRaw(this.Components.PhoneInput || PhoneInput),
+      PhoneCountryOptions: markRaw(this.Components.PhoneCountryOptions || PhoneCountryOptions),
+      PhoneCountryOption: markRaw(this.Components.PhoneCountryOption || PhoneCountryOption),
+      PhoneCountry: markRaw(this.Components.PhoneCountry || PhoneCountry),
+      TabWrapper: markRaw(this.Components.TabWrapper || TabWrapper),
+      Tab: markRaw(this.Components.Tab || Tab),
+      countryCode: this.initialCountryCode.toLowerCase(),
     }
   },
   components: {
@@ -173,9 +177,6 @@ export default {
     },
     multipleInputs() {
       return this.allowMail && this.allowPhone
-    },
-    countryCode() {
-      return this.initialCountryCode.toLowerCase()
     },
   },
   methods: {

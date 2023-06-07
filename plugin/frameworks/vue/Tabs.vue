@@ -40,8 +40,8 @@ export default {
     style: Object,
     variables: Object,
     labels: Object,
-    TabWrapper: Function,
-    Tab: Function,
+    TabWrapper: Object,
+    Tab: Object,
   },
   data() {
     return {

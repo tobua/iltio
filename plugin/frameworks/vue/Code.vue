@@ -52,6 +52,8 @@ export default {
     handleCode: Function,
     Message: Object,
     Input: Object,
+    Button: Object,
+    Error: Object,
   },
   components: { Resend },
   data() {
