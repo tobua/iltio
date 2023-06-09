@@ -7,6 +7,9 @@ on:
 jobs:
   plugin:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
     defaults:
       run:
         working-directory: plugin
@@ -15,7 +18,8 @@ jobs:
       - run: npm install --legacy-peer-deps
       - run: npm run build
       - run: npm test
-      - uses: tobua/release-npm-action@v1
+      - run: npm install -g npm@latest
+      - uses: tobua/release-npm-action@v2
         with:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           FOLDER: plugin
@@ -26,7 +30,10 @@ jobs:
         working-directory: test
     steps:
       - uses: actions/checkout@v3
-      - run: npm install --legacy-peer-deps --prefix .. # Install in root to ensure all workspace dependencies installed.
+      # Install in root to ensure all workspace dependencies installed.
+      - run: |
+          cd ..
+          npm install --legacy-peer-deps
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - name: Run Playwright tests

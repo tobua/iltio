@@ -46,7 +46,7 @@ For the task table we will add more or less the same permissions including an up
 
 ## The Code
 
-The following app will first show the iltio `<Form />` to promt the user to authenticate. Once the user is logged in the Apollo client is created with the token added to the header allowing for the `Projects` component being rendered inside an `ApolloProvider`.
+The following app will first show the iltio `<Authentication />` to promt the user to authenticate. Once the user is logged in the Apollo client is created with the token added to the header allowing for the `Projects` component being rendered inside an `ApolloProvider`.
 
 ```jsx
 import { useState } from 'react'
@@ -68,7 +68,7 @@ function App() {
     )
   }
 
-  return <Form configuration={{ token: 'demo' }} onSuccess={() => setLoggedIn(true)} />
+  return <Authentication configuration={{ token: 'demo' }} onSuccess={() => setLoggedIn(true)} />
 }
 ```
 

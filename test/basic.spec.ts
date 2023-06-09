@@ -65,6 +65,8 @@ test('Tabs working properly.', async ({ page }) => {
 
   await tabPhone.click()
 
+  await wait(0.25) // Required for Svelte handlers.
+
   await expect(tabMail).not.toHaveCSS('font-weight', '700')
   await expect(tabPhone).toHaveCSS('font-weight', '700')
   await expect(inputMail).not.toBeVisible()

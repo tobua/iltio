@@ -10,7 +10,12 @@ import {
   ViewStyle,
   TextStyle,
 } from 'react-native'
-import { Authentication, Props, Styles, ComponentTypes } from '../react/Authentication.js'
+import {
+  Authentication as ReactAuthentication,
+  Props,
+  Styles,
+  ComponentTypes,
+} from '../react/Authentication.js'
 import type { NativeStyles, NativeVariables } from './types.js'
 
 export { configure, Store, MemoryStorage } from '../store.js'
@@ -317,7 +322,7 @@ const NativeComponents = {
   ),
 }
 
-export function NativeForm({
+export function Authentication({
   Components,
   style,
   ...props
@@ -337,5 +342,5 @@ export function NativeForm({
     ...style,
   }
 
-  return <Authentication Components={NativeComponents} style={style as Styles} {...props} />
+  return <ReactAuthentication Components={NativeComponents} style={style as Styles} {...props} />
 }

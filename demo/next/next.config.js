@@ -1,4 +1,4 @@
-module.exports = {
+const configuration = {
   async rewrites() {
     return [
       {
@@ -8,3 +8,5 @@ module.exports = {
     ]
   },
 }
+
+export default configuration

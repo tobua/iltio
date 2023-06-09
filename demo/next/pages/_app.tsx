@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import Head from 'next/head'
+import Head from 'next/head.js'
 import '@/styles/globals.css'
-import type { AppProps } from 'next/app'
+import type { AppProps } from 'next/app.js'
 import { Inter } from 'next/font/google'
 import { authorize } from 'iltio'
 import styles from '@/styles/app.module.css'
@@ -52,6 +52,7 @@ function Actions() {
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
+      {/* @ts-ignore */}
       <Head>
         <title>iltio Next.JS Demo</title>
         <meta

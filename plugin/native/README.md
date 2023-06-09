@@ -9,9 +9,9 @@ npm install iltio react-native-localize
 ```
 
 ```tsx
-import { NativeForm } from 'iltio/dist/native/index.js'
+import { Authentication } from 'iltio/dist/native/index.js'
 
-export const MyNativeAuthentication = () => <NativeForm configuration={{ token: APP_TOKEN }} {...} />
+export const MyNativeAuthentication = () => <Authentication configuration={{ token: APP_TOKEN }} {...} />
 ```
 
 ## Demo

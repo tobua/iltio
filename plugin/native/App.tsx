@@ -12,7 +12,7 @@ import {
   Platform,
 } from 'react-native'
 import { getCountry } from 'react-native-localize'
-import { NativeForm, configure } from 'iltio/dist/native/index.js'
+import { Authentication, configure } from 'iltio/dist/native/index.js'
 
 configure({ token: 'demo' })
 
@@ -137,9 +137,9 @@ export default () => {
       <Text style={styles.title}>iltio Native Authentication</Text>
       <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.description}>Without Customization</Text>
-        <NativeForm onSuccess={handleSuccess} />
+        <Authentication onSuccess={handleSuccess} />
         <Text style={styles.description}>Various Customizations</Text>
-        <NativeForm
+        <Authentication
           allowMail={false}
           variables={{ color: 'blue', borderRadius: 10 }}
           labels={{ submit: 'Register or Login' }}
@@ -147,7 +147,7 @@ export default () => {
           onSuccess={handleSuccess}
         />
         <Text style={styles.description}>Custom UI Components</Text>
-        <NativeForm
+        <Authentication
           onSuccess={handleSuccess}
           Components={{
             Input: CustomInput,

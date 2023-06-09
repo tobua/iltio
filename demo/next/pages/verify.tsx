@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
 import type { NextPage } from 'next'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router.js'
 import styles from '@/styles/app.module.css'
 
 const Verify: NextPage = () => {
