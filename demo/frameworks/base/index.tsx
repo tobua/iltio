@@ -1,6 +1,6 @@
 import { createRoot } from 'react-dom/client'
 import { Authentication } from 'iltio/base'
-import { CustomUIComponents } from './custom'
+import { CustomUIComponents } from './custom.js'
 
 createRoot(document.body).render(
   <div style={{ fontFamily: 'sans-serif' }}>

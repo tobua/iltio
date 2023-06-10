@@ -16,5 +16,7 @@ Plugins and demos to integrate Authentication into any React website or React Na
 
 The following plugins are included in the repository.
 
-- [React Plugin](https://github.com/tobua/iltio/tree/main/plugin)
+- [React Plugin](https://github.com/tobua/iltio/tree/main/plugin/react)
 - [React Native Plugin](https://github.com/tobua/iltio/tree/main/plugin/native)
+- [Vue Plugin](https://github.com/tobua/iltio/tree/main/plugin/frameworks/vue)
+- [Svelte Plugin](https://github.com/tobua/iltio/tree/main/plugin/frameworks/svelte)
