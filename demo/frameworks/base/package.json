@@ -3,7 +3,9 @@
     "title": "iltio React Demo",
     "tsconfig": {
       "compilerOptions": {
-        "moduleResolution": "nodenext"
+        "target": "ESNext",
+        "module": "esnext",
+        "moduleResolution": "bundler"
       }
     }
   },
