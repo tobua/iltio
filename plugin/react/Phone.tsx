@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo, useTransition, useDeferredValue } from 'react'
 import { Variables, Label, Text, filterCountries, countries } from 'iltio'
 import { Styles, ComponentTypes } from './types.js'
 
@@ -11,6 +11,7 @@ interface Props {
   setPhone: Function
   Components: ComponentTypes
   style: Styles
+  onSubmitEditing?: (event: any) => void
 }
 
 export function Phone({
@@ -22,11 +23,15 @@ export function Phone({
   setPhone,
   Components,
   style,
+  onSubmitEditing,
 }: Props) {
   const [open, setOpen] = useState(false)
   const [filter, setFilter] = useState('')
-  const filteredCountries = filterCountries(filter)
+  const currentFilter = useDeferredValue(filter) // Ensure filter input stays responsive.
+  const filteredCountries = useMemo(() => filterCountries(currentFilter), [currentFilter])
   const country = countries[countryCode]
+
+  const [isPending, startTransition] = useTransition()
 
   return (
     <Components.PhoneWrapper
@@ -40,7 +45,11 @@ export function Phone({
           prefix={country.prefix}
           flag={country.flag}
           variables={variables}
-          togglePicker={() => setOpen(!open)}
+          togglePicker={() =>
+            startTransition(() => {
+              setOpen(!open)
+            })
+          }
           aria-label={Label.phoneCountry}
           data-country={countryCode}
           style={style.phoneCountry}
@@ -56,8 +65,14 @@ export function Phone({
           valid={phoneValid}
           placeholder={Text.PhoneInputPlaceholder}
           type="tel"
+          {...(onSubmitEditing ? { onSubmitEditing } : {})}
         />
       </Components.PhoneTop>
+      {isPending && (
+        <Components.PhoneCountryOptions style={style.phoneCountryOptions} variables={variables}>
+          <Components.Message variables={variables}>Loading...</Components.Message>
+        </Components.PhoneCountryOptions>
+      )}
       {open && (
         <Components.PhoneCountryOptions style={style.phoneCountryOptions} variables={variables}>
           <Components.Input

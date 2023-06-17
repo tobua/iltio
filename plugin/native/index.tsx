@@ -79,17 +79,21 @@ const NativeComponents = {
     style,
     onChange,
     type,
+    valid = true,
+    onSubmitEditing,
     ...props
   }: ComponentProps & {
     style?: { view?: StyleProp<ViewStyle>; input?: StyleProp<TextStyle> }
     type: string
     onChange: ({ target: { value } }: { target: { value: string } }) => void
+    onSubmitEditing: () => void
+    valid: boolean
   }) => (
     <View
       style={[
         {
           borderWidth: 1,
-          borderColor: variables.color,
+          borderColor: valid ? variables.color : variables.colorError,
           borderRadius: variables.borderRadius,
           marginBottom: variables.space,
           paddingVertical: Platform.OS === 'android' ? 5 : variables.smallSpace,
@@ -101,6 +105,7 @@ const NativeComponents = {
     >
       <TextInput
         onChangeText={(value: string) => onChange({ target: { value } })}
+        onSubmitEditing={onSubmitEditing}
         style={[
           {
             minWidth: 100,
@@ -159,7 +164,10 @@ const NativeComponents = {
   }: ComponentProps & {
     children: string
   }) => (
-    <Text style={[{ color: 'red', marginBottom: variables.space }, style]} {...props}>
+    <Text
+      style={[{ color: variables.colorError, marginBottom: variables.space }, style]}
+      {...props}
+    >
       {children}
     </Text>
   ),
@@ -185,13 +193,18 @@ const NativeComponents = {
       {children}
     </Text>
   ),
-  PhoneWrapper: ({ style, variables, ...props }: ComponentProps) => (
+  PhoneWrapper: ({
+    style,
+    variables,
+    valid = true,
+    ...props
+  }: ComponentProps & { valid: boolean }) => (
     <View
       style={[
         {
           flexDirection: 'column',
           borderWidth: 1,
-          borderColor: variables.color,
+          borderColor: valid ? variables.color : variables.colorError,
           borderRadius: variables.borderRadius,
           marginBottom: variables.space,
           paddingHorizontal: variables.smallSpace,
@@ -298,14 +311,17 @@ const NativeComponents = {
     variables,
     onChange,
     type,
+    onSubmitEditing,
     ...props
   }: ComponentProps & {
     style?: StyleProp<TextStyle>
     type: string
     onChange: ({ target: { value } }: { target: { value: string } }) => void
+    onSubmitEditing: () => void
   }) => (
     <TextInput
       onChangeText={(value: string) => onChange({ target: { value } })}
+      onSubmitEditing={onSubmitEditing}
       style={[
         {
           minWidth: 100,
@@ -342,5 +358,12 @@ export function Authentication({
     ...style,
   }
 
-  return <ReactAuthentication Components={NativeComponents} style={style as Styles} {...props} />
+  return (
+    <ReactAuthentication
+      isReactNative
+      Components={NativeComponents}
+      style={style as Styles}
+      {...props}
+    />
+  )
 }

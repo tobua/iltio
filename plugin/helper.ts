@@ -2,6 +2,7 @@ import urlJoin from 'url-join'
 import { app, Store } from './store.js'
 import { countries } from './data/countries.js'
 import { poll } from './route.js'
+import { Variables } from './types.js'
 
 export const validateEmail = (value: string) =>
   // eslint-disable-next-line no-control-regex
@@ -31,8 +32,9 @@ export const defaultLabels = {
   resend: 'Resend Code',
 }
 
-export const defaultVariables = {
+export const defaultVariables: Variables = {
   color: 'black',
+  colorError: 'red',
   contrast: 'white',
   borderRadius: 0,
   smallSpace: 10,

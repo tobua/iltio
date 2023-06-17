@@ -1,4 +1,5 @@
 // This file will be copied over to the demo app when running create-native-app.js.
+/* eslint-disable react-native/no-inline-styles */
 import React, { useMemo } from 'react'
 import {
   SafeAreaView,
@@ -137,9 +138,10 @@ export default () => {
       <Text style={styles.title}>iltio Native Authentication</Text>
       <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.description}>Without Customization</Text>
-        <Authentication onSuccess={handleSuccess} />
+        <Authentication configuration={{ token: 'demo' }} onSuccess={handleSuccess} />
         <Text style={styles.description}>Various Customizations</Text>
         <Authentication
+          configuration={{ token: 'demo' }}
           allowMail={false}
           variables={{ color: 'blue', borderRadius: 10 }}
           labels={{ submit: 'Register or Login' }}
@@ -148,6 +150,7 @@ export default () => {
         />
         <Text style={styles.description}>Custom UI Components</Text>
         <Authentication
+          configuration={{ token: 'demo' }}
           onSuccess={handleSuccess}
           Components={{
             Input: CustomInput,

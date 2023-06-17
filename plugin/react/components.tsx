@@ -78,7 +78,7 @@ export const components = {
       style={{
         borderWidth: 1,
         borderStyle: 'solid',
-        borderColor: valid ? variables.color : 'red',
+        borderColor: valid ? variables.color : variables.colorError,
         padding: 9,
         outline: 'none',
         borderRadius: variables.borderRadius,
@@ -93,7 +93,7 @@ export const components = {
   Error: ({ style, variables, children, ...props }: ErrorProps) => (
     <p
       style={{
-        color: 'red',
+        color: variables.colorError,
         margin: 0,
         fontSize: variables.fontSize,
         fontFamily: variables.fontFamily,
@@ -127,7 +127,7 @@ export const components = {
         flexDirection: 'column',
         borderWidth: 1,
         borderStyle: 'solid',
-        borderColor: valid ? variables.color : 'red',
+        borderColor: valid ? variables.color : variables.colorError,
         borderRadius: variables.borderRadius,
         paddingLeft: variables.smallSpace,
         ...style,
@@ -199,7 +199,7 @@ export const components = {
         width: '100%',
         fontSize: variables.fontSize,
         fontFamily: variables.fontFamily,
-        borderColor: valid ? variables.color : 'red',
+        borderColor: valid ? variables.color : variables.colorError,
         ...style,
       }}
       {...props}

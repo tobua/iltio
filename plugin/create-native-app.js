@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { copyFileSync, renameSync } from 'fs'
+import { copyFileSync, renameSync, rmSync } from 'fs'
 import { join } from 'path'
 import { execSync } from 'child_process'
 
@@ -13,7 +13,11 @@ execSync(`npx react-native init ${appName} --template react-native-template-type
 
 renameSync(appName, 'app')
 
-copyFileSync('native/App.tsx', `app/App.tsx`)
+copyFileSync('native/App.tsx', 'app/App.tsx')
+// Enable experimental support for package "exports".
+// NOTE will be included in React Native 0.72 (not yet released).
+copyFileSync('native/metro.config.json', 'app/metro.config.json')
+rmSync('app/metro.config.js')
 
 // Ensure plugin /dist contents are available
 execSync('npm run build', {

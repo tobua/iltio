@@ -1,5 +1,6 @@
 export interface Variables {
   color?: string
+  colorError?: string
   contrast?: string
   borderRadius?: number | string
   smallSpace?: number | string

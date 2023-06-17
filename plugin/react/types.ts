@@ -60,6 +60,7 @@ export interface Props {
   initialCountryCode?: string
   Components?: ComponentTypes
   labels?: Labels
+  isReactNative?: boolean
 }
 
 export type Styles = {

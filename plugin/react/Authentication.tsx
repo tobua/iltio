@@ -31,6 +31,7 @@ export function Authentication({
   variables = defaultVariables,
   labels = {},
   Components = components,
+  isReactNative = false,
 }: Props) {
   const [tab, setTab] = useState(allowMail ? 'mail' : 'phone')
   const [mail, setMail] = useState('')
@@ -121,9 +122,9 @@ export function Authentication({
             setError(Text.CodeExpiredError)
           }
 
-          if (localError === 'Wrong code entered.') {
-            setCodeValid(false)
-          }
+          setCodeValid(false)
+          setError(typeof localError === 'string' ? localError : Text.UnknownError)
+
           return
         }
 
@@ -205,6 +206,7 @@ export function Authentication({
               style={style.inputMail}
               placeholder={Text.MailInputPlaceholder}
               type="email"
+              {...(isReactNative ? { onSubmitEditing: handleSubmit } : {})}
             />
           )}
           {allowPhone && (!multipleInputs || tab === 'phone') && (
@@ -217,6 +219,7 @@ export function Authentication({
               setPhone={setPhone}
               Components={Components}
               style={style}
+              {...(isReactNative ? { onSubmitEditing: handleSubmit } : {})}
             />
           )}
           {error && (
@@ -233,6 +236,7 @@ export function Authentication({
             type="submit"
             style={style.button}
             variables={variables}
+            onClick={(event: any) => isReactNative && handleSubmit(event)}
           >
             {loading ? Text.LoadingButton : labels.submit}
           </Components.Button>
@@ -258,7 +262,7 @@ export function Authentication({
           </Components.Message>
           <Components.Input
             aria-label={Label.inputCode}
-            onChange={(event) => handleCode(event.target.value)}
+            onChange={(event: any) => handleCode(event.target.value)}
             valid={codeValid}
             required
             placeholder={Text.CodeInputPlaceholder}
@@ -267,6 +271,15 @@ export function Authentication({
             style={{ textAlign: 'center', ...style.inputCode }}
             variables={variables}
           />
+          {error && (
+            <Components.Error
+              style={style.error}
+              variables={variables}
+              aria-label={Label.inputError}
+            >
+              {error}
+            </Components.Error>
+          )}
           <Resend Components={Components} labels={labels} variables={variables} style={style} />
         </>
       )}
