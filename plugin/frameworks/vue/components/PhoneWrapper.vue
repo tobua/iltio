@@ -5,7 +5,7 @@
       flexDirection: 'column',
       borderWidth: '1px',
       borderStyle: 'solid',
-      borderColor: valid ? variables.color : 'red',
+      borderColor: valid ? variables.color : variables.colorError,
       borderRadius: `${variables.borderRadius}px`,
       paddingLeft: `${variables.smallSpace}px`,
       ...style,

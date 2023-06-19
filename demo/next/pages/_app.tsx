@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import Head from 'next/head.js'
-import '@/styles/globals.css'
-import type { AppProps } from 'next/app.js'
+import Head from 'next/head'
+import '../styles/globals.css'
+import type { AppProps } from 'next/app'
 import { Inter } from 'next/font/google'
 import { authorize } from 'iltio'
-import styles from '@/styles/app.module.css'
+import styles from '../styles/app.module.css'
 
 const inter = Inter({ subsets: ['latin'] })
 

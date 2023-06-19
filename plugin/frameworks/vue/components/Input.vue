@@ -3,7 +3,7 @@
     :style="{
       borderWidth: '1px',
       borderStyle: 'solid',
-      borderColor: valid ? variables.color : 'red',
+      borderColor: valid ? variables.color : variables.colorError,
       padding: '9px',
       outline: 'none',
       borderRadius: `${variables.borderRadius}px`,

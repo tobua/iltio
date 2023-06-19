@@ -1,7 +1,7 @@
 <template>
   <p
     :style="{
-      color: 'red',
+      color: variables.colorError,
       margin: 0,
       fontSize: `${variables.fontSize}px`,
       fontFamily: variables.fontFamily,

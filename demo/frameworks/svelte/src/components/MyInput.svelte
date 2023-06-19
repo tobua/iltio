@@ -8,7 +8,7 @@
   style="
       border: none;
       border-bottom: 1px solid black;
-      border-color: {valid ? 'black' : 'red'};
+      border-color: {valid ? 'black' : variables.colorError};
       padding-bottom: 5px;
       color: {variables.color};
       cursor: pointer;

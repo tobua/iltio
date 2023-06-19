@@ -2,7 +2,7 @@ import { ApolloClient, InMemoryCache, gql } from '@apollo/client'
 
 export const createClient = (token: string) => {
   return new ApolloClient({
-    uri: 'https://relieved-dinosaur-18.hasura.app/v1/graphql',
+    uri: 'https://iltio-next-demo.hasura.app/v1/graphql',
     cache: new InMemoryCache(),
     headers: {
       'x-token': token,

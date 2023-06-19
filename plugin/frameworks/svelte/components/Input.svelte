@@ -8,6 +8,6 @@
   on:input
   style="border-width: 1px; border-style: solid; border-color: {valid
     ? variables.color
-    : 'red'}; padding: 9px; outline: none; border-radius: {variables.borderRadius}px; font-size: {variables.fontSize}px; font-family: {variables.fontFamily}; background-color: inherit; {style}"
+    : variables.colorError}; padding: 9px; outline: none; border-radius: {variables.borderRadius}px; font-size: {variables.fontSize}px; font-family: {variables.fontFamily}; background-color: inherit; {style}"
   {...$$restProps}
 />

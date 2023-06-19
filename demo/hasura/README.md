@@ -10,25 +10,25 @@ After the registration you'll be redirected to the Hasura Cloud dashboard. Make 
 
 Once that's configured click **Launch Console** which will open the GraphQL explorer in a new window. The database is still empty, so let's add a `project` table with the following fields:
 
-| Column | Type                 |
-| ------ | -------------------- |
-| id     | integer, primary key |
-| name   | text                 |
-| user   | text                 |
+| Column | Type                                  |
+| ------ | ------------------------------------- |
+| id     | integer (auto-increment), primary key |
+| name   | text                                  |
+| user   | text                                  |
 
 and a new `task` table with these fields:
 
-| Column  | Type                    |
-| ------- | ----------------------- |
-| id      | integer, primary key    |
-| name    | text                    |
-| done    | boolean, default: false |
-| project | integer                 |
-| user    | text                    |
+| Column  | Type                                  |
+| ------- | ------------------------------------- |
+| id      | integer (auto-increment), primary key |
+| name    | text                                  |
+| done    | boolean, default: false               |
+| project | integer                               |
+| user    | text                                  |
 
 Now with both tables available, let's add a **Relationship** to the `project` table. As the relationship type choose "Array Relationship" enter `task` as the name (name will later be used in the GQL query) pick the `task` table as the reference and link it's project field to the id of the `project` table.
 
-Last but not least the permissions have to be configured for both tables to ensure users can only use the API when authenticated. The permissions will also ensure that a user can only retrieve and edit their own projects. To do this head on over to the **Permissions** tab in the project table.
+Last but not least the permissions have to be configured for both tables to ensure users can only use the API when authenticated. The permissions will also ensure that a user can only retrieve and edit their own projects. To do this head on over to the **Permissions** tab in the project table. To ensure this new relationship is updated for the permissions and no errors occur later, go to Settings and reload the metadata.
 
 Add a new role called `user` and click on the insert permissions that should currently be marked as ❌. Under "Row insert permissions" add a new check like this to ensure the user in the table matches the authorized user from the webhook.
 

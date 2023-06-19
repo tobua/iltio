@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { Store, configure, authorize, logout, remove } from 'iltio'
 import { Authentication } from 'iltio/react'
-import { CustomUIComponents } from './custom-ui-components.js'
+import { CustomUIComponents } from './custom-ui-components'
 
 configure({
   token: 'demo',

@@ -4,7 +4,7 @@
 </script>
 
 <p
-  style="color: red; margin: 0; font-size: {variables.fontSize}px; font-family: {variables.fontFamily}; {style}"
+  style="color: {variables.colorError}; margin: 0; font-size: {variables.fontSize}px; font-family: {variables.fontFamily}; {style}"
   {...$$restProps}
 >
   <slot />

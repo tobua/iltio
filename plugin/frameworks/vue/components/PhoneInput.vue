@@ -6,7 +6,7 @@
       padding: '9px',
       outline: 'none',
       width: '100%',
-      borderColor: valid ? variables.color : 'red',
+      borderColor: valid ? variables.color : variables.colorError,
       fontSize: `${variables.fontSize}px`,
       fontFamily: variables.fontFamily,
       ...style,

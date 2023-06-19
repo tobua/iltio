@@ -1,5 +1,4 @@
 <script>
-  export let variables
   export let style = ''
 </script>
 

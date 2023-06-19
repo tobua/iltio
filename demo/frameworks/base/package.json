@@ -1,19 +1,12 @@
 {
   "papua": {
-    "title": "iltio React Demo",
-    "tsconfig": {
-      "compilerOptions": {
-        "target": "ESNext",
-        "module": "esnext",
-        "moduleResolution": "bundler"
-      }
-    }
+    "title": "iltio React Demo"
   },
   "dependencies": {
-    "@types/react": "^18.2.12",
-    "@types/react-dom": "^18.2.5",
+    "@types/react": "^18.2.13",
+    "@types/react-dom": "^18.2.6",
     "iltio": "*",
-    "papua": "^4.3.10",
+    "papua": "^5.2.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   }

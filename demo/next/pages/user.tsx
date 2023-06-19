@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { getCookie } from 'cookies-next'
 import { configure, CookieStorage, logout, remove } from 'iltio'
 import { GetServerSideProps } from 'next'
-import styles from '@/styles/app.module.css'
+import styles from '../styles/app.module.css'
 
 configure({
   url: '/api/authentication',

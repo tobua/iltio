@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server.js'
-import type { NextRequest } from 'next/server.js'
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
 import { authorize } from 'iltio'
 
 export async function middleware(request: NextRequest) {

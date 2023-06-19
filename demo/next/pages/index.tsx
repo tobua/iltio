@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router.js'
+import { useRouter } from 'next/router'
 import { CookieStorage } from 'iltio'
 import { Authentication } from 'iltio/react'
 
