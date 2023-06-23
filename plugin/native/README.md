@@ -9,7 +9,8 @@ npm install iltio react-native-localize
 ```
 
 ```tsx
-import { Authentication } from 'iltio/dist/native/index.js'
+import { Authentication } from 'iltio/native' // Requires "unstable_enablePackageExports" in metro configuration.
+import { Authentication } from 'iltio/dist/native/index.js' // Fallback without exports.
 
 export const MyNativeAuthentication = () => <Authentication configuration={{ token: APP_TOKEN }} {...} />
 ```

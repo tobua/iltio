@@ -13,7 +13,7 @@ import {
   Platform,
 } from 'react-native'
 import { getCountry } from 'react-native-localize'
-import { Authentication, configure } from 'iltio/dist/native/index.js'
+import { Authentication, configure } from 'iltio/native'
 
 configure({ token: 'demo' })
 

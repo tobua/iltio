@@ -26,7 +26,7 @@ and a new `task` table with these fields:
 | project | integer                               |
 | user    | text                                  |
 
-Now with both tables available, let's add a **Relationship** to the `project` table. As the relationship type choose "Array Relationship" enter `task` as the name (name will later be used in the GQL query) pick the `task` table as the reference and link it's project field to the id of the `project` table.
+Now with both tables available, let's add a **Relationship** to the `project` table. As the relationship type choose "Array Relationship" enter `tasks` as the name (name will later be used in the GQL query) pick the `task` table as the reference and link it's project field to the id of the `project` table.
 
 Last but not least the permissions have to be configured for both tables to ensure users can only use the API when authenticated. The permissions will also ensure that a user can only retrieve and edit their own projects. To do this head on over to the **Permissions** tab in the project table. To ensure this new relationship is updated for the permissions and no errors occur later, go to Settings and reload the metadata.
 

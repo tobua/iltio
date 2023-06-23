@@ -30,7 +30,8 @@ export function MyAuthentication() {
 ## React Native
 
 ```tsx
-import { Authentication } from 'iltio/dist/native/index.js'
+import { Authentication } from 'iltio/native' // Requires "unstable_enablePackageExports" in metro configuration.
+import { Authentication } from 'iltio/dist/native/index.js' // Fallback without exports.
 
 export const MyForm = () => <Authentication {...} />
 ```
