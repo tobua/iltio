@@ -1,6 +1,6 @@
-export { configure, Store, MemoryStorage, CookieStorage, app, reset } from './store.js'
-export { authenticate, poll, confirm, resend, authorize, logout, remove } from './route.js'
-export type { Variables, Labels, Configuration } from './types.js'
+export { configure, Store, MemoryStorage, CookieStorage, app, reset } from './store'
+export { authenticate, poll, confirm, resend, authorize, logout, remove } from './route'
+export type { Variables, Labels, Configuration } from './types'
 export {
   getNameType,
   defaultVariables,
@@ -10,6 +10,6 @@ export {
   filterCountries,
   initializePolling,
   stopPolling,
-} from './helper.js'
-export { countries } from './data/countries.js'
-export { Label, Text } from './text.js'
+} from './helper'
+export { countries } from './data/countries'
+export { Label, Text } from './text'

@@ -14,10 +14,10 @@ import {
   initializePolling,
   stopPolling,
 } from 'iltio'
-import { Phone } from './Phone.js'
-import { components } from './components.js'
-import { Props, ComponentTypes, Styles } from './types.js'
-import { Resend } from './Resend.js'
+import { Phone } from './Phone'
+import { components } from './components'
+import { Props, ComponentTypes, Styles } from './types'
+import { Resend } from './Resend'
 
 export { ComponentTypes, Props, Styles }
 

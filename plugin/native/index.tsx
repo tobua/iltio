@@ -15,15 +15,15 @@ import {
   Props,
   Styles,
   ComponentTypes,
-} from '../react/Authentication.js'
-import type { NativeStyles, NativeVariables } from './types.js'
+} from '../react/Authentication'
+import type { NativeStyles, NativeVariables } from './types'
 
-export { configure, Store, MemoryStorage } from '../store.js'
-export { authenticate, poll, confirm, resend, authorize, logout, remove } from '../route.js'
+export { configure, Store, MemoryStorage } from '../store'
+export { authenticate, poll, confirm, resend, authorize, logout, remove } from '../route'
 
 export { NativeVariables as Variables, Styles, NativeStyles, ComponentTypes }
 
-export { getNameType } from '../helper.js'
+export { getNameType } from '../helper'
 
 const nativeInputTypeMap = {
   email: 'email-address',

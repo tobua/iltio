@@ -10,7 +10,7 @@ import {
   MessageProps,
   ComponentTypes,
   Styles,
-} from './types.js'
+} from './types'
 
 type ComponentProps = { style?: Styles; variables: Variables }
 

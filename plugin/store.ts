@@ -1,5 +1,5 @@
 import { parse } from 'cookie'
-import { BasicStorage, Configuration } from './types.js'
+import { BasicStorage, Configuration } from './types'
 
 export const MemoryStorage = {
   data: {} as { [key: string]: string },

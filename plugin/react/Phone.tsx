@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useTransition, useDeferredValue } from 'react'
 import { Variables, Label, Text, filterCountries, countries } from 'iltio'
-import { Styles, ComponentTypes } from './types.js'
+import { Styles, ComponentTypes } from './types'
 
 interface Props {
   phoneValid: boolean

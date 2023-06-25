@@ -21,4 +21,6 @@ export type NativeStyles = {
 
 export interface NativeVariables extends Variables {
   borderRadius?: number
+  space?: number
+  smallSpace?: number
 }

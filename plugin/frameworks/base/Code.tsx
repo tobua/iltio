@@ -1,6 +1,6 @@
 import React from 'react'
 import { Label, Text } from 'iltio'
-import { Resend } from './Resend.js'
+import { Resend } from './Resend'
 
 export function Code({
   Components,

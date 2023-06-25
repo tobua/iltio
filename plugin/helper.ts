@@ -1,8 +1,8 @@
 import urlJoin from 'url-join'
-import { app, Store } from './store.js'
-import { countries } from './data/countries.js'
-import { poll } from './route.js'
-import { Variables } from './types.js'
+import { app, Store } from './store'
+import { countries } from './data/countries'
+import { poll } from './route'
+import { Variables } from './types'
 
 export const validateEmail = (value: string) =>
   // eslint-disable-next-line no-control-regex

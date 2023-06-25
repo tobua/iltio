@@ -3,7 +3,7 @@
     "title": "iltio React Demo"
   },
   "dependencies": {
-    "@types/react": "^18.2.13",
+    "@types/react": "^18.2.14",
     "@types/react-dom": "^18.2.6",
     "iltio": "*",
     "papua": "^5.3.0",

@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import { Variables, Labels, resend, Label, Text } from 'iltio'
-import { Styles, ComponentTypes } from './types.js'
+import { Styles, ComponentTypes } from './types'
 
 export function Resend({
   Components,

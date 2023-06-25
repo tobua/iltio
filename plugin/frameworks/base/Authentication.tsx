@@ -5,7 +5,6 @@ import {
   defaultVariables,
   defaultLabels,
   Store,
-  app,
   configure,
   validateEmail,
   validatePhone,
@@ -16,10 +15,10 @@ import {
   stopPolling,
 } from 'iltio'
 import { Props } from 'iltio/react'
-import { Phone } from './Phone.js'
-import { components } from './Components.js'
-import { Tabs } from './Tabs.js'
-import { Code } from './Code.js'
+import { Phone } from './Phone'
+import { components } from './Components'
+import { Tabs } from './Tabs'
+import { Code } from './Code'
 
 export function Authentication({
   allowPhone = true,
