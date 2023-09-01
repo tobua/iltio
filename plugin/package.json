@@ -28,8 +28,26 @@
   },
   "dependencies": {
     "cookie": "^0.5.0",
-    "cookies-next": "^2.1.2",
+    "cookies-next": "^3.0.0",
     "url-join": "^5.0.0"
+  },
+  "devDependencies": {
+    "@builder.io/qwik": "^1.2.10",
+    "@testing-library/jest-dom": "^6.1.2",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.4.3",
+    "@types/cookie": "^0.5.1",
+    "@types/styled-components": "^5.1.26",
+    "cpx": "^1.5.0",
+    "happy-dom": "^10.11.2",
+    "next": "^13.4.19",
+    "padua": "^2.0.3",
+    "prettier-plugin-svelte": "^3.0.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-native": "^0.72.4",
+    "styled-components": "^6.0.7",
+    "vitest": "^0.34.3"
   },
   "peerDependencies": {
     "@builder.io/qwik": ">= 0.100",
@@ -105,24 +123,6 @@
     "registration",
     "token"
   ],
-  "devDependencies": {
-    "@builder.io/qwik": "^1.1.5",
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^14.0.0",
-    "@testing-library/user-event": "^14.4.3",
-    "@types/cookie": "^0.5.1",
-    "@types/styled-components": "^5.1.26",
-    "cpx": "^1.5.0",
-    "happy-dom": "^9.20.3",
-    "next": "^13.4.7",
-    "padua": "^2.0.0",
-    "prettier-plugin-svelte": "^2.10.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-native": "^0.72.0",
-    "styled-components": "^5.3.11",
-    "vitest": "^0.32.2"
-  },
   "prettier": "padua/configuration/.prettierrc.json",
   "eslintConfig": {
     "extends": "./node_modules/padua/configuration/eslint.cjs"
