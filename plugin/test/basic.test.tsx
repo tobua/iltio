@@ -3,13 +3,10 @@ import { act, render, screen } from '@testing-library/react'
 import { expect, test, vi, afterEach } from 'vitest'
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
-import matchers from '@testing-library/jest-dom/matchers'
 import { authenticate, stopPolling } from '../index'
 import { Authentication } from '../react/Authentication'
 import { Label } from '../text'
 import { mockFetch, wait } from './helper'
-
-expect.extend(matchers)
 
 const { fetchMockCalls, setResponse, getResponse } = mockFetch()
 
