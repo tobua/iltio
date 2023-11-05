@@ -28,26 +28,26 @@
   },
   "dependencies": {
     "cookie": "^0.5.0",
-    "cookies-next": "^3.0.0",
+    "cookies-next": "^4.0.0",
     "url-join": "^5.0.0"
   },
   "devDependencies": {
-    "@builder.io/qwik": "^1.2.10",
-    "@testing-library/jest-dom": "^6.1.2",
+    "@builder.io/qwik": "^1.2.17",
+    "@testing-library/jest-dom": "^6.1.4",
     "@testing-library/react": "^14.0.0",
-    "@testing-library/user-event": "^14.4.3",
-    "@types/cookie": "^0.5.1",
-    "@types/styled-components": "^5.1.26",
+    "@testing-library/user-event": "^14.5.1",
+    "@types/cookie": "^0.5.3",
+    "@types/styled-components": "^5.1.29",
     "cpx": "^1.5.0",
-    "happy-dom": "^10.11.2",
-    "next": "^13.4.19",
-    "padua": "^2.0.3",
+    "happy-dom": "^12.10.3",
+    "next": "^14.0.1",
+    "padua": "^2.0.6",
     "prettier-plugin-svelte": "^3.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-native": "^0.72.4",
-    "styled-components": "^6.0.7",
-    "vitest": "^0.34.3"
+    "react-native": "^0.72.6",
+    "styled-components": "^6.1.0",
+    "vitest": "^0.34.6"
   },
   "peerDependencies": {
     "@builder.io/qwik": ">= 0.100",
@@ -134,6 +134,6 @@
     "provenance": true
   },
   "engines": {
-    "node": ">= 16"
+    "node": ">= 18"
   }
 }

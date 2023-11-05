@@ -7,7 +7,7 @@ const appName = 'AuthenticationApp'
 
 console.log('⌛ Initializing a fresh RN project...')
 
-execSync(`npx react-native init ${appName} --template react-native-template-typescript`, {
+execSync(`npx react-native init ${appName}`, {
   stdio: 'inherit',
 })
 
