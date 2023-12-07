@@ -7,7 +7,7 @@
   },
   "type": "module",
   "dependencies": {
-    "ajv": "^8"
+    "ajv": "^7"
   },
   "workspaces": [
     "demo/*",

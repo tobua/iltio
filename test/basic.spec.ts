@@ -1,4 +1,4 @@
-import { rest } from 'msw'
+import { HttpResponse, delay, http } from 'msw'
 import { Label } from 'iltio'
 import { test, expect } from './setup.js'
 import { Page } from '@playwright/test'
@@ -161,39 +161,46 @@ test('Can successfully submit a correct mail address.', async ({ page, worker })
   const userId = '123456'
 
   await worker.use(
-    rest.get('https://iltio.com/api/authenticate', (request, response, context) => {
-      lastRequestParams = request.url.searchParams
-      return response(
-        context.delay(50),
-        context.status(200),
-        context.json({ error: false, codeToken: codeToken, registration: true })
+    http.get('https://iltio.com/api/authenticate', async ({ request }) => {
+      const url = new URL(request.url)
+      lastRequestParams = url.searchParams
+
+      await delay(50)
+      return HttpResponse.json(
+        { error: false, codeToken: codeToken, registration: true },
+        { status: 200 },
       )
-    })
+    }),
   )
 
   await worker.use(
-    rest.get('https://iltio.com/api/verify/poll', (request, response, context) => {
-      pollRequestParams = request.url.searchParams
-      return response(context.delay(50), context.status(200), context.json({ error: true }))
-    })
+    http.get('https://iltio.com/api/verify/poll', async ({ request }) => {
+      const url = new URL(request.url)
+      pollRequestParams = url.searchParams
+
+      await delay(50)
+      return HttpResponse.json({ error: true }, { status: 200 })
+    }),
   )
 
   await worker.use(
-    rest.get('https://iltio.com/api/resend-code', (request, response, context) => {
-      resendCodeRequestParams = request.url.searchParams
-      return response(context.delay(50), context.status(200), context.json({ error: false }))
-    })
+    http.get('https://iltio.com/api/resend-code', async ({ request }) => {
+      const url = new URL(request.url)
+      resendCodeRequestParams = url.searchParams
+
+      await delay(50)
+      return HttpResponse.json({ error: false }, { status: 200 })
+    }),
   )
 
   await worker.use(
-    rest.get('https://iltio.com/api/verify/confirm', (request, response, context) => {
-      confirmRequestParams = request.url.searchParams
-      return response(
-        context.delay(50),
-        context.status(200),
-        context.json({ error: false, token: confirmToken, userId })
-      )
-    })
+    http.get('https://iltio.com/api/verify/confirm', async ({ request }) => {
+      const url = new URL(request.url)
+      confirmRequestParams = url.searchParams
+
+      await delay(50)
+      return HttpResponse.json({ error: false, token: confirmToken, userId }, { status: 200 })
+    }),
   )
 
   const context = await loadPage(page)
@@ -212,7 +219,7 @@ test('Can successfully submit a correct mail address.', async ({ page, worker })
   const messageConfirm = context.getByLabel(Label.messageConfirm)
   await expect(messageConfirm).toBeVisible()
   await expect(messageConfirm).toHaveText(
-    'Enter the code received in your mail below or confirm through the link.'
+    'Enter the code received in your mail below or confirm through the link.',
   )
 
   const resendCode = context.getByLabel(Label.resendCode)
@@ -247,14 +254,16 @@ test('Can successfully submit a correct phone number.', async ({ page, worker })
   let lastRequestParams = new URLSearchParams()
 
   await worker.use(
-    rest.get('https://iltio.com/api/authenticate', (request, response, context) => {
-      lastRequestParams = request.url.searchParams
-      return response(
-        context.delay(50),
-        context.status(200),
-        context.json({ error: false, codeToken: '123', registration: true })
+    http.get('https://iltio.com/api/authenticate', async ({ request }) => {
+      const url = new URL(request.url)
+      lastRequestParams = url.searchParams
+
+      await delay(50)
+      return HttpResponse.json(
+        { error: false, codeToken: '123', registration: true },
+        { status: 200 },
       )
-    })
+    }),
   )
 
   const context = await loadPage(page)
@@ -282,7 +291,7 @@ test('Can successfully submit a correct phone number.', async ({ page, worker })
   const messageConfirm = context.getByLabel(Label.messageConfirm)
   await expect(messageConfirm).toBeVisible()
   await expect(messageConfirm).toHaveText(
-    'Enter the code received in your mail below or confirm through the link.'
+    'Enter the code received in your mail below or confirm through the link.',
   )
 
   const resendCode = context.getByLabel(Label.resendCode)

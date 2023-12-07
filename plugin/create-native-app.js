@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { copyFileSync, renameSync, rmSync } from 'fs'
+import { copyFileSync, renameSync } from 'fs'
 import { join } from 'path'
 import { execSync } from 'child_process'
 
@@ -7,7 +7,8 @@ const appName = 'AuthenticationApp'
 
 console.log('⌛ Initializing a fresh RN project...')
 
-execSync(`npx react-native init ${appName}`, {
+// Pods will be installed later in the script and a git repository isn't required here.
+execSync(`npx react-native init ${appName} --install-pods false --skip-git-init true`, {
   stdio: 'inherit',
 })
 
@@ -15,9 +16,7 @@ renameSync(appName, 'app')
 
 copyFileSync('native/App.tsx', 'app/App.tsx')
 // Enable experimental support for package "exports".
-// NOTE will be included in React Native 0.72 (not yet released).
-copyFileSync('native/metro.config.json', 'app/metro.config.json')
-rmSync('app/metro.config.js')
+copyFileSync('native/metro.config.js', 'app/metro.config.js')
 
 // Ensure plugin /dist contents are available
 execSync('npm run build', {
