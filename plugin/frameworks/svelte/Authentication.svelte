@@ -281,6 +281,7 @@
       {codeValid}
       Components={MergedComponents}
       {handleCode}
+      {tab}
     />
   {/if}
 </MergedComponents.Form>

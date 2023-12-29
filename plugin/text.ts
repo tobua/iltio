@@ -21,6 +21,7 @@ export const Label = {
 export const Text = {
   RegistrationMessage: 'A new account was created for you.',
   CodeSentMessage: 'Enter the code received in your mail below or confirm through the link.',
+  CodeSentMessagePhone: 'Enter the code or confirm through the link received by text.',
   CodeInputPlaceholder: 'Code',
   LoadingButton: 'Loading...',
   MailInputPlaceholder: 'Mail',

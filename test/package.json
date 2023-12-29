@@ -8,9 +8,9 @@
   "dependencies": {
     "@playwright/test": "^1.40.1",
     "iltio": "*",
-    "msw": "^2.0.10",
+    "msw": "^2.0.11",
     "playwright": "^1.40.1",
-    "playwright-msw": "^3.0.0"
+    "playwright-msw": "^3.0.1"
   },
   "prettier": {
     "semi": false,

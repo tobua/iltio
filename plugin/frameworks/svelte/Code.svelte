@@ -2,7 +2,7 @@
   import { Label, Text } from 'iltio'
   import Resend from './Resend.svelte'
 
-  export let Components, style, variables, labels, registration, codeValid, handleCode
+  export let Components, style, variables, labels, registration, codeValid, handleCode, tab
 </script>
 
 {#if registration}
@@ -11,7 +11,7 @@
   </Components.Message>
 {/if}
 <Components.Message aria-label={Label.messageConfirm} style={style.message} {variables}>
-  {Text.CodeSentMessage}
+  {tab === 'mail' ? Text.CodeSentMessage : Text.CodeSentMessagePhone}
 </Components.Message>
 <Components.Input
   aria-label={Label.inputCode}

@@ -226,6 +226,7 @@ export function Authentication({
           registration={registration}
           codeValid={codeValid}
           handleCode={handleCode}
+          tab={tab}
         />
       )}
     </Components.Form>

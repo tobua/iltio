@@ -1,5 +1,5 @@
 import { HttpResponse, delay, http } from 'msw'
-import { Label } from 'iltio'
+import { Label, Text } from 'iltio'
 import { test, expect } from './setup.js'
 import { Page } from '@playwright/test'
 
@@ -218,9 +218,7 @@ test('Can successfully submit a correct mail address.', async ({ page, worker })
 
   const messageConfirm = context.getByLabel(Label.messageConfirm)
   await expect(messageConfirm).toBeVisible()
-  await expect(messageConfirm).toHaveText(
-    'Enter the code received in your mail below or confirm through the link.',
-  )
+  await expect(messageConfirm).toHaveText(Text.CodeSentMessage)
 
   const resendCode = context.getByLabel(Label.resendCode)
   await expect(resendCode).toBeVisible()
@@ -290,9 +288,7 @@ test('Can successfully submit a correct phone number.', async ({ page, worker })
 
   const messageConfirm = context.getByLabel(Label.messageConfirm)
   await expect(messageConfirm).toBeVisible()
-  await expect(messageConfirm).toHaveText(
-    'Enter the code received in your mail below or confirm through the link.',
-  )
+  await expect(messageConfirm).toHaveText(Text.CodeSentMessagePhone)
 
   const resendCode = context.getByLabel(Label.resendCode)
   await expect(resendCode).toBeVisible()

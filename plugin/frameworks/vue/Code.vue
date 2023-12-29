@@ -14,7 +14,7 @@
     :style="style.message"
     :variables="variables"
   >
-    {{ Text.CodeSentMessage }}
+    {{ tab === 'mail' ? Text.CodeSentMessage : Text.CodeSentMessagePhone }}
   </component>
   <component
     :is="Input"
@@ -54,6 +54,7 @@ export default {
     Input: Object,
     Button: Object,
     Error: Object,
+    tab: String,
   },
   components: { Resend },
   data() {

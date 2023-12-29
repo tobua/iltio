@@ -105,7 +105,7 @@ export function Authentication({
       setRegistration(localRegistration)
       setSubmitted(true)
     },
-    [mail, phone, allowMail, allowPhone, tab]
+    [mail, phone, allowMail, allowPhone, tab],
   )
 
   // TODO return backend errors as status code numbers.
@@ -141,7 +141,7 @@ export function Authentication({
         setCodeValid(true)
       }
     },
-    [registration]
+    [registration],
   )
 
   useEffect(() => {
@@ -151,7 +151,7 @@ export function Authentication({
         setSubmitted(false)
         setError(Text.CodeExpiredError)
       },
-      registration
+      registration,
     )
 
     if (configuration) {
@@ -258,7 +258,7 @@ export function Authentication({
             style={style.message}
             variables={variables}
           >
-            {Text.CodeSentMessage}
+            {tab === 'mail' ? Text.CodeSentMessage : Text.CodeSentMessagePhone}
           </Components.Message>
           <Components.Input
             aria-label={Label.inputCode}

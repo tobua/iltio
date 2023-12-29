@@ -79,6 +79,7 @@
         :Message="Message"
         :Button="Button"
         :Error="Error"
+        :tab="tab"
       />
     </template>
   </component>
@@ -235,7 +236,7 @@ export default {
           this.submitted = false
           this.error = Text.CodeExpiredError
         },
-        this.registration
+        this.registration,
       )
     },
     async handleCode(code) {
@@ -292,7 +293,7 @@ export default {
         this.submitted = false
         this.error = Text.CodeExpiredError
       },
-      this.registration
+      this.registration,
     )
 
     if (this.configuration) {

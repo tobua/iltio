@@ -10,6 +10,7 @@ export function Code({
   registration,
   codeValid,
   handleCode,
+  tab,
 }: any) {
   return (
     <>
@@ -27,7 +28,7 @@ export function Code({
         style={style.message}
         variables={variables}
       >
-        {Text.CodeSentMessage}
+        {tab === 'mail' ? Text.CodeSentMessage : Text.CodeSentMessagePhone}
       </Components.Message>
       <Components.Input
         aria-label={Label.inputCode}
