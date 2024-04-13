@@ -13,7 +13,7 @@
   "dependencies": {
     "@apollo/client": "^3.9.11",
     "graphql": "^16.8.1",
-    "iltio": "workspace:*",
+    "iltio": "*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

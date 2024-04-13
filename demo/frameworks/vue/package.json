@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "vue": "^3.4.21",
-    "iltio": "workspace:*"
+    "iltio": "*"
   },
   "devDependencies": {
     "@tsconfig/node18": "^18.2.4",
