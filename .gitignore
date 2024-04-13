@@ -1,4 +1,4 @@
-package-lock.json
+bun.lockb
 node_modules
 demo/frameworks/*/dist
 demo/frameworks/*/build

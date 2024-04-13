@@ -3,12 +3,15 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "postinstall": "npm run build --workspace=plugin"
+    "postinstall": "cd plugin && bun run build"
   },
   "type": "module",
   "dependencies": {
     "ajv": "^7"
   },
+  "trustedDependencies": [
+    "papua"
+  ],
   "workspaces": [
     "demo/*",
     "demo/frameworks/*",

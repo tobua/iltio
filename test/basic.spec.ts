@@ -48,7 +48,7 @@ test('Proper styles and labels applied to initial elements.', async ({ page }) =
   await expect(submit).toHaveText('Submit')
 })
 
-test('Tabs working properly.', async ({ page }) => {
+test('Tabs working properly.', async ({ page }, testInfo) => {
   const context = await loadPage(page)
 
   const tabMail = context.getByLabel(Label.tabMail)
@@ -65,7 +65,9 @@ test('Tabs working properly.', async ({ page }) => {
 
   await tabPhone.click()
 
-  await wait(0.25) // Required for Svelte handlers.
+  if (testInfo.project.name.includes('svelte')) {
+    await wait(0.5) // Required for Svelte handlers.
+  }
 
   await expect(tabMail).not.toHaveCSS('font-weight', '700')
   await expect(tabPhone).toHaveCSS('font-weight', '700')
@@ -73,13 +75,15 @@ test('Tabs working properly.', async ({ page }) => {
   await expect(inputPhone).toBeVisible()
 })
 
-test('Can open and use phone country dropdown.', async ({ page }) => {
+test('Can open and use phone country dropdown.', async ({ page }, testInfo) => {
   const context = await loadPage(page)
 
   const tabPhone = context.getByLabel(Label.tabPhone)
   await tabPhone.click()
 
-  await wait(0.25) // Required for Svelte handlers.
+  if (testInfo.project.name.includes('svelte')) {
+    await wait(0.5) // Required for Svelte handlers.
+  }
 
   const phoneCountry = context.getByLabel(Label.phoneCountry)
   await expect(phoneCountry).toBeVisible()
@@ -98,7 +102,9 @@ test('Can open and use phone country dropdown.', async ({ page }) => {
 
   await phoneCountry.click() // Open country dropdown again.
 
-  await wait(0.25)
+  if (testInfo.project.name.includes('svelte')) {
+    await wait(0.5) // Required for Svelte handlers.
+  }
 
   await expect(phoneInputCountrySearch).toBeVisible()
 
