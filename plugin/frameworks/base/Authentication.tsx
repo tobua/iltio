@@ -100,7 +100,7 @@ export function Authentication({
       setRegistration(localRegistration)
       setSubmitted(true)
     },
-    [mail, phone, allowMail, allowPhone, tab]
+    [mail, phone, allowMail, allowPhone, tab],
   )
 
   const handleCode = useCallback(
@@ -135,7 +135,7 @@ export function Authentication({
         setCodeValid(true)
       }
     },
-    [registration]
+    [registration],
   )
 
   useEffect(() => {
@@ -145,7 +145,7 @@ export function Authentication({
         setSubmitted(false)
         setError(Text.CodeExpiredError)
       },
-      registration
+      registration,
     )
 
     if (configuration) {

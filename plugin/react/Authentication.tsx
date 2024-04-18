@@ -45,6 +45,7 @@ export function Authentication({
   const [registration, setRegistration] = useState(false)
   const [error, setError] = useState('')
   const [codeValid, setCodeValid] = useState(true)
+  const [validatingCode, setValidatingCode] = useState(false)
 
   // eslint-disable-next-line no-param-reassign
   Components = useMemo(() => ({ ...components, ...Components }), [Components])
@@ -113,7 +114,10 @@ export function Authentication({
     async (code: string) => {
       if (code.length === 4) {
         setError('')
+        setValidatingCode(true)
         const { error: localError, token: userToken } = await confirm(code)
+
+        setValidatingCode(false)
 
         if (localError) {
           if (localError === 'Code invalid or expired.') {
@@ -260,17 +264,20 @@ export function Authentication({
           >
             {tab === 'mail' ? Text.CodeSentMessage : Text.CodeSentMessagePhone}
           </Components.Message>
-          <Components.Input
-            aria-label={Label.inputCode}
-            onChange={(event: any) => handleCode(event.target.value)}
-            valid={codeValid}
-            required
-            placeholder={Text.CodeInputPlaceholder}
-            type="number"
-            maxLength={4}
-            style={{ textAlign: 'center', ...style.inputCode }}
-            variables={variables}
-          />
+          <Components.CodeInputWrapper>
+            <Components.Input
+              aria-label={Label.inputCode}
+              onChange={(event: any) => handleCode(event.target.value)}
+              valid={codeValid}
+              required
+              placeholder={Text.CodeInputPlaceholder}
+              type="number"
+              maxLength={4}
+              style={{ textAlign: 'center', ...style.inputCode }}
+              variables={variables}
+            />
+            {validatingCode && <Components.Loader variables={variables} />}
+          </Components.CodeInputWrapper>
           {error && (
             <Components.Error
               style={style.error}

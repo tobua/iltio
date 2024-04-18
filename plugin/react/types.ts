@@ -48,6 +48,8 @@ export type ComponentTypes = {
   PhoneCountry?: FunctionComponent<any>
   PhoneCountryOptions?: FunctionComponent<any>
   PhoneCountryOption?: FunctionComponent<any>
+  CodeInputWrapper?: FunctionComponent<TabWrapperProps & any>
+  Loader?: FunctionComponent<any>
 }
 
 export interface Props {

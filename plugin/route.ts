@@ -1,6 +1,14 @@
 import { app, Store } from './store'
 import { joinUrl } from './helper'
 
+async function handleError(response: Response) {
+  try {
+    return await response.json() // Needs await to catch in here.
+  } catch (error) {
+    return { error: true }
+  }
+}
+
 export const authenticate = async (name: string) => {
   const baseUrl = app.authenticateUrl || joinUrl('/authenticate')
   const isReactNative = typeof navigator !== 'undefined' && navigator.product === 'ReactNative'
@@ -12,8 +20,12 @@ export const authenticate = async (name: string) => {
 
   const response = await fetch(
     `${baseUrl}?name=${encodeURIComponent(name)}${app.apiToken ? `&token=${app.apiToken}` : ''}`,
-    fetchConfiguration
+    fetchConfiguration,
   )
+
+  if (!response.ok) {
+    return await handleError(response)
+  }
 
   return response.json() as Promise<{
     error: boolean | string
@@ -25,6 +37,10 @@ export const authenticate = async (name: string) => {
 export const poll = async () => {
   const response = await fetch(joinUrl(`/verify/poll?token=${Store.codeToken}`))
 
+  if (!response.ok) {
+    return await handleError(response)
+  }
+
   return response.json() as Promise<{
     error: boolean | string
     token?: string
@@ -33,8 +49,12 @@ export const poll = async () => {
 
 export const confirm = async (code: string) => {
   const response = await fetch(
-    joinUrl(`/verify/confirm?code=${encodeURIComponent(code)}&token=${Store.codeToken}`)
+    joinUrl(`/verify/confirm?code=${encodeURIComponent(code)}&token=${Store.codeToken}`),
   )
+
+  if (!response.ok) {
+    return await handleError(response)
+  }
 
   return response.json() as Promise<{
     error: boolean | string
@@ -44,8 +64,12 @@ export const confirm = async (code: string) => {
 
 export const resend = async (token = Store.codeToken) => {
   const response = await fetch(
-    joinUrl(`/resend-code?name=${encodeURIComponent(Store.name)}&token=${token}`)
+    joinUrl(`/resend-code?name=${encodeURIComponent(Store.name)}&token=${token}`),
   )
+
+  if (!response.ok) {
+    return await handleError(response)
+  }
 
   return response.json() as Promise<{
     error: boolean | string
@@ -54,8 +78,12 @@ export const resend = async (token = Store.codeToken) => {
 
 export const authorize = async (token = Store.token) => {
   const response = await fetch(joinUrl(`/authorize?token=${token}`))
-  const { error, role, id, name } = await response.json()
 
+  if (!response.ok) {
+    return await handleError(response)
+  }
+
+  const { error, role, id, name } = await response.json()
   return { error, role, id, name }
 }
 
@@ -65,8 +93,12 @@ export const logout = async (server = false, token = Store.token) => {
 
   if (server) {
     const response = await fetch(joinUrl(`/logout?token=${token}`))
-    const { error } = await response.json()
 
+    if (!response.ok) {
+      return await handleError(response)
+    }
+
+    const { error } = await response.json()
     return { error }
   }
 
@@ -80,10 +112,13 @@ export const remove = async (token = Store.token) => {
   }
 
   const response = await fetch(joinUrl(`/delete?token=${token}`))
-  const { error } = await response.json()
 
+  if (!response.ok) {
+    return await handleError(response)
+  }
+
+  const { error } = await response.json()
   Store.removeToken()
   Store.removeName()
-
   return { error }
 }
