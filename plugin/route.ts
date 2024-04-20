@@ -122,3 +122,18 @@ export const remove = async (token = Store.token) => {
   Store.removeName()
   return { error }
 }
+
+export const log = async (message: string, eventId: number) => {
+  const response = await fetch(joinUrl(`/logs?id=${encodeURIComponent(eventId)}`), {
+    method: 'POST',
+    body: JSON.stringify({ data: message }),
+  })
+
+  if (!response.ok) {
+    return await handleError(response)
+  }
+
+  return response.json() as Promise<{
+    error: boolean
+  }>
+}
