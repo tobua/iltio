@@ -50,6 +50,8 @@ const getInitialConfiguration = () => ({
   storage: getInitialStorage(),
   pollDuration: 10000,
   pollInterval: null,
+  encryptionKey: '',
+  encryptionKeyStorageKey: 'client-side-encryption-key',
 })
 
 export const app = getInitialConfiguration()
@@ -88,5 +90,14 @@ export const Store = {
   },
   removeName() {
     app.storage.removeItem(app.nameStorageKey)
+  },
+  get encryptionKey() {
+    return app.storage.getItem(app.encryptionKeyStorageKey) ?? ''
+  },
+  set encryptionKey(value: string) {
+    app.storage.setItem(app.encryptionKeyStorageKey, value)
+  },
+  removeEncryptionKey() {
+    app.storage.removeItem(app.encryptionKeyStorageKey)
   },
 }

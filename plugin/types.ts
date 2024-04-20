@@ -31,4 +31,6 @@ export interface Configuration {
   codeTokenStorageKey?: string
   nameStorageKey?: string
   pollDuration?: number
+  encryptionKey?: string
+  encryptionKeyStorageKey?: string
 }

@@ -13,3 +13,4 @@ export {
 } from './helper'
 export { countries } from './data/countries'
 export { Label, Text } from './text'
+export { encrypt } from './encrypt'
