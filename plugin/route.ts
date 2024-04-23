@@ -1,8 +1,14 @@
 import { app, Store } from './store'
 import { joinUrl } from './helper'
 
-async function handleError(response: Response) {
+async function fetchWithError(url: string, options?: RequestInit) {
   try {
+    const response = await fetch(url, options)
+
+    if (!response.ok) {
+      return await response.json() // Error message from server.
+    }
+
     return await response.json() // Needs await to catch in here.
   } catch (error) {
     return { error: true }
@@ -18,73 +24,52 @@ export const authenticate = async (name: string) => {
       }
     : {}
 
-  const response = await fetch(
+  const response = await fetchWithError(
     `${baseUrl}?name=${encodeURIComponent(name)}${app.apiToken ? `&token=${app.apiToken}` : ''}`,
     fetchConfiguration,
   )
 
-  if (!response.ok) {
-    return await handleError(response)
-  }
-
-  return response.json() as Promise<{
+  return response as {
     error: boolean | string
     codeToken?: string
     registration?: boolean
-  }>
+  }
 }
 
 export const poll = async () => {
-  const response = await fetch(joinUrl(`/verify/poll?token=${Store.codeToken}`))
+  const response = await fetchWithError(joinUrl(`/verify/poll?token=${Store.codeToken}`))
 
-  if (!response.ok) {
-    return await handleError(response)
-  }
-
-  return response.json() as Promise<{
+  return response as {
     error: boolean | string
     token?: string
-  }>
+  }
 }
 
 export const confirm = async (code: string) => {
-  const response = await fetch(
+  const response = await fetchWithError(
     joinUrl(`/verify/confirm?code=${encodeURIComponent(code)}&token=${Store.codeToken}`),
   )
 
-  if (!response.ok) {
-    return await handleError(response)
-  }
-
-  return response.json() as Promise<{
+  return response as {
     error: boolean | string
     token?: string
-  }>
+  }
 }
 
 export const resend = async (token = Store.codeToken) => {
-  const response = await fetch(
+  const response = await fetchWithError(
     joinUrl(`/resend-code?name=${encodeURIComponent(Store.name)}&token=${token}`),
   )
 
-  if (!response.ok) {
-    return await handleError(response)
-  }
-
-  return response.json() as Promise<{
+  return response as {
     error: boolean | string
-  }>
+  }
 }
 
 export const authorize = async (token = Store.token) => {
-  const response = await fetch(joinUrl(`/authorize?token=${token}`))
+  const response = await fetchWithError(joinUrl(`/authorize?token=${token}`))
 
-  if (!response.ok) {
-    return await handleError(response)
-  }
-
-  const { error, role, id, name } = await response.json()
-  return { error, role, id, name }
+  return response as { error: boolean; role: string; id: number; name: string }
 }
 
 export const logout = async (server = false, token = Store.token) => {
@@ -92,14 +77,8 @@ export const logout = async (server = false, token = Store.token) => {
   Store.removeName()
 
   if (server) {
-    const response = await fetch(joinUrl(`/logout?token=${token}`))
-
-    if (!response.ok) {
-      return await handleError(response)
-    }
-
-    const { error } = await response.json()
-    return { error }
+    const response = await fetchWithError(joinUrl(`/logout?token=${token}`))
+    return response as { error: boolean }
   }
 
   return { error: false }
@@ -111,29 +90,40 @@ export const remove = async (token = Store.token) => {
     return console.error('No user logged in or token provided.')
   }
 
-  const response = await fetch(joinUrl(`/delete?token=${token}`))
+  const response = await fetchWithError(joinUrl(`/delete?token=${token}`))
 
-  if (!response.ok) {
-    return await handleError(response)
-  }
-
-  const { error } = await response.json()
   Store.removeToken()
   Store.removeName()
-  return { error }
+  return response as { error: boolean }
 }
 
 export const log = async (message: string, eventId: number) => {
-  const response = await fetch(joinUrl(`/logs?id=${encodeURIComponent(eventId)}`), {
+  const response = await fetchWithError(joinUrl(`/logs?id=${encodeURIComponent(eventId)}`), {
     method: 'POST',
     body: JSON.stringify({ data: message }),
   })
 
-  if (!response.ok) {
-    return await handleError(response)
-  }
-
-  return response.json() as Promise<{
+  return response as {
     error: boolean
-  }>
+  }
+}
+
+export const user = async (token = Store.token) => {
+  const response = await fetchWithError(joinUrl(`/internal/user?token=${token}`))
+
+  return response as {
+    error: boolean
+    encrypted: boolean
+  }
+}
+
+export const toggleEncryption = async (token = Store.token) => {
+  const response = await fetchWithError(joinUrl(`/encrypt?token=${token}`), {
+    method: 'PUT',
+  })
+
+  return response as {
+    error: boolean
+    encrypted: boolean
+  }
 }

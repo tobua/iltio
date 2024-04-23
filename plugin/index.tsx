@@ -1,5 +1,15 @@
 export { configure, Store, MemoryStorage, CookieStorage, app, reset } from './store'
-export { authenticate, poll, confirm, resend, authorize, logout, remove } from './route'
+export {
+  authenticate,
+  poll,
+  confirm,
+  resend,
+  authorize,
+  logout,
+  remove,
+  user,
+  toggleEncryption,
+} from './route'
 export type { Variables, Labels, Configuration } from './types'
 export {
   getNameType,

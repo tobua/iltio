@@ -1,5 +1,5 @@
 import React from 'react'
-import { act, render, screen } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import { afterEach, expect, test, vi } from 'vitest'
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
@@ -53,9 +53,7 @@ test('Can configure the token and the storage keys.', async () => {
     registration: true,
   })
 
-  await act(async () => {
-    await userEvent.click(screen.getByLabelText(Label.submit))
-  })
+  await userEvent.click(screen.getByLabelText(Label.submit))
 
   expect(fetchMockCalls().length).toBe(2)
   expect(fetchMockCalls()[0][0]).toContain(`token=${appToken}`)
@@ -116,7 +114,7 @@ test('Can add React components to override default elements.', async () => {
       variables={{ color: 'blue' }}
       labels={{ submit: 'Submit Button' }}
       Components={{ Button: MyVariablesButton }}
-    />
+    />,
   )
 
   expect(screen.getByLabelText(Label.submit)).toHaveStyle({ 'background-color': 'blue' })
@@ -157,9 +155,7 @@ test('Polling interval can be configured.', async () => {
     registration: true,
   })
 
-  await act(async () => {
-    await userEvent.click(screen.getByLabelText(Label.submit))
-  })
+  await userEvent.click(screen.getByLabelText(Label.submit))
 
   expect(fetchMockCalls().length).toBe(2)
 
@@ -209,9 +205,7 @@ test('Can configure the token on the JSX tag as well.', async () => {
     registration: true,
   })
 
-  await act(async () => {
-    await userEvent.click(screen.getByLabelText(Label.submit))
-  })
+  await userEvent.click(screen.getByLabelText(Label.submit))
 
   expect(fetchMockCalls().length).toBe(2)
 

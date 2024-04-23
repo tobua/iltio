@@ -14,6 +14,8 @@ export type Labels = {
   tabPhone?: string
   tabMail?: string
   resend?: string
+  encrypt?: string
+  decrypt?: string
 }
 
 export interface BasicStorage {

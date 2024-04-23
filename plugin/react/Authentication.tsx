@@ -18,8 +18,9 @@ import { Phone } from './Phone'
 import { components } from './components'
 import { Props, ComponentTypes, Styles } from './types'
 import { Resend } from './Resend'
+import { Encryption } from './Encryption'
 
-export { ComponentTypes, Props, Styles }
+export { ComponentTypes, Props, Styles, Encryption }
 
 export function Authentication({
   configuration,

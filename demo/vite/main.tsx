@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { Store, configure, authorize, logout, remove } from 'iltio'
-import { Authentication } from 'iltio/react'
+import { Authentication, Encryption } from 'iltio/react'
 import { CustomUIComponents } from './custom-ui-components'
 
 configure({
   token: 'demo',
+  // url: 'http://localhost:3000/api',
   storage: window.localStorage,
 })
 
@@ -19,7 +20,12 @@ const App = () => {
     }
     const load = async () => {
       if (Store.token) {
-        const { name } = await authorize()
+        const { error, name } = await authorize()
+
+        if (error) {
+          await logout()
+          window.location.reload()
+        }
 
         if (name) {
           setName(name)
@@ -69,6 +75,13 @@ const App = () => {
         >
           Delete my Account
         </button>
+        <div
+          id="encryption"
+          style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+        >
+          <h3>Client-side Encryption</h3>
+          <Encryption onDone={() => alert('Done!')} />
+        </div>
       </div>
     )
   }
@@ -183,5 +196,5 @@ createRoot(document.getElementById('root') as HTMLElement).render(
         GitHub
       </a>
     </div>
-  </div>
+  </div>,
 )

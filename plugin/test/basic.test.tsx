@@ -1,5 +1,5 @@
 import React from 'react'
-import { act, render, screen } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import { expect, test, vi, afterEach } from 'vitest'
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
@@ -42,9 +42,7 @@ test('Can successfully register with a mail address.', async () => {
     registration: true,
   })
 
-  await act(async () => {
-    await userEvent.click(screen.getByLabelText(Label.submit))
-  })
+  await userEvent.click(screen.getByLabelText(Label.submit))
 
   expect(fetchMockCalls().length).toBe(2)
 
@@ -70,7 +68,7 @@ test('Can successfully register with a mail address.', async () => {
   expect(fetchMockCalls().length).toBe(3)
 
   expect(fetchMockCalls()[2][0]).toContain(
-    `verify/confirm?code=${correctVerificationCode}&token=${codeToken}`
+    `verify/confirm?code=${correctVerificationCode}&token=${codeToken}`,
   )
 
   expect(onSuccessMock.mock.calls.length).toBe(1)
@@ -95,9 +93,7 @@ test('Can login with the same mail address.', async () => {
     registration: false,
   })
 
-  await act(async () => {
-    await userEvent.click(screen.getByLabelText(Label.submit))
-  })
+  await userEvent.click(screen.getByLabelText(Label.submit))
 
   expect(fetchMockCalls().length).toBe(2)
 

@@ -2,20 +2,8 @@ import { app } from './index'
 
 const keyLength = 128 // 128, 192, 265
 
-// function arrayBufferToBase64(arrayBuffer: ArrayBuffer) {
-//   const uint8Array = new Uint8Array(arrayBuffer)
-//   const base64String = btoa(String.fromCharCode.apply(null, uint8Array))
-//   return base64String
-// }
-
-function arrayBufferToBase64(arrayBuffer: ArrayBuffer) {
-  const uint8Array = new Uint8Array(arrayBuffer)
-  let binary = ''
-  for (let i = 0; i < uint8Array.length; i++) {
-    binary += String.fromCharCode(uint8Array[i])
-  }
-  return window.btoa(binary)
-}
+const arrayBufferToBase64 = (arrayBuffer: ArrayBuffer) =>
+  btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)))
 
 export async function encrypt<T extends object>(data: T, ignoreKeys: string[] = []) {
   if (!app.encryptionKey) {
@@ -38,7 +26,7 @@ export async function encrypt<T extends object>(data: T, ignoreKeys: string[] = 
       const encryptedData = await window.crypto.subtle.encrypt(
         {
           name: 'AES-GCM',
-          // length: keyLength,
+          length: keyLength,
           iv: window.crypto.getRandomValues(new Uint8Array(12)),
         },
         cryptoKey,
@@ -77,7 +65,7 @@ async function importKeyFromString(keyString: string) {
 async function serializeEncryptionKey(key: CryptoKey) {
   try {
     const exportedRawKey = await window.crypto.subtle.exportKey('raw', key)
-    return arrayBufferToBase64(exportedRawKey) // arrayBufferToBase64(exportedKey)
+    return arrayBufferToBase64(exportedRawKey)
   } catch (error) {
     console.error('iltio: Error serializing encryption key:', error)
     return null
@@ -91,7 +79,7 @@ export async function generateEncryptionKey() {
         name: 'AES-GCM',
         length: keyLength,
       },
-      true, // extractable
+      true,
       ['encrypt', 'decrypt'],
     )
     return serializeEncryptionKey(key)

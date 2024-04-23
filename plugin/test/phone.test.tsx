@@ -1,5 +1,5 @@
 import React from 'react'
-import { act, render, screen } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import { afterEach, expect, test, vi } from 'vitest'
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
@@ -29,9 +29,7 @@ test('Invalid phone number leads to invalid input.', async () => {
   expect(screen.getByLabelText(Label.inputPhone)).toHaveAttribute('aria-invalid', 'false')
   expect(screen.getByLabelText(Label.submit)).toHaveTextContent('Submit')
 
-  await act(async () => {
-    await userEvent.click(screen.getByLabelText(Label.submit))
-  })
+  await userEvent.click(screen.getByLabelText(Label.submit))
 
   expect(fetchMockCalls().length).toBe(0)
   expect(screen.getByLabelText(Label.submit)).toHaveTextContent('Submit')
@@ -45,9 +43,7 @@ test('No submit with empty phone number.', async () => {
   // Type something to avoid "required" attribute preventing submit.
   await userEvent.type(screen.getByLabelText(Label.inputPhone), ' ')
 
-  await act(async () => {
-    await userEvent.click(screen.getByLabelText(Label.submit))
-  })
+  await userEvent.click(screen.getByLabelText(Label.submit))
 
   expect(fetchMockCalls().length).toBe(0)
   expect(screen.getByLabelText(Label.inputPhone)).toHaveAttribute('aria-invalid', 'true')
@@ -62,9 +58,7 @@ test('Valid phone number is submitted.', async () => {
 
   expect(screen.getByLabelText(Label.inputPhone)).toHaveAttribute('aria-invalid', 'false')
 
-  await act(async () => {
-    await userEvent.click(screen.getByLabelText(Label.submit))
-  })
+  await userEvent.click(screen.getByLabelText(Label.submit))
 
   expect(fetchMockCalls().length).toBe(1)
   expect(fetchMockCalls()[0][0]).toContain(encodeURIComponent(`+1${phoneNumber}`))
@@ -89,9 +83,7 @@ test('Country can be selected.', async () => {
 
   expect(screen.getByLabelText(Label.inputPhone)).toHaveAttribute('aria-invalid', 'false')
 
-  await act(async () => {
-    await userEvent.click(screen.getByLabelText(Label.submit))
-  })
+  await userEvent.click(screen.getByLabelText(Label.submit))
 
   expect(fetchMockCalls().length).toBe(1)
   expect(fetchMockCalls()[0][0]).toContain(encodeURIComponent(`+41${phoneNumber}`))

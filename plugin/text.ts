@@ -16,6 +16,11 @@ export const Label = {
   phoneWrapper: 'authentication-phone-wrapper',
   messageConfirm: 'authentication-message-confirm',
   inputCode: 'authentication-input-code',
+  encryptionLoading: 'encryption-loading',
+  encryptionCode: 'encryption-code',
+  encryptionEnable: 'encryption-enable',
+  encryptionDisable: 'encryption-disable',
+  encryptionDone: 'encryption-done',
 }
 
 export const Text = {
@@ -32,4 +37,8 @@ export const Text = {
   FilterCountriesInputPlaceholder: 'Filter Countries',
   PhoneInputPlaceholder: 'Phone',
   CodeResentMessage: 'A new code is being sent to you.',
+  EncryptionNoToken: 'Not logged in.',
+  EncryptionLoadingStatus: 'Checking encryption status...',
+  EncryptionDisabling: 'Disabling encryption...',
+  EncryptionClose: 'Done',
 }
