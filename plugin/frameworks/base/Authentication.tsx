@@ -107,7 +107,11 @@ export function Authentication({
     async (code: string) => {
       if (code.length === 4) {
         setError('')
-        const { error: localError, token: userToken } = await confirm(code)
+        const {
+          error: localError,
+          token: userToken,
+          encrypted: localEncrypted,
+        } = await confirm(code)
 
         if (localError) {
           if (localError === 'Code invalid or expired.') {
@@ -128,7 +132,7 @@ export function Authentication({
           Store.token = userToken
           Store.removeCodeToken()
           if (onSuccess) {
-            onSuccess(Store.name, userToken, registration)
+            onSuccess(Store.name, userToken, registration, localEncrypted)
           }
         }
       } else {

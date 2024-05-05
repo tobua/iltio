@@ -47,6 +47,7 @@ export function Authentication({
   const [error, setError] = useState('')
   const [codeValid, setCodeValid] = useState(true)
   const [validatingCode, setValidatingCode] = useState(false)
+  const [encrypted, setEncrypted] = useState(false)
 
   // eslint-disable-next-line no-param-reassign
   Components = useMemo(() => ({ ...components, ...Components }), [Components])
@@ -99,6 +100,7 @@ export function Authentication({
       }
 
       setLoading(false)
+      setEncrypted(encrypted)
 
       if (localError) {
         setError(localError === true ? Text.UnknownError : localError)
@@ -116,7 +118,11 @@ export function Authentication({
       if (code.length === 4) {
         setError('')
         setValidatingCode(true)
-        const { error: localError, token: userToken } = await confirm(code)
+        const {
+          error: localError,
+          token: userToken,
+          encrypted: localEncrypted,
+        } = await confirm(code)
 
         setValidatingCode(false)
 
@@ -138,8 +144,10 @@ export function Authentication({
         if (userToken) {
           Store.token = userToken
           Store.removeCodeToken()
-          if (onSuccess) {
-            onSuccess(Store.name, userToken, registration)
+          if (localEncrypted) {
+            setEncrypted(localEncrypted)
+          } else if (onSuccess) {
+            onSuccess(Store.name, userToken, registration, localEncrypted)
           }
         }
       } else {
@@ -149,9 +157,20 @@ export function Authentication({
     [registration],
   )
 
+  const handlePollingSuccess = useCallback(
+    (_name: string, token: string, registration: boolean, localEncrypted: boolean) => {
+      if (localEncrypted) {
+        setEncrypted(localEncrypted)
+      } else if (onSuccess) {
+        onSuccess(Store.name, token, registration, localEncrypted)
+      }
+    },
+    [],
+  )
+
   useEffect(() => {
     initializePolling(
-      onSuccess,
+      handlePollingSuccess,
       () => {
         setSubmitted(false)
         setError(Text.CodeExpiredError)
@@ -163,6 +182,15 @@ export function Authentication({
       configure(configuration)
     }
   }, [registration, configuration, onSuccess, submitted])
+
+  if (encrypted) {
+    return (
+      <div>
+        <p>Enctypted!!</p>
+        <Encryption variables={variables} style={style} Components={Components} labels={labels} />
+      </div>
+    )
+  }
 
   return (
     <Components.Form

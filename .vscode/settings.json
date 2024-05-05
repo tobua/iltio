@@ -3,6 +3,7 @@
     "demo/next",
     "demo/vite",
     "demo/hasura",
+    "demo/encryption",
     "plugin"
   ]
 }

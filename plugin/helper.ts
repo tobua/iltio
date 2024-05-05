@@ -65,14 +65,14 @@ export const filterCountries = (filter: string) => {
 }
 
 export const initializePolling = (
-  successCallback: Function,
-  expiredCallback: Function,
+  successCallback: (name: string, token: string, registration: boolean, encrypted: boolean) => void,
+  expiredCallback: () => void,
   registration: boolean,
 ) => {
   const submitted = Store.codeToken !== ''
 
   async function checkVerified() {
-    const { error: localError, token: userToken } = await poll()
+    const { error: localError, token: userToken, encrypted } = await poll()
 
     if (localError) {
       // Code token expired, start over.
@@ -93,7 +93,7 @@ export const initializePolling = (
       }
 
       if (successCallback) {
-        successCallback(Store.name, userToken, registration)
+        successCallback(Store.name, userToken, registration, encrypted)
       }
     }
   }

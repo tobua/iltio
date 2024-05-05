@@ -42,6 +42,7 @@ export const poll = async () => {
   return response as {
     error: boolean | string
     token?: string
+    encrypted?: boolean
   }
 }
 
@@ -53,6 +54,7 @@ export const confirm = async (code: string) => {
   return response as {
     error: boolean | string
     token?: string
+    encrypted?: boolean
   }
 }
 
