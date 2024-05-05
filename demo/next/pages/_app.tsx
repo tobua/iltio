@@ -10,7 +10,12 @@ const inter = Inter({ subsets: ['latin'] })
 
 function Actions() {
   const [count, setCount] = useState('?')
-  const [user, setUser] = useState({ id: null, name: null, error: false })
+  const [user, setUser] = useState({
+    id: 0,
+    name: '',
+    error: false,
+    role: 'user',
+  })
 
   return (
     <>

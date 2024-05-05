@@ -44,10 +44,10 @@ const useFlow = <T extends string>(stages: Stage<T>[]) => {
 }
 
 interface Props {
-  variables: Variables
-  Components: ComponentTypes
-  style: Styles
-  labels: Labels
+  variables?: Variables
+  Components?: ComponentTypes
+  style?: Styles
+  labels?: Labels
   onDone?: () => void
 }
 
