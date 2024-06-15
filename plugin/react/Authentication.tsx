@@ -48,6 +48,8 @@ export function Authentication({
   const [codeValid, setCodeValid] = useState(true)
   const [validatingCode, setValidatingCode] = useState(false)
   const [encrypted, setEncrypted] = useState(false)
+  const [encryptionKey, setEncryptionKey] = useState('')
+  const [encryptionText, setEncryptionText] = useState('')
 
   // eslint-disable-next-line no-param-reassign
   Components = useMemo(() => ({ ...components, ...Components }), [Components])
@@ -112,6 +114,16 @@ export function Authentication({
     [mail, phone, allowMail, allowPhone, tab],
   )
 
+  const handleEncryptionKey = useCallback<FormEventHandler<HTMLFormElement>>(
+    async (event) => {
+      event.preventDefault()
+      setError('')
+      Store.encryptionKey = encryptionKey
+      onSuccess(Store.name, Store.token, registration, encrypted)
+    },
+    [encryptionKey],
+  )
+
   // TODO return backend errors as status code numbers.
   const handleCode = useCallback(
     async (code: string) => {
@@ -122,6 +134,7 @@ export function Authentication({
           error: localError,
           token: userToken,
           encrypted: localEncrypted,
+          encryptionText: localEncryptionText,
         } = await confirm(code)
 
         setValidatingCode(false)
@@ -146,6 +159,7 @@ export function Authentication({
           Store.removeCodeToken()
           if (localEncrypted) {
             setEncrypted(localEncrypted)
+            setEncryptionText(localEncryptionText)
           } else if (onSuccess) {
             onSuccess(Store.name, userToken, registration, localEncrypted)
           }
@@ -158,9 +172,17 @@ export function Authentication({
   )
 
   const handlePollingSuccess = useCallback(
-    (_name: string, token: string, registration: boolean, localEncrypted: boolean) => {
+    (
+      _name: string,
+      token: string,
+      registration: boolean,
+      localEncrypted: boolean,
+      localEncryptionText?: string,
+    ) => {
+      console.log('polling success', _name, token, registration, localEncrypted)
       if (localEncrypted) {
         setEncrypted(localEncrypted)
+        setEncryptionText(localEncryptionText)
       } else if (onSuccess) {
         onSuccess(Store.name, token, registration, localEncrypted)
       }
@@ -185,10 +207,42 @@ export function Authentication({
 
   if (encrypted) {
     return (
-      <div>
-        <p>Enctypted!!</p>
-        <Encryption variables={variables} style={style} Components={Components} labels={labels} />
-      </div>
+      <Components.Form
+        aria-label={Label.form}
+        onSubmit={handleEncryptionKey}
+        style={style.form}
+        variables={variables}
+      >
+        <Components.Message
+          aria-label={Label.encryptionEnterKey}
+          style={style.message}
+          variables={variables}
+        >
+          {Text.EncryptionEnterKey}
+        </Components.Message>
+        <Components.Input
+          aria-label={Label.inputEncryptionKey}
+          aria-invalid={!true}
+          value={encryptionKey}
+          onChange={(event) => setEncryptionKey(event.target.value)}
+          required
+          valid={true}
+          variables={variables}
+          style={style.inputMail}
+          placeholder={Text.EncryptionInputPlaceholder}
+          type="text"
+          {...(isReactNative ? { onSubmitEditing: handleEncryptionKey } : {})}
+        />
+        <Components.Button
+          aria-label={Label.encryptionKeySubmit}
+          type="submit"
+          style={style.button}
+          variables={variables}
+          onClick={(event: any) => isReactNative && handleEncryptionKey(event)}
+        >
+          {loading ? Text.LoadingButton : Text.EncryptionSubmitKey}
+        </Components.Button>
+      </Components.Form>
     )
   }
 

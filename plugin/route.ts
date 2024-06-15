@@ -43,6 +43,7 @@ export const poll = async () => {
     error: boolean | string
     token?: string
     encrypted?: boolean
+    encryptionText?: string
   }
 }
 
@@ -55,6 +56,7 @@ export const confirm = async (code: string) => {
     error: boolean | string
     token?: string
     encrypted?: boolean
+    encryptionText?: string
   }
 }
 
@@ -119,8 +121,8 @@ export const user = async (token = Store.token) => {
   }
 }
 
-export const toggleEncryption = async (token = Store.token) => {
-  const response = await fetchWithError(joinUrl(`/encrypt?token=${token}`), {
+export const toggleEncryption = async (token = Store.token, text?: string) => {
+  const response = await fetchWithError(joinUrl(`/encrypt?token=${token}&text=${text}`), {
     method: 'PUT',
   })
 

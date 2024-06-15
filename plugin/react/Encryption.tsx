@@ -9,6 +9,8 @@ import {
   toggleEncryption,
   Labels,
   Store,
+  generateEncryptionKey,
+  encryptText,
 } from 'iltio'
 import { Styles, ComponentTypes } from './types'
 import { components } from './components'
@@ -66,23 +68,42 @@ export function Encryption({
   ])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [encryptionKey, setEncryptionKey] = useState('')
 
   const handleToggle = useCallback<FormEventHandler<HTMLFormElement>>(
     async (event) => {
       event.preventDefault()
       setError('')
       setLoading(true)
+      const key = await generateEncryptionKey()
+      const encryptedText = await encryptText('Hello Encryption')
 
-      const { error: localError, encrypted: localEncrypted } = await toggleEncryption()
+      console.log('stage', stage, key, encryptedText)
+
+      // TODO localEncrypted not used!
+      const { error: localError, encrypted: localEncrypted } =
+        stage === 'enable'
+          ? await toggleEncryption(Store.token, encryptedText)
+          : await toggleEncryption()
 
       if (localError) {
         setError(typeof localError === 'string' ? localError : 'Unknown error')
+        return
       }
 
       setLoading(false)
 
       if (stage === 'disable') {
         onDone()
+      }
+
+      if (stage === 'enable') {
+        if (!key) {
+          setError('Unable to generate encryption key.')
+          return
+        }
+        Store.encryptionKey = key
+        setEncryptionKey(key)
       }
 
       nextStage()
@@ -133,7 +154,7 @@ export function Encryption({
           style={style.button}
           variables={variables}
         >
-          {labels.encrypt}
+          {loading ? Text.EncryptionEnabling : labels.encrypt}
         </Components.Button>
       )}
       {stage === 'disable' && (
@@ -154,8 +175,15 @@ export function Encryption({
             style={style.message}
             variables={variables}
           >
-            123456789
+            {Text.EncryptionKeyGenerated}
           </Components.Message>
+          <Components.Input
+            style={style.inputMail}
+            variables={variables}
+            value={encryptionKey}
+            type="text"
+            disabled={true}
+          />
           <Components.Button
             aria-label={Label.encryptionDone}
             onClick={() => {

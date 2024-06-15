@@ -6,6 +6,7 @@ export const Label = {
   tabWrapper: 'authentication-tab-wrapper',
   inputMail: 'authentication-input-mail',
   inputPhone: 'authentication-input-phone',
+  inputEncryptionKey: 'encryption-input-key',
   submit: 'authentication-submit',
   phoneCountry: 'authentication-phone-country',
   resendCode: 'authentication-resend-code',
@@ -21,6 +22,8 @@ export const Label = {
   encryptionEnable: 'encryption-enable',
   encryptionDisable: 'encryption-disable',
   encryptionDone: 'encryption-done',
+  encryptionEnterKey: 'encryption-enter-key',
+  encryptionKeySubmit: 'encryption-submit-key',
 }
 
 export const Text = {
@@ -40,5 +43,11 @@ export const Text = {
   EncryptionNoToken: 'Not logged in.',
   EncryptionLoadingStatus: 'Checking encryption status...',
   EncryptionDisabling: 'Disabling encryption...',
+  EncryptionEnabling: 'Enabling encryption...',
+  EncryptionKeyGenerated:
+    'An encryption key has been generated, please remember it and store it somewhere safe.',
   EncryptionClose: 'Done',
+  EncryptionEnterKey: 'Encryption is enabled for your account, please enter the encryption key.',
+  EncryptionInputPlaceholder: 'Please enter the key...',
+  EncryptionSubmitKey: 'Submit Key',
 }
