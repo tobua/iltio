@@ -113,11 +113,12 @@ export const log = async (message: string, eventId: number) => {
 }
 
 export const user = async (token = Store.token) => {
-  const response = await fetchWithError(joinUrl(`/internal/user?token=${token}`))
+  const response = await fetchWithError(joinUrl(`/user?token=${token}`))
 
   return response as {
     error: boolean
     encrypted: boolean
+    encryptionText: string
   }
 }
 

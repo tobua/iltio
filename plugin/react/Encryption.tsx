@@ -11,6 +11,7 @@ import {
   Store,
   generateEncryptionKey,
   encryptText,
+  app,
 } from 'iltio'
 import { Styles, ComponentTypes } from './types'
 import { components } from './components'
@@ -69,25 +70,30 @@ export function Encryption({
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [encryptionKey, setEncryptionKey] = useState('')
+  const [encryptionText, setEncryptionText] = useState('')
 
   const handleToggle = useCallback<FormEventHandler<HTMLFormElement>>(
     async (event) => {
       event.preventDefault()
       setError('')
       setLoading(true)
-      const key = await generateEncryptionKey()
-      const encryptedText = await encryptText('Hello Encryption')
 
-      console.log('stage', stage, key, encryptedText)
+      let response = { error: true, encrypted: false }
+      let key: string | false = false
 
-      // TODO localEncrypted not used!
-      const { error: localError, encrypted: localEncrypted } =
-        stage === 'enable'
-          ? await toggleEncryption(Store.token, encryptedText)
-          : await toggleEncryption()
+      if (stage === 'enable') {
+        key = await generateEncryptionKey()
+        app.encryptionKey = key as string
+        const encryptedText = await encryptText('Hello Encryption')
 
-      if (localError) {
-        setError(typeof localError === 'string' ? localError : 'Unknown error')
+        console.log('stage', stage, key, encryptedText)
+        response = await toggleEncryption(Store.token, encryptedText)
+      } else {
+        response = await toggleEncryption()
+      }
+
+      if (response.error) {
+        setError(typeof response.error === 'string' ? response.error : 'Unknown error')
         return
       }
 
@@ -115,15 +121,18 @@ export function Encryption({
     setError('')
 
     if (stage === 'status') {
-      user().then(({ error: localError, encrypted: localEncrypted }) => {
-        if (localError) {
-          setError(typeof localError === 'string' ? localError : 'Unknown error')
-        } else {
-          nextStage(String(localEncrypted))
-        }
+      user().then(
+        ({ error: localError, encrypted: localEncrypted, encryptionText: localEncryptionText }) => {
+          if (localError) {
+            setError(typeof localError === 'string' ? localError : 'Unknown error')
+          } else {
+            setEncryptionText(localEncryptionText)
+            nextStage(String(localEncrypted))
+          }
 
-        setLoading(false)
-      })
+          setLoading(false)
+        },
+      )
     }
   }, [stage])
 

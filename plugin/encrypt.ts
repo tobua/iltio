@@ -1,6 +1,20 @@
 import { app } from './index'
 
+function stringToIv(ivString) {
+  const binaryString = atob(ivString)
+  const iv = new Uint8Array(binaryString.length)
+  for (let i = 0; i < binaryString.length; i++) {
+    iv[i] = binaryString.charCodeAt(i)
+  }
+  return iv
+}
+
+function ivToString(iv: Uint8Array) {
+  return btoa(String.fromCharCode(...iv))
+}
+
 let cryptoKey: CryptoKey
+const initializationVector = stringToIv('UxjZQV8Lgc7Sh+Wo') // window.crypto.getRandomValues(new Uint8Array(12))
 
 async function getCryptoKey() {
   if (cryptoKey) {
@@ -31,12 +45,38 @@ export async function encryptText(value: string) {
     {
       name: 'AES-GCM',
       length: keyLength,
-      iv: window.crypto.getRandomValues(new Uint8Array(12)),
+      iv: initializationVector,
     },
     cryptoKey,
     input,
   )
   return arrayBufferToBase64(encryptedText)
+}
+
+function base64ToArrayBuffer(base64: string) {
+  const binary = window.atob(base64)
+  const len = binary.length
+  const bytes = new Uint8Array(len)
+  for (let i = 0; i < len; i++) {
+    bytes[i] = binary.charCodeAt(i)
+  }
+  return bytes.buffer
+}
+
+export async function decryptText(text: string) {
+  const cryptoKey = await getCryptoKey()
+  const encryptedTextBuffer = base64ToArrayBuffer(text)
+
+  const decryptedText = await window.crypto.subtle.decrypt(
+    {
+      name: 'AES-GCM',
+      iv: initializationVector,
+    },
+    cryptoKey,
+    encryptedTextBuffer,
+  )
+
+  return new TextDecoder().decode(decryptedText)
 }
 
 export async function encrypt<T extends object>(data: T, ignoreKeys: string[] = []) {
@@ -70,7 +110,7 @@ async function importKeyFromString(keyString: string) {
       ),
       { name: 'AES-GCM', length: keyLength },
       true,
-      ['encrypt', 'decrypt'], //
+      ['encrypt', 'decrypt'],
     )
     return importedKey
   } catch (error) {

@@ -49,6 +49,7 @@ export function Authentication({
   const [validatingCode, setValidatingCode] = useState(false)
   const [encrypted, setEncrypted] = useState(false)
   const [encryptionKey, setEncryptionKey] = useState('')
+  const [encryptionKeyValid, setEncryptionKeyValid] = useState(true)
   const [encryptionText, setEncryptionText] = useState('')
 
   // eslint-disable-next-line no-param-reassign
@@ -222,11 +223,14 @@ export function Authentication({
         </Components.Message>
         <Components.Input
           aria-label={Label.inputEncryptionKey}
-          aria-invalid={!true}
+          aria-invalid={!encryptionKeyValid}
           value={encryptionKey}
-          onChange={(event) => setEncryptionKey(event.target.value)}
+          onChange={(event) => {
+            setEncryptionKeyValid(true)
+            setEncryptionKey(event.target.value)
+          }}
           required
-          valid={true}
+          valid={encryptionKeyValid}
           variables={variables}
           style={style.inputMail}
           placeholder={Text.EncryptionInputPlaceholder}
