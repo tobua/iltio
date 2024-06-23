@@ -50,7 +50,6 @@ const getInitialConfiguration = () => ({
   storage: getInitialStorage(),
   pollDuration: 10000,
   pollInterval: null,
-  encryptionKey: '',
   encryptionKeyStorageKey: 'client-side-encryption-key',
 })
 

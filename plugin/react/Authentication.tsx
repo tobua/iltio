@@ -1,4 +1,4 @@
-import React, { FormEventHandler, useCallback, useEffect, useMemo, useState } from 'react'
+import { FormEventHandler, useCallback, useEffect, useMemo, useState } from 'react'
 import {
   Store,
   configure,
@@ -13,12 +13,14 @@ import {
   countries,
   initializePolling,
   stopPolling,
+  encryptText,
 } from 'iltio'
 import { Phone } from './Phone'
 import { components } from './components'
 import { Props, ComponentTypes, Styles } from './types'
 import { Resend } from './Resend'
 import { Encryption } from './Encryption'
+import { removeCryptoKey } from '../encrypt'
 
 export { ComponentTypes, Props, Styles, Encryption }
 
@@ -51,6 +53,7 @@ export function Authentication({
   const [encryptionKey, setEncryptionKey] = useState('')
   const [encryptionKeyValid, setEncryptionKeyValid] = useState(true)
   const [encryptionText, setEncryptionText] = useState('')
+  const [encryptionError, setEncryptionError] = useState('')
 
   // eslint-disable-next-line no-param-reassign
   Components = useMemo(() => ({ ...components, ...Components }), [Components])
@@ -119,8 +122,29 @@ export function Authentication({
     async (event) => {
       event.preventDefault()
       setError('')
+      setEncryptionKeyValid(true)
+
+      // TODO reloading at this point shouldn't lead to being logged in.
+
       Store.encryptionKey = encryptionKey
-      onSuccess(Store.name, Store.token, registration, encrypted)
+      removeCryptoKey()
+      let currentEncryptionText = ''
+
+      try {
+        currentEncryptionText = await encryptText('Hello Encryption')
+      } catch (error) {
+        // Key probably too short, validate directly once length defined.
+        setEncryptionKeyValid(false)
+        setEncryptionError('Wrong encryption key length.')
+        return
+      }
+
+      if (currentEncryptionText === encryptionText) {
+        onSuccess(Store.name, Store.token, registration, encrypted)
+      } else {
+        setEncryptionKeyValid(false)
+        setEncryptionError('Wrong encryption key entered.')
+      }
     },
     [encryptionKey],
   )
@@ -180,7 +204,6 @@ export function Authentication({
       localEncrypted: boolean,
       localEncryptionText?: string,
     ) => {
-      console.log('polling success', _name, token, registration, localEncrypted)
       if (localEncrypted) {
         setEncrypted(localEncrypted)
         setEncryptionText(localEncryptionText)
@@ -237,6 +260,11 @@ export function Authentication({
           type="text"
           {...(isReactNative ? { onSubmitEditing: handleEncryptionKey } : {})}
         />
+        {encryptionError && (
+          <Components.Error style={style.error} variables={variables} aria-label={Label.encryptionError}>
+            {encryptionError}
+          </Components.Error>
+        )}
         <Components.Button
           aria-label={Label.encryptionKeySubmit}
           type="submit"

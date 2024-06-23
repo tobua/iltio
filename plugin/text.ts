@@ -24,6 +24,7 @@ export const Label = {
   encryptionDone: 'encryption-done',
   encryptionEnterKey: 'encryption-enter-key',
   encryptionKeySubmit: 'encryption-submit-key',
+  encryptionError: 'encryption-error',
 }
 
 export const Text = {

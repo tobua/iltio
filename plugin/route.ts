@@ -1,5 +1,6 @@
 import { app, Store } from './store'
 import { joinUrl } from './helper'
+import { removeCryptoKey } from './encrypt'
 
 async function fetchWithError(url: string, options?: RequestInit) {
   try {
@@ -79,6 +80,8 @@ export const authorize = async (token = Store.token) => {
 export const logout = async (server = false, token = Store.token) => {
   Store.removeToken()
   Store.removeName()
+  Store.removeEncryptionKey()
+  removeCryptoKey()
 
   if (server) {
     const response = await fetchWithError(joinUrl(`/logout?token=${token}`))

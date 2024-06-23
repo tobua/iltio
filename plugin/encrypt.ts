@@ -1,4 +1,4 @@
-import { app } from './index'
+import { Store } from './index'
 
 function stringToIv(ivString) {
   const binaryString = atob(ivString)
@@ -13,22 +13,33 @@ function ivToString(iv: Uint8Array) {
   return btoa(String.fromCharCode(...iv))
 }
 
-let cryptoKey: CryptoKey
-const initializationVector = stringToIv('UxjZQV8Lgc7Sh+Wo') // window.crypto.getRandomValues(new Uint8Array(12))
+const state: { cryptoKey: CryptoKey; initializationVector: Uint8Array } = {
+  cryptoKey: null,
+  initializationVector: stringToIv('UxjZQV8Lgc7Sh+Wo'),
+}
 
-async function getCryptoKey() {
-  if (cryptoKey) {
-    return cryptoKey
+// let cryptoKey: CryptoKey
+// const initializationVector = stringToIv('UxjZQV8Lgc7Sh+Wo') // window.crypto.getRandomValues(new Uint8Array(12))
+
+export const removeCryptoKey = () => {
+  state.cryptoKey = null
+  console.log(state.cryptoKey, Store.encryptionKey)
+}
+
+const getCryptoKey = async () => {
+  if (state.cryptoKey) {
+    // TODO old encryption key not properly deleted.
+    // return state.cryptoKey
   }
 
-  const localCryptoKey = await importKeyFromString(app.encryptionKey)
+  const localCryptoKey = await importKeyFromString(Store.encryptionKey)
 
   if (!localCryptoKey) {
     console.error('iltio: Failed to import crypto key.')
     throw new Error('Failed to local crypto key.')
   }
 
-  cryptoKey = localCryptoKey
+  state.cryptoKey = localCryptoKey
 
   return localCryptoKey
 }
@@ -39,15 +50,15 @@ const arrayBufferToBase64 = (arrayBuffer: ArrayBuffer) =>
   btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)))
 
 export async function encryptText(value: string) {
-  const cryptoKey = await getCryptoKey()
+  const currentCryptoKey = await getCryptoKey()
   const input = new TextEncoder().encode(value)
   const encryptedText = await window.crypto.subtle.encrypt(
     {
       name: 'AES-GCM',
       length: keyLength,
-      iv: initializationVector,
+      iv: state.initializationVector,
     },
-    cryptoKey,
+    currentCryptoKey,
     input,
   )
   return arrayBufferToBase64(encryptedText)
@@ -64,15 +75,15 @@ function base64ToArrayBuffer(base64: string) {
 }
 
 export async function decryptText(text: string) {
-  const cryptoKey = await getCryptoKey()
+  const currentCryptoKey = await getCryptoKey()
   const encryptedTextBuffer = base64ToArrayBuffer(text)
 
   const decryptedText = await window.crypto.subtle.decrypt(
     {
       name: 'AES-GCM',
-      iv: initializationVector,
+      iv: state.initializationVector,
     },
-    cryptoKey,
+    currentCryptoKey,
     encryptedTextBuffer,
   )
 
@@ -80,7 +91,7 @@ export async function decryptText(text: string) {
 }
 
 export async function encrypt<T extends object>(data: T, ignoreKeys: string[] = []) {
-  if (!app.encryptionKey) {
+  if (!Store.encryptionKey) {
     console.error('iltio: Missing encryption key.')
     return false
   }

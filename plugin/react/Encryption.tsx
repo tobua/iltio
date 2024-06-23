@@ -1,4 +1,4 @@
-import React, { useState, useCallback, FormEventHandler, useEffect } from 'react'
+import { useState, useCallback, FormEventHandler, useEffect } from 'react'
 import {
   Variables,
   Label,
@@ -11,7 +11,6 @@ import {
   Store,
   generateEncryptionKey,
   encryptText,
-  app,
 } from 'iltio'
 import { Styles, ComponentTypes } from './types'
 import { components } from './components'
@@ -83,10 +82,8 @@ export function Encryption({
 
       if (stage === 'enable') {
         key = await generateEncryptionKey()
-        app.encryptionKey = key as string
+        Store.encryptionKey = key as string
         const encryptedText = await encryptText('Hello Encryption')
-
-        console.log('stage', stage, key, encryptedText)
         response = await toggleEncryption(Store.token, encryptedText)
       } else {
         response = await toggleEncryption()
