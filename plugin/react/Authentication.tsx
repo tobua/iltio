@@ -49,6 +49,7 @@ export function Authentication({
   const [error, setError] = useState('')
   const [codeValid, setCodeValid] = useState(true)
   const [validatingCode, setValidatingCode] = useState(false)
+  const [userToken, setUserToken] = useState('')
   const [encrypted, setEncrypted] = useState(false)
   const [encryptionKey, setEncryptionKey] = useState('')
   const [encryptionKeyValid, setEncryptionKeyValid] = useState(true)
@@ -124,8 +125,6 @@ export function Authentication({
       setError('')
       setEncryptionKeyValid(true)
 
-      // TODO reloading at this point shouldn't lead to being logged in.
-
       Store.encryptionKey = encryptionKey
       removeCryptoKey()
       let currentEncryptionText = ''
@@ -140,6 +139,7 @@ export function Authentication({
       }
 
       if (currentEncryptionText === encryptionText) {
+        Store.token = userToken
         onSuccess(Store.name, Store.token, registration, encrypted)
       } else {
         setEncryptionKeyValid(false)
@@ -157,7 +157,7 @@ export function Authentication({
         setValidatingCode(true)
         const {
           error: localError,
-          token: userToken,
+          token: localUserToken,
           encrypted: localEncrypted,
           encryptionText: localEncryptionText,
         } = await confirm(code)
@@ -179,14 +179,15 @@ export function Authentication({
 
         stopPolling()
 
-        if (userToken) {
-          Store.token = userToken
+        if (localUserToken) {
           Store.removeCodeToken()
           if (localEncrypted) {
+            setUserToken(localUserToken)
             setEncrypted(localEncrypted)
             setEncryptionText(localEncryptionText)
           } else if (onSuccess) {
-            onSuccess(Store.name, userToken, registration, localEncrypted)
+            Store.token = localUserToken
+            onSuccess(Store.name, localUserToken, registration, localEncrypted)
           }
         }
       } else {
@@ -247,6 +248,7 @@ export function Authentication({
         <Components.Input
           aria-label={Label.inputEncryptionKey}
           aria-invalid={!encryptionKeyValid}
+          autoFocus
           value={encryptionKey}
           onChange={(event) => {
             setEncryptionKeyValid(true)
@@ -261,7 +263,11 @@ export function Authentication({
           {...(isReactNative ? { onSubmitEditing: handleEncryptionKey } : {})}
         />
         {encryptionError && (
-          <Components.Error style={style.error} variables={variables} aria-label={Label.encryptionError}>
+          <Components.Error
+            style={style.error}
+            variables={variables}
+            aria-label={Label.encryptionError}
+          >
             {encryptionError}
           </Components.Error>
         )}
@@ -382,6 +388,7 @@ export function Authentication({
           <Components.CodeInputWrapper>
             <Components.Input
               aria-label={Label.inputCode}
+              autoFocus
               onChange={(event: any) => handleCode(event.target.value)}
               valid={codeValid}
               required
