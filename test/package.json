@@ -6,10 +6,9 @@
   },
   "type": "module",
   "dependencies": {
-    "@playwright/test": "^1.45.0",
+    "@playwright/test": "^1.45.1",
     "iltio": "*",
     "msw": "^2.3.1",
-    "playwright": "^1.45.0",
     "playwright-msw": "^3.0.1"
   },
   "prettier": {

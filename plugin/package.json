@@ -32,7 +32,7 @@
     "url-join": "^5.0.0"
   },
   "devDependencies": {
-    "@builder.io/qwik": "^1.5.7",
+    "@builder.io/qwik": "^1.6.0",
     "@react-native-community/cli": "^13.6.9",
     "@testing-library/jest-dom": "^6.4.6",
     "@testing-library/react": "^16.0.0",
@@ -46,7 +46,7 @@
     "prettier-plugin-svelte": "^3.2.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-native": "^0.74.2",
+    "react-native": "^0.74.3",
     "styled-components": "^6.1.11",
     "vitest": "^1.6.0"
   },
@@ -56,6 +56,23 @@
     "react": ">= 18.0",
     "react-native": ">= 0.69",
     "react-native-localize": "^3.2.0"
+  },
+  "peerDependenciesMeta": {
+    "@builder.io/qwik": {
+      "optional": true
+    },
+    "next": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    },
+    "react-native": {
+      "optional": true
+    },
+    "react-native-localize": {
+      "optional": true
+    }
   },
   "type": "module",
   "sideEffects": false,
