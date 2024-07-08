@@ -111,6 +111,7 @@ export function Authentication({
           error: localError,
           token: userToken,
           encrypted: localEncrypted,
+          uid,
         } = await confirm(code)
 
         if (localError) {
@@ -130,6 +131,7 @@ export function Authentication({
 
         if (userToken) {
           Store.token = userToken
+          Store.uid = uid
           Store.removeCodeToken()
           if (onSuccess) {
             onSuccess(Store.name, userToken, registration, localEncrypted)

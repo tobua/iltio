@@ -47,6 +47,7 @@ const getInitialConfiguration = () => ({
   tokenStorageKey: 'auth-token',
   codeTokenStorageKey: 'auth-verify-token',
   nameStorageKey: 'auth-name',
+  uidStorageKey: 'auth-uid',
   storage: getInitialStorage(),
   pollDuration: 10000,
   pollInterval: null,
@@ -98,5 +99,14 @@ export const Store = {
   },
   removeEncryptionKey() {
     app.storage.removeItem(app.encryptionKeyStorageKey)
+  },
+  get uid() {
+    return app.storage.getItem(app.uidStorageKey) ?? ''
+  },
+  set uid(value: string) {
+    app.storage.setItem(app.uidStorageKey, value)
+  },
+  removeUid() {
+    app.storage.removeItem(app.uidStorageKey)
   },
 }

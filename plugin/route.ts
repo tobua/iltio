@@ -34,6 +34,10 @@ export const authenticate = async (name: string) => {
     error: boolean | string
     codeToken?: string
     registration?: boolean
+    // Anonymous registration.
+    token?: string
+    id: string
+    uid: string
   }
 }
 
@@ -45,6 +49,8 @@ export const poll = async () => {
     token?: string
     encrypted?: boolean
     encryptionText?: string
+    userId?: string
+    uid?: string
   }
 }
 
@@ -58,6 +64,8 @@ export const confirm = async (code: string) => {
     token?: string
     encrypted?: boolean
     encryptionText?: string
+    userId?: string
+    uid?: string
   }
 }
 
@@ -74,13 +82,14 @@ export const resend = async (token = Store.codeToken) => {
 export const authorize = async (token = Store.token) => {
   const response = await fetchWithError(joinUrl(`/authorize?token=${token}`))
 
-  return response as { error: boolean; role: string; id: number; name: string }
+  return response as { error: boolean; role: string; id: string; uid: string; name: string }
 }
 
 export const logout = async (server = false, token = Store.token) => {
   Store.removeToken()
   Store.removeName()
   Store.removeEncryptionKey()
+  Store.removeUid()
   removeCryptoKey()
 
   if (server) {
@@ -101,6 +110,8 @@ export const remove = async (token = Store.token) => {
 
   Store.removeToken()
   Store.removeName()
+  Store.removeEncryptionKey()
+  Store.removeUid()
   return response as { error: boolean }
 }
 
@@ -120,6 +131,8 @@ export const user = async (token = Store.token) => {
 
   return response as {
     error: boolean
+    id: string
+    uid: string
     encrypted: boolean
     encryptionText: string
   }

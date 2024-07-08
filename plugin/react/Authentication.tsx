@@ -160,6 +160,7 @@ export function Authentication({
           token: localUserToken,
           encrypted: localEncrypted,
           encryptionText: localEncryptionText,
+          uid,
         } = await confirm(code)
 
         setValidatingCode(false)
@@ -187,6 +188,7 @@ export function Authentication({
             setEncryptionText(localEncryptionText)
           } else if (onSuccess) {
             Store.token = localUserToken
+            Store.uid = uid
             onSuccess(Store.name, localUserToken, registration, localEncrypted)
           }
         }
