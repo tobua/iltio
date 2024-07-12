@@ -8,6 +8,7 @@ export {
   logout,
   remove,
   user,
+  rootUser,
   toggleEncryption,
 } from './route'
 export type { Variables, Labels, Configuration } from './types'
