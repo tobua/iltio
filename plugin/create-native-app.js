@@ -1,7 +1,6 @@
-#!/usr/bin/env node
-import { copyFileSync, renameSync } from 'fs'
-import { join } from 'path'
-import { execSync } from 'child_process'
+import { copyFileSync, renameSync } from 'node:fs'
+import { join } from 'node:path'
+import { execSync } from 'node:child_process'
 
 const appName = 'AuthenticationApp'
 
@@ -19,7 +18,7 @@ copyFileSync('native/App.tsx', 'app/App.tsx')
 copyFileSync('native/metro.config.js', 'app/metro.config.js')
 
 // Ensure plugin /dist contents are available
-execSync('npm run build', {
+execSync('bun run build', {
   stdio: 'inherit',
 })
 
@@ -30,7 +29,7 @@ execSync('npm install $(npm pack .. | tail -1) --legacy-peer-deps', {
 })
 
 // Additional dependency.
-execSync('npm install iltio react-native-localize --legacy-peer-deps', {
+execSync('bun install iltio react-native-localize', {
   cwd: join(process.cwd(), 'app'),
   stdio: 'inherit',
 })

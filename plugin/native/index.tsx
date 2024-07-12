@@ -1,4 +1,3 @@
-import React from 'react'
 import {
   Text,
   View,
@@ -9,6 +8,7 @@ import {
   StyleProp,
   ViewStyle,
   TextStyle,
+  ActivityIndicator,
 } from 'react-native'
 import {
   Authentication as ReactAuthentication,
@@ -334,6 +334,26 @@ const NativeComponents = {
       autoCapitalize="none"
       autoCorrect={false}
       {...props}
+    />
+  ),
+  CodeInputWrapper: ({ style, ...props }: ComponentProps & { style?: StyleProp<ViewStyle> }) => (
+    <View
+      style={[{ display: 'flex', flexDirection: 'column', position: 'relative' }, style]}
+      {...props}
+    />
+  ),
+  Loader: ({ style, variables }: ComponentProps & { style?: StyleProp<ViewStyle> }) => (
+    <ActivityIndicator
+      style={[
+        {
+          position: 'absolute',
+          right: variables.space,
+          top: 5,
+        },
+        style,
+      ]}
+      size="small"
+      color={variables.color}
     />
   ),
 }

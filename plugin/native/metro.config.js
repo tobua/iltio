@@ -12,6 +12,4 @@ const config = {
   },
 }
 
-console.log(getDefaultConfig(__dirname))
-
 module.exports = mergeConfig(getDefaultConfig(__dirname), config)

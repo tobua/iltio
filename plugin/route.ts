@@ -138,6 +138,21 @@ export const user = async (token = Store.token) => {
   }
 }
 
+export const rootUser = async (token = Store.token) => {
+  const response = await fetchWithError(joinUrl(`/internal/user?token=${token}`))
+
+  return response as {
+    error: boolean
+    id: string
+    uid: string
+    allowMail: boolean
+    allowPhone: boolean
+    allowAnonymousRegistration: boolean
+    allowRecoveryToken: boolean
+    users: { name: string; createdAt: Date }[]
+  }
+}
+
 export const toggleEncryption = async (token = Store.token, text?: string) => {
   const response = await fetchWithError(joinUrl(`/encrypt?token=${token}&text=${text}`), {
     method: 'PUT',
