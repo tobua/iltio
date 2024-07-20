@@ -30,14 +30,18 @@ function getInitialStorage() {
     return MemoryStorage as BasicStorage
   }
 
+  // Use sessionStorage in development to avoid sharing logins between different applications running on localhost:3000.
+  const defaultStorage =
+    process.env.NODE_ENV === 'production' ? window.localStorage : window.sessionStorage
+
   try {
-    window.sessionStorage.getItem('non-existent')
+    defaultStorage.getItem('non-existent')
   } catch (error) {
-    // Access to sessionStorage blocked by browser, which is the case in Codesandbox iframe.
+    // Access to sessionStorage (or localStorage) blocked by browser, which is the case in Codesandbox iframe.
     return MemoryStorage as BasicStorage
   }
 
-  return window.sessionStorage as BasicStorage
+  return defaultStorage as BasicStorage
 }
 
 const getInitialConfiguration = () => ({

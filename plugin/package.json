@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@builder.io/qwik": "^1.7.1",
-    "@react-native-community/cli": "^13.6.9",
+    "@react-native-community/cli": "^14.0.0",
     "@testing-library/jest-dom": "^6.4.6",
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.5.2",
@@ -43,12 +43,12 @@
     "happy-dom": "^14.12.3",
     "next": "^14.2.5",
     "padua": "^4.0.1",
-    "prettier-plugin-svelte": "^3.2.5",
+    "prettier-plugin-svelte": "^3.2.6",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-native": "^0.74.3",
-    "styled-components": "^6.1.11",
-    "vitest": "^2.0.2"
+    "styled-components": "^6.1.12",
+    "vitest": "^2.0.3"
   },
   "peerDependencies": {
     "@builder.io/qwik": ">= 0.100",
