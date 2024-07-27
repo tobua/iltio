@@ -6,6 +6,7 @@ import {
   addTaskMutation,
 } from './interface'
 import { Colors } from './main'
+import { Store } from 'iltio'
 
 const Form = ({ title, onAdd }: { title: string; onAdd: (value: string) => void }) => (
   <form
@@ -57,14 +58,14 @@ export function Projects() {
 
   const [addProject, { error: errorAddProject, loading: loadingAddProject }] = useMutation<
     any,
-    { name: string }
+    { name: string; user: string }
   >(addProjectMutation, {
     refetchQueries: [{ query: getProjectsQuery }],
   })
 
   const [addTask, { error: errorAddTask, loading: loadingAddTask }] = useMutation<
     any,
-    { name: string; project: number }
+    { name: string; project: number; user: string }
   >(addTaskMutation, {
     refetchQueries: [{ query: getProjectsQuery }],
   })
@@ -94,7 +95,7 @@ export function Projects() {
       <Form
         title="Add a project"
         onAdd={(value) => {
-          addProject({ variables: { name: value } })
+          addProject({ variables: { name: value, user: Store.uid } })
         }}
       />
       {projects.map((project) => (
@@ -111,7 +112,9 @@ export function Projects() {
           <h2 style={{ margin: 0 }}>{project.name}</h2>
           <Form
             title="Add a task"
-            onAdd={(value) => addTask({ variables: { name: value, project: project.id } })}
+            onAdd={(value) =>
+              addTask({ variables: { name: value, project: project.id, user: Store.uid } })
+            }
           />
           {project.tasks.length !== 0 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>

@@ -25,16 +25,16 @@ export const getProjectsQuery = gql`
 `
 
 export const addProjectMutation = gql`
-  mutation AddProjectMutation($name: String!) {
-    insert_project_one(object: { name: $name }) {
+  mutation AddProjectMutation($name: String!, $user: String!) {
+    insert_project_one(object: { name: $name, user: $user }) {
       id
     }
   }
 `
 
 export const addTaskMutation = gql`
-  mutation AddTaskMutation($name: String!, $project: Int!) {
-    insert_task_one(object: { name: $name, project: $project }) {
+  mutation AddTaskMutation($name: String!, $project: Int!, $user: String!) {
+    insert_task_one(object: { name: $name, project: $project, user: $user }) {
       id
     }
   }

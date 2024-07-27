@@ -34,7 +34,7 @@
   "devDependencies": {
     "@builder.io/qwik": "^1.7.1",
     "@react-native-community/cli": "^14.0.0",
-    "@testing-library/jest-dom": "^6.4.6",
+    "@testing-library/jest-dom": "^6.4.8",
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.5.2",
     "@types/cookie": "^0.6.0",
@@ -48,7 +48,7 @@
     "react-dom": "^18.3.1",
     "react-native": "^0.74.3",
     "styled-components": "^6.1.12",
-    "vitest": "^2.0.3"
+    "vitest": "^2.0.4"
   },
   "peerDependencies": {
     "@builder.io/qwik": ">= 0.100",

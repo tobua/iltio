@@ -15,7 +15,7 @@ jobs:
         working-directory: plugin
     steps:
       - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v1
+      - uses: oven-sh/setup-bun@v2
       - run: bun install
       - run: bun run build
       - run: bun run test
@@ -30,7 +30,7 @@ jobs:
         working-directory: test
     steps:
       - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v1
+      - uses: oven-sh/setup-bun@v2
       # Install in root to ensure all workspace dependencies installed.
       - run: |
           cd ..

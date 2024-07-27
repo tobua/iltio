@@ -85,5 +85,5 @@ createRoot(document.getElementById('root') as HTMLElement).render(
         GitHub
       </a>
     </div>
-  </div>
+  </div>,
 )
