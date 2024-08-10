@@ -50,6 +50,7 @@ export function Authentication({
   const [codeValid, setCodeValid] = useState(true)
   const [validatingCode, setValidatingCode] = useState(false)
   const [userToken, setUserToken] = useState('')
+  const [jsonWebToken, setJsonWebToken] = useState('')
   const [encrypted, setEncrypted] = useState(false)
   const [encryptionKey, setEncryptionKey] = useState('')
   const [encryptionKeyValid, setEncryptionKeyValid] = useState(true)
@@ -140,6 +141,7 @@ export function Authentication({
 
       if (currentEncryptionText === encryptionText) {
         Store.token = userToken
+        Store.jsonWebToken = jsonWebToken
         onSuccess(Store.name, Store.token, registration, encrypted)
       } else {
         setEncryptionKeyValid(false)
@@ -158,6 +160,7 @@ export function Authentication({
         const {
           error: localError,
           token: localUserToken,
+          jsonWebToken: localJsonWebToken,
           encrypted: localEncrypted,
           encryptionText: localEncryptionText,
           uid,
@@ -184,10 +187,12 @@ export function Authentication({
           Store.removeCodeToken()
           if (localEncrypted) {
             setUserToken(localUserToken)
+            setJsonWebToken(localJsonWebToken)
             setEncrypted(localEncrypted)
             setEncryptionText(localEncryptionText)
           } else if (onSuccess) {
             Store.token = localUserToken
+            Store.jsonWebToken = localJsonWebToken
             Store.uid = uid
             onSuccess(Store.name, localUserToken, registration, localEncrypted)
           }

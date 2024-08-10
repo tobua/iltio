@@ -52,6 +52,7 @@ const getInitialConfiguration = () => ({
   codeTokenStorageKey: 'auth-verify-token',
   nameStorageKey: 'auth-name',
   uidStorageKey: 'auth-uid',
+  jsonWebTokenKey: 'auth-jwt',
   storage: getInitialStorage(),
   pollDuration: 10000,
   pollInterval: null,
@@ -84,6 +85,15 @@ export const Store = {
     app.storage.setItem(app.codeTokenStorageKey, value)
   },
   removeCodeToken() {
+    app.storage.removeItem(app.codeTokenStorageKey)
+  },
+  get jsonWebToken() {
+    return app.storage.getItem(app.codeTokenStorageKey) ?? ''
+  },
+  set jsonWebToken(value: string) {
+    app.storage.setItem(app.jsonWebTokenKey, value)
+  },
+  removeJsonWebToken() {
     app.storage.removeItem(app.codeTokenStorageKey)
   },
   get name() {

@@ -7,7 +7,7 @@ const appName = 'AuthenticationApp'
 console.log('⌛ Initializing a fresh RN project...')
 
 // Pods will be installed later in the script and a git repository isn't required here.
-execSync(`npx react-native init ${appName} --install-pods false --skip-git-init true`, {
+execSync(`bun react-native init ${appName} --install-pods false --skip-git-init true`, {
   stdio: 'inherit',
 })
 
@@ -29,7 +29,7 @@ execSync('npm install $(npm pack .. | tail -1) --legacy-peer-deps', {
 })
 
 // Additional dependency.
-execSync('bun install iltio react-native-localize', {
+execSync('bun install react-native-localize', {
   cwd: join(process.cwd(), 'app'),
   stdio: 'inherit',
 })

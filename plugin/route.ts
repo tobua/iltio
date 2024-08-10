@@ -47,6 +47,7 @@ export const poll = async () => {
   return response as {
     error: boolean | string
     token?: string
+    jsonWebToken?: string
     encrypted?: boolean
     encryptionText?: string
     userId?: string
@@ -62,6 +63,7 @@ export const confirm = async (code: string) => {
   return response as {
     error: boolean | string
     token?: string
+    jsonWebToken?: string
     encrypted?: boolean
     encryptionText?: string
     userId?: string
@@ -90,6 +92,7 @@ export const logout = async (server = false, token = Store.token) => {
   Store.removeName()
   Store.removeEncryptionKey()
   Store.removeUid()
+  Store.removeJsonWebToken()
   removeCryptoKey()
 
   if (server) {
@@ -112,6 +115,7 @@ export const remove = async (token = Store.token) => {
   Store.removeName()
   Store.removeEncryptionKey()
   Store.removeUid()
+  Store.removeJsonWebToken()
   return response as { error: boolean }
 }
 
