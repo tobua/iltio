@@ -2,12 +2,84 @@ import { useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { Store, configure, authorize, logout, remove } from 'iltio'
 import { Authentication, Encryption } from 'iltio/react'
+import { useQuery, useMutation } from '@apollo/client'
+import { ApolloProvider } from '@apollo/client'
+import { getPostsQuery, addPostMutation, createClient } from './interface'
 
-configure({
-  token: 'demo',
-  // url: 'http://localhost:3000/api',
-  storage: window.localStorage,
-})
+configure({ token: 'demo-jwt', storage: window.localStorage })
+
+function AddPost() {
+  const [addPost, { error, loading }] = useMutation<any, { content: string; user: string }>(
+    addPostMutation,
+    {
+      refetchQueries: [{ query: getPostsQuery }],
+    },
+  )
+
+  if (error) return <p>Error loading data.</p>
+  if (loading) return <p>Loading data.</p>
+
+  return (
+    <form
+      style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        gap: 20,
+        padding: 20,
+        border: '1px solid black',
+        alignSelf: 'normal',
+      }}
+      onSubmit={async (event: any) => {
+        event.preventDefault()
+        await addPost({ variables: { content: event.target[0].value, user: Store.uid } })
+        event.target[0].value = ''
+      }}
+    >
+      <input
+        style={{ display: 'flex', flex: 1, border: 'none', outline: 'none' }}
+        placeholder="Your message"
+      />
+      <button
+        style={{
+          border: 'none',
+          background: 'lightgray',
+          padding: 10,
+          color: 'black',
+          cursor: 'pointer',
+        }}
+        type="submit"
+      >
+        Post
+      </button>
+    </form>
+  )
+}
+
+function Posts() {
+  const { loading, error, data } = useQuery(getPostsQuery)
+
+  console.log('load', loading, error, data)
+
+  const posts = (data?.post ?? []) as {
+    id: number
+    content: string
+    createdAt: string
+  }[]
+
+  if (error) return <p>Error loading data.</p>
+  if (loading) return <p>Loading data.</p>
+  if (posts.length === 0) return <p>No posts yet, start posting!</p>
+
+  return (
+    <div>
+      {posts.map((post) => (
+        <p key={post.id}>
+          {post.content} {post.createdAt}
+        </p>
+      ))}
+    </div>
+  )
+}
 
 const App = () => {
   const [name, setName] = useState('')
@@ -42,46 +114,51 @@ const App = () => {
 
   if (name) {
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-        <span>Logged in as: {name}</span>
-        <button
-          style={{
-            border: 'none',
-            background: 'black',
-            color: 'white',
-            padding: 10,
-            cursor: 'pointer',
-          }}
-          onClick={() => {
-            logout()
-            setName('')
-          }}
-        >
-          Logout
-        </button>
-        <button
-          style={{
-            border: 'none',
-            background: 'black',
-            color: 'white',
-            padding: 10,
-            cursor: 'pointer',
-          }}
-          onClick={async () => {
-            await remove()
-            setName('')
-          }}
-        >
-          Delete my Account
-        </button>
-        <div
-          id="encryption"
-          style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
-        >
-          <h3>Client-side Encryption</h3>
-          <Encryption onDone={() => alert('Done!')} />
+      <ApolloProvider client={createClient(Store.jsonWebToken)}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 20, alignSelf: 'normal' }}>
+          <span>Logged in as: {name}</span>
+          <button
+            style={{
+              border: 'none',
+              background: 'black',
+              color: 'white',
+              padding: 10,
+              cursor: 'pointer',
+            }}
+            onClick={() => {
+              logout()
+              setName('')
+            }}
+          >
+            Logout
+          </button>
+          <button
+            style={{
+              border: 'none',
+              background: 'black',
+              color: 'white',
+              padding: 10,
+              cursor: 'pointer',
+            }}
+            onClick={async () => {
+              await remove()
+              setName('')
+            }}
+          >
+            Delete my Account
+          </button>
+          <div
+            id="encryption"
+            style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+          >
+            <h3>Client-side Encryption</h3>
+            <Encryption onDone={() => alert('Done!')} />
+            <h2>Your Encrypted Social Network</h2>
+            <AddPost />
+            <Posts />
+          </div>
         </div>
-      </div>
+      </ApolloProvider>
     )
   }
 
@@ -99,7 +176,6 @@ const App = () => {
         <div id="base" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <p>Regular Form</p>
           <Authentication
-            configuration={{ token: 'demo' }}
             onSuccess={(name, token, registration) => {
               console.log('success', name, token, registration)
               setName(name)
@@ -125,7 +201,7 @@ createRoot(document.getElementById('root') as HTMLElement).render(
     }}
   >
     <h1 style={{ marginBottom: 0 }}>iltio Encryption Demo</h1>
-    <p style={{ margin: 0 }}>Authentication with client-side encryption</p>
+    <p style={{ margin: 0 }}>Hasura app with authentication and client-side encryption</p>
     <App />
     <hr
       style={{

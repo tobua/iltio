@@ -3,7 +3,8 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "postinstall": "cd plugin && bun run build"
+    "postinstall": "cd plugin && bun run build",
+    "update": "workspaces \"update --no-install\" --output"
   },
   "type": "module",
   "dependencies": {

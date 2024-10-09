@@ -14,13 +14,13 @@ import {
   initializePolling,
   stopPolling,
   encryptText,
+  removeCryptoKey,
 } from 'iltio'
 import { Phone } from './Phone'
 import { components } from './components'
 import { Props, ComponentTypes, Styles } from './types'
 import { Resend } from './Resend'
 import { Encryption } from './Encryption'
-import { removeCryptoKey } from '../encrypt'
 
 export { ComponentTypes, Props, Styles, Encryption }
 
@@ -51,6 +51,7 @@ export function Authentication({
   const [validatingCode, setValidatingCode] = useState(false)
   const [userToken, setUserToken] = useState('')
   const [jsonWebToken, setJsonWebToken] = useState('')
+  const [uid, setUid] = useState('')
   const [encrypted, setEncrypted] = useState(false)
   const [encryptionKey, setEncryptionKey] = useState('')
   const [encryptionKeyValid, setEncryptionKeyValid] = useState(true)
@@ -142,6 +143,7 @@ export function Authentication({
       if (currentEncryptionText === encryptionText) {
         Store.token = userToken
         Store.jsonWebToken = jsonWebToken
+        Store.uid = uid
         onSuccess(Store.name, Store.token, registration, encrypted)
       } else {
         setEncryptionKeyValid(false)
@@ -163,7 +165,7 @@ export function Authentication({
           jsonWebToken: localJsonWebToken,
           encrypted: localEncrypted,
           encryptionText: localEncryptionText,
-          uid,
+          uid: localUid,
         } = await confirm(code)
 
         setValidatingCode(false)
@@ -188,12 +190,13 @@ export function Authentication({
           if (localEncrypted) {
             setUserToken(localUserToken)
             setJsonWebToken(localJsonWebToken)
+            setUid(localUid)
             setEncrypted(localEncrypted)
             setEncryptionText(localEncryptionText)
           } else if (onSuccess) {
             Store.token = localUserToken
             Store.jsonWebToken = localJsonWebToken
-            Store.uid = uid
+            Store.uid = localUid
             onSuccess(Store.name, localUserToken, registration, localEncrypted)
           }
         }

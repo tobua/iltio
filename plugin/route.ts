@@ -153,7 +153,8 @@ export const rootUser = async (token = Store.token) => {
     allowPhone: boolean
     allowAnonymousRegistration: boolean
     allowRecoveryToken: boolean
-    users: { name: string; createdAt: Date }[]
+    users: { id: number; name: string; createdAt: Date }[]
+    tokens: { id: number; device: string; location: string; createdAt: string }[]
   }
 }
 
