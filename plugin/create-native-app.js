@@ -1,50 +1,49 @@
-import { copyFileSync, renameSync } from 'node:fs'
-import { join } from 'node:path'
 import { execSync } from 'node:child_process'
+import { cpSync, renameSync } from 'node:fs'
 
 const appName = 'AuthenticationApp'
 
 console.log('⌛ Initializing a fresh RN project...')
 
-// Pods will be installed later in the script and a git repository isn't required here.
-execSync(`bun react-native init ${appName} --install-pods false --skip-git-init true`, {
-  stdio: 'inherit',
-})
+execSync(
+  `bunx @react-native-community/cli init ${appName} --skip-git-init true --install-pods true`,
+  {
+    // Write output to cnosole.
+    stdio: 'inherit',
+  },
+)
 
-renameSync(appName, 'app')
-
-copyFileSync('native/App.tsx', 'app/App.tsx')
+cpSync('native/App.tsx', `${appName}/App.tsx`)
 // Enable experimental support for package "exports".
-copyFileSync('native/metro.config.js', 'app/metro.config.js')
+cpSync('native/metro.config.js', `${appName}/logo.png`)
+renameSync(appName, 'app')
 
 // Ensure plugin /dist contents are available
 execSync('bun run build', {
   stdio: 'inherit',
 })
 
-// Install this package locally, avoiding symlinks.
-execSync('npm install $(npm pack .. | tail -1) --legacy-peer-deps', {
-  cwd: join(process.cwd(), 'app'),
-  stdio: 'inherit',
+const output = execSync('bun pm pack', {
+  encoding: 'utf-8',
 })
 
-// Additional dependency.
-execSync('bun install react-native-localize', {
-  cwd: join(process.cwd(), 'app'),
-  stdio: 'inherit',
+const tgzFileName = output.match(/[\w.-]+\.tgz/)[0]
+
+execSync(`bun install react-native-localize ../${tgzFileName}`, {
+  cwd: './app',
 })
 
-// Linking for react-native-localize.
-execSync('pod install', {
-  cwd: join(process.cwd(), 'app/ios'),
-  stdio: 'inherit',
+console.log('⌛ Updating pods for new architecture.')
+
+execSync('RCT_NEW_ARCH_ENABLED=1 pod update', {
+  cwd: './app/ios',
 })
 
 console.log('')
 console.log('🍞 React Native App created inside /app.')
 console.log('🛠️  To run the example with the plugin included:')
 console.log('🐚 cd app')
-console.log('🐚 npm run ios / npm run android')
+console.log('🐚 bun ios / bun android')
 console.log('🌪️  To copy over the changes from the plugin source run:')
-console.log('🐚 npm run watch')
+console.log('🐚 bun start & bun app:copy')
 console.log('🛠️  This will copy changes over to the app.')

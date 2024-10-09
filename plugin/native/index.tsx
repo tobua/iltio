@@ -15,15 +15,19 @@ import {
   Props,
   Styles,
   ComponentTypes,
+  Encryption,
 } from '../react/Authentication'
 import type { NativeStyles, NativeVariables } from './types'
 
-export { configure, Store, MemoryStorage } from '../store'
-export { authenticate, poll, confirm, resend, authorize, logout, remove } from '../route'
+type NativeProps = Omit<Props, 'style'> & { style?: NativeStyles }
 
-export { NativeVariables as Variables, Styles, NativeStyles, ComponentTypes }
-
-export { getNameType } from '../helper'
+export {
+  NativeVariables as Variables,
+  NativeStyles as Styles,
+  NativeProps as Props,
+  ComponentTypes,
+  Encryption,
+}
 
 const nativeInputTypeMap = {
   email: 'email-address',
@@ -358,11 +362,7 @@ const NativeComponents = {
   ),
 }
 
-export function Authentication({
-  Components,
-  style,
-  ...props
-}: Omit<Props, 'style'> & { style?: NativeStyles }) {
+export function Authentication({ Components, style, ...props }: NativeProps) {
   // The only difference to the regular form is the UI, for which we use native components.
   Object.assign(NativeComponents, Components)
   // eslint-disable-next-line no-param-reassign

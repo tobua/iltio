@@ -4,3 +4,4 @@ dist
 app
 tsconfig.json
 !frameworks/*/tsconfig.json
+*.tgz
