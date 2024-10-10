@@ -15,5 +15,14 @@ Once the table is created to the the **Permissions** tab for this table and add 
 
 ## Hasura JWT
 
-HASURA_GRAPHQL_JWT_SECRET='{"type":"RS512", "key": "-----BEGIN PUBLIC KEY-----\nKEY\n-----END PUBLIC KEY-----\n"}'
+To enable JWT authorization on hasura add the `HASURA_GRAPHQL_JWT_SECRET` environment variable. The secret itself has to be encoded in a specific way which includes the algorithm used. It's possible to verify JWT tokens on the hasura side with only a public token, where it's not possible for that host to issue any new tokens. In our case we use the simpler version where we directly pass the secret key.
+
+```
 HASURA_GRAPHQL_JWT_SECRET='{"type":"HS256", "key": "KEY"}'
+```
+
+When switching to public key encryption encode the key like this:
+
+```
+HASURA_GRAPHQL_JWT_SECRET='{"type":"RS512", "key": "-----BEGIN PUBLIC KEY-----\nKEY\n-----END PUBLIC KEY-----\n"}'
+```

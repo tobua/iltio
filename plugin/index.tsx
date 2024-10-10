@@ -25,4 +25,11 @@ export {
 export { countries } from './data/countries'
 export { Label, Text } from './text'
 export { log } from './log'
-export { encrypt, generateEncryptionKey, encryptText, removeCryptoKey } from './encrypt'
+export {
+  encrypt,
+  generateEncryptionKey,
+  encryptText,
+  removeCryptoKey,
+  decrypt,
+  decryptText,
+} from './encrypt'

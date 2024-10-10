@@ -1,4 +1,5 @@
 import { Store } from './index'
+import { addEncryptionPrefix, hasEncryptionPrefix, removeEncryptionPrefix } from './store'
 
 function stringToIv(ivString) {
   const binaryString = atob(ivString)
@@ -100,13 +101,28 @@ export async function encrypt<T extends object>(data: T, ignoreKeys: string[] = 
     if (ignoreKeys.includes(key)) continue
     const text = String(value)
     try {
-      data[key] = await encryptText(text)
+      data[key] = addEncryptionPrefix(await encryptText(text))
     } catch (error) {
       console.error('iltio: Error encrypting data:', error)
     }
   }
 
   return data as { [K in keyof T]: string } // All values serialized to strings.
+}
+
+export async function decrypt<T extends object>(data: T, ignoreKeys: string[] = []) {
+  for (const [key, value] of Object.entries(data)) {
+    if (ignoreKeys.includes(key)) continue
+    const text = String(value)
+    if (!hasEncryptionPrefix(text)) continue
+    try {
+      data[key] = await decryptText(removeEncryptionPrefix(text))
+    } catch (error) {
+      console.error('iltio: Error decrypting data:', error)
+    }
+  }
+
+  return data // TODO transform types?
 }
 
 async function importKeyFromString(keyString: string) {

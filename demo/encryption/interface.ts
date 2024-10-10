@@ -5,7 +5,8 @@ export const createClient = (token: string) => {
     uri: 'https://iltio-encryption.hasura.app/v1/graphql',
     cache: new InMemoryCache(),
     headers: {
-      'x-hasura-admin-secret': process.env.HASURA_ADMIN_SECRET as string,
+      // Token includes JWT claims, needs to be enabled on hasura by setting HASURA_GRAPHQL_JWT_SECRET.
+      Authorization: `Bearer ${token}`,
     },
   })
 }

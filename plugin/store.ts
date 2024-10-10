@@ -57,6 +57,7 @@ const getInitialConfiguration = () => ({
   pollDuration: 10000,
   pollInterval: null,
   encryptionKeyStorageKey: 'client-side-encryption-key',
+  encryptionPrefix: 'enc',
 })
 
 export const app = getInitialConfiguration()
@@ -88,13 +89,13 @@ export const Store = {
     app.storage.removeItem(app.codeTokenStorageKey)
   },
   get jsonWebToken() {
-    return app.storage.getItem(app.codeTokenStorageKey) ?? ''
+    return app.storage.getItem(app.jsonWebTokenKey) ?? ''
   },
   set jsonWebToken(value: string) {
     app.storage.setItem(app.jsonWebTokenKey, value)
   },
   removeJsonWebToken() {
-    app.storage.removeItem(app.codeTokenStorageKey)
+    app.storage.removeItem(app.jsonWebTokenKey)
   },
   get name() {
     return app.storage.getItem(app.nameStorageKey) ?? ''
@@ -124,3 +125,11 @@ export const Store = {
     app.storage.removeItem(app.uidStorageKey)
   },
 }
+
+export const addEncryptionPrefix = (text: string) => `${app.encryptionPrefix}_${text}`
+
+export const hasEncryptionPrefix = (text?: unknown) =>
+  typeof text === 'string' && text.startsWith(`${app.encryptionPrefix}_`)
+
+export const removeEncryptionPrefix = (text: string) =>
+  text.slice(`${app.encryptionPrefix}_`.length)

@@ -35,4 +35,5 @@ export interface Configuration {
   pollDuration?: number
   encryptionKey?: string
   encryptionKeyStorageKey?: string
+  encryptionPrefix?: string
 }

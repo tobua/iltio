@@ -1,6 +1,7 @@
 import { generateEncryptionKey } from '../encrypt'
 import { joinUrl } from '../helper'
 import { encrypt, configure, Store } from '../index'
+import { hasEncryptionPrefix, removeEncryptionPrefix } from '../store'
 
 test('Properly joins URLs.', () => {
   expect(joinUrl('/authorize')).toBe('https://iltio.com/api/authorize')
@@ -21,7 +22,8 @@ test('Can set an encrption key and encrypt various payloads.', async () => {
   expect(typeof key === 'string' && key !== '').toBe(true)
   Store.encryptionKey = key as string
   const successfulEncryption = await encrypt({ id: 1 })
-  expect(successfulEncryption && successfulEncryption.id.length).toEqual(24)
+  expect(hasEncryptionPrefix(successfulEncryption && successfulEncryption.id)).toBe(true)
+  expect(successfulEncryption && successfulEncryption.id.length).toEqual(28)
 })
 
 test('Ignored properties will not be encrypted.', async () => {
@@ -30,4 +32,6 @@ test('Ignored properties will not be encrypted.', async () => {
   const successfulEncryption = await encrypt({ id: 2, message: 'Hello World!' }, ['id'])
   expect(successfulEncryption && successfulEncryption.id).toBe(2)
   expect(successfulEncryption && successfulEncryption.message).not.toBe('Hello World!')
+  expect(hasEncryptionPrefix(successfulEncryption && successfulEncryption.id)).toBe(false)
+  expect(hasEncryptionPrefix(successfulEncryption && successfulEncryption.message)).toBe(true)
 })

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
-import { Store, configure, authorize, logout, remove } from 'iltio'
+import { Store, configure, authorize, logout, remove, encrypt, decrypt } from 'iltio'
 import { Authentication, Encryption } from 'iltio/react'
 import { useQuery, useMutation } from '@apollo/client'
 import { ApolloProvider } from '@apollo/client'
@@ -31,7 +31,14 @@ function AddPost() {
       }}
       onSubmit={async (event: any) => {
         event.preventDefault()
-        await addPost({ variables: { content: event.target[0].value, user: Store.uid } })
+        const variables = await encrypt({ content: event.target[0].value, user: Store.uid }, [
+          'user',
+        ])
+        if (variables) {
+          await addPost({ variables })
+        } else {
+          alert('Failed to encrypt data.')
+        }
         event.target[0].value = ''
       }}
     >
@@ -57,18 +64,32 @@ function AddPost() {
 
 function Posts() {
   const { loading, error, data } = useQuery(getPostsQuery)
+  const [posts, setPosts] = useState<{ id: number; content: string; createdAt: string }[]>([])
+  const [isDecrypting, setIsDecrypting] = useState(true)
 
-  console.log('load', loading, error, data)
+  useEffect(() => {
+    if (data?.post) {
+      // Decrypt posts when data is available
+      const decryptPosts = async () => {
+        setIsDecrypting(true)
+        // Copy post, as it's properties are marked as read-only by apollo.
+        const decryptedPosts = await Promise.all(
+          (data.post as { id: number; content: string; createdAt: string }[]).map((post) =>
+            decrypt({ ...post }, ['id', 'createdAt']),
+          ),
+        )
+        setPosts(decryptedPosts)
+        setIsDecrypting(false)
+      }
 
-  const posts = (data?.post ?? []) as {
-    id: number
-    content: string
-    createdAt: string
-  }[]
+      decryptPosts()
+    }
+  }, [data])
 
   if (error) return <p>Error loading data.</p>
   if (loading) return <p>Loading data.</p>
   if (posts.length === 0) return <p>No posts yet, start posting!</p>
+  if (isDecrypting) return <p>Decrypting data...</p>
 
   return (
     <div>
