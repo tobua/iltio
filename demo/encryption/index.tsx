@@ -105,6 +105,8 @@ function Posts() {
 const App = () => {
   const [name, setName] = useState('')
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+  const [jwt, setJwt] = useState('')
 
   useEffect(() => {
     if (!loading) {
@@ -122,20 +124,27 @@ const App = () => {
         if (name) {
           setName(name)
         }
+
+        const jsonWebToken = await Store.jsonWebToken
+
+        if (jsonWebToken) {
+          setJwt(jsonWebToken)
+        } else {
+          setError('JWT not found.')
+        }
       }
 
       setLoading(false)
     }
     load()
-  }, [loading, setLoading])
+  }, [loading, setLoading, name])
 
-  if (loading) {
-    return <p>Loading</p>
-  }
+  if (loading) return <p>Loading</p>
+  if (error) return <p>Error: {error}</p>
 
   if (name) {
     return (
-      <ApolloProvider client={createClient(Store.jsonWebToken)}>
+      <ApolloProvider client={createClient(jwt)}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 20, alignSelf: 'normal' }}>
           <span>Logged in as: {name}</span>
           <button
@@ -199,6 +208,7 @@ const App = () => {
           <Authentication
             onSuccess={(name, token, registration) => {
               console.log('success', name, token, registration)
+              setLoading(true)
               setName(name)
             }}
           />

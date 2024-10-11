@@ -47,7 +47,7 @@ export const poll = async () => {
   return response as {
     error: boolean | string
     token?: string
-    jsonWebToken?: string
+    jsonWebToken?: { token: string; expirationDate: string }
     encrypted?: boolean
     encryptionText?: string
     userId?: string
@@ -63,11 +63,21 @@ export const confirm = async (code: string) => {
   return response as {
     error: boolean | string
     token?: string
-    jsonWebToken?: string
+    jsonWebToken?: { token: string; expirationDate: string }
     encrypted?: boolean
     encryptionText?: string
     userId?: string
     uid?: string
+  }
+}
+
+export const webToken = async (token = Store.token) => {
+  const response = await fetchWithError(joinUrl(`/web-token?token=${token}`))
+
+  return response as {
+    error: boolean | string
+    jsonWebToken?: { token: string; expirationDate: string }
+    publicKey?: string
   }
 }
 

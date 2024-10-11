@@ -1,5 +1,6 @@
 import { parse } from 'cookie'
 import { BasicStorage, Configuration } from './types'
+import { webToken } from './route'
 
 export const MemoryStorage = {
   data: {} as { [key: string]: string },
@@ -88,11 +89,34 @@ export const Store = {
   removeCodeToken() {
     app.storage.removeItem(app.codeTokenStorageKey)
   },
-  get jsonWebToken() {
-    return app.storage.getItem(app.jsonWebTokenKey) ?? ''
+  get jsonWebToken(): Promise<null | string> {
+    const tokenRaw = app.storage.getItem(app.jsonWebTokenKey)
+
+    if (!tokenRaw) {
+      return Promise.resolve(null)
+    }
+
+    const jsonWebToken = JSON.parse(tokenRaw) as { token: string; expirationDate: string }
+    const expirationDate = new Date(jsonWebToken.expirationDate)
+    const isDateExpired = expirationDate < new Date()
+
+    if (isDateExpired) {
+      return new Promise(async (done) => {
+        const { error, jsonWebToken } = await webToken()
+
+        if (error) {
+          return done(null)
+        }
+
+        Store.jsonWebToken = jsonWebToken
+        done(jsonWebToken.token)
+      })
+    }
+
+    return Promise.resolve(jsonWebToken.token)
   },
-  set jsonWebToken(value: string) {
-    app.storage.setItem(app.jsonWebTokenKey, value)
+  set jsonWebToken(value: { token: string; expirationDate: string }) {
+    app.storage.setItem(app.jsonWebTokenKey, JSON.stringify(value))
   },
   removeJsonWebToken() {
     app.storage.removeItem(app.jsonWebTokenKey)

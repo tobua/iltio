@@ -50,7 +50,7 @@ export function Authentication({
   const [codeValid, setCodeValid] = useState(true)
   const [validatingCode, setValidatingCode] = useState(false)
   const [userToken, setUserToken] = useState('')
-  const [jsonWebToken, setJsonWebToken] = useState('')
+  const [jsonWebToken, setJsonWebToken] = useState({ token: '', expirationDate: '' })
   const [uid, setUid] = useState('')
   const [encrypted, setEncrypted] = useState(false)
   const [encryptionKey, setEncryptionKey] = useState('')
