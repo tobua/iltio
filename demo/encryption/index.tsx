@@ -31,9 +31,10 @@ function AddPost() {
       }}
       onSubmit={async (event: any) => {
         event.preventDefault()
-        const variables = await encrypt({ content: event.target[0].value, user: Store.uid }, [
-          'user',
-        ])
+        const variables = await encrypt(
+          { content: event.target[0].value, user: Store.uid },
+          { ignoreKeys: ['user'] },
+        )
         if (variables) {
           await addPost({ variables })
         } else {

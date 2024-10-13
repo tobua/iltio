@@ -91,17 +91,38 @@ export async function decryptText(text: string) {
   return new TextDecoder().decode(decryptedText)
 }
 
-export async function encrypt<T extends object>(data: T, ignoreKeys: string[] = []) {
+export async function encrypt<T extends object>(
+  data: T,
+  options: {
+    ignoreKeys?: string[]
+    keys?: { [key: string]: { maxLength?: number } }
+    allowUnencrypted?: boolean
+  } = {
+    ignoreKeys: [],
+    keys: {},
+    allowUnencrypted: true,
+  },
+) {
   if (!Store.encryptionKey) {
+    if (options.allowUnencrypted) {
+      return data as { [K in keyof T]: string } // TODO convert to string?
+    }
     console.error('iltio: Missing encryption key.')
     return false
   }
 
   for (const [key, value] of Object.entries(data)) {
-    if (ignoreKeys.includes(key)) continue
+    if (Array.isArray(options.ignoreKeys) && options.ignoreKeys.includes(key)) continue
     const text = String(value)
     try {
-      data[key] = addEncryptionPrefix(await encryptText(text))
+      const encryptedText = addEncryptionPrefix(await encryptText(text))
+
+      if (options.keys?.[key] && encryptedText.length > options.keys[key].maxLength) {
+        console.warn(`Skipping encryption of key "${key}" as maxLength has been exceeded`)
+        return false
+      } else {
+        data[key] = encryptedText
+      }
     } catch (error) {
       console.error('iltio: Error encrypting data:', error)
     }

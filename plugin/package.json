@@ -27,7 +27,7 @@
     ]
   },
   "dependencies": {
-    "cookie": "^1.0.0",
+    "cookie": "^1.0.1",
     "cookies-next": "^4.3.0",
     "url-join": "^5.0.0"
   },

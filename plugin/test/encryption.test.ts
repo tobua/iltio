@@ -1,8 +1,9 @@
 import { expect, test, vi, afterEach } from 'vitest'
 import '@testing-library/jest-dom'
-import { Store } from '../index'
 import { mockFetch } from './helper'
 import { generateEncryptionKey, encryptText, decryptText } from '../encrypt'
+import { encrypt, Store, configure } from '../index'
+import { hasEncryptionPrefix } from '../store'
 
 const { fetchMockCalls, setResponse } = mockFetch()
 
@@ -52,4 +53,58 @@ test('Reissues expired JWT.', async () => {
   expect(jsonWebToken).toEqual('789')
 
   expect(fetchMockCalls().length).toBe(1) // Refetched JWT.
+})
+
+test('Can set an encrption key and encrypt various payloads.', async () => {
+  // @ts-ignore
+  Store.encryptionKey = undefined
+  const missingKey = await encrypt({ id: 1 }, { allowUnencrypted: false })
+  expect(missingKey).toEqual(false) // Missing encryption key.
+  const key = await generateEncryptionKey()
+  expect(typeof key === 'string' && key !== '').toBe(true)
+  Store.encryptionKey = key as string
+  const successfulEncryption = await encrypt({ id: 1 })
+  expect(hasEncryptionPrefix(successfulEncryption && successfulEncryption.id)).toBe(true)
+  expect(successfulEncryption && successfulEncryption.id.length).toEqual(28)
+})
+
+test('Ignored properties will not be encrypted.', async () => {
+  const key = await generateEncryptionKey()
+  Store.encryptionKey = key as string
+  const successfulEncryption = await encrypt(
+    { id: 2, message: 'Hello World!' },
+    { ignoreKeys: ['id'] },
+  )
+  expect(successfulEncryption && successfulEncryption.id).toBe(2)
+  expect(successfulEncryption && successfulEncryption.message).not.toBe('Hello World!')
+  expect(hasEncryptionPrefix(successfulEncryption && successfulEncryption.id)).toBe(false)
+  expect(hasEncryptionPrefix(successfulEncryption && successfulEncryption.message)).toBe(true)
+})
+
+test('Will error if a keys maxLength if exceeded.', async () => {
+  const key = await generateEncryptionKey()
+  Store.encryptionKey = key as string
+  let encryptionResult = await encrypt(
+    { content: 'Hello World! This message is really long!!' },
+    { keys: { content: { maxLength: 20 } } },
+  )
+  expect(encryptionResult).toBe(false)
+
+  encryptionResult = await encrypt(
+    { content: 'Hello World! This message is really long!!' },
+    { keys: { content: { maxLength: 256 } } },
+  )
+  expect(encryptionResult).not.toBe(false)
+  expect(encryptionResult && encryptionResult.content.length).toBeGreaterThan(20)
+})
+
+test('Can configure the encryption prefix.', async () => {
+  const prefix = 'this_is_encrypted!!'
+  configure({ encryptionPrefix: prefix })
+  const key = await generateEncryptionKey()
+  Store.encryptionKey = key as string
+  const encryptionResult = await encrypt({ first: 'first', second: 'second' })
+
+  expect(encryptionResult && encryptionResult.first.startsWith(`${prefix}_`)).toBe(true)
+  expect(encryptionResult && encryptionResult.second.startsWith(`${prefix}_`)).toBe(true)
 })
