@@ -95,6 +95,7 @@ export async function encrypt<T extends object>(
   data: T,
   options: {
     ignoreKeys?: string[]
+    includeKeys?: string[]
     keys?: { [key: string]: { maxLength?: number } }
     allowUnencrypted?: boolean
   } = {
@@ -113,6 +114,8 @@ export async function encrypt<T extends object>(
 
   for (const [key, value] of Object.entries(data)) {
     if (Array.isArray(options.ignoreKeys) && options.ignoreKeys.includes(key)) continue
+    if (Array.isArray(options.includeKeys) && !options.includeKeys.includes(key)) continue
+
     const text = String(value)
     try {
       const encryptedText = addEncryptionPrefix(await encryptText(text))

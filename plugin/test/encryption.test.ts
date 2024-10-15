@@ -81,6 +81,18 @@ test('Ignored properties will not be encrypted.', async () => {
   expect(hasEncryptionPrefix(successfulEncryption && successfulEncryption.message)).toBe(true)
 })
 
+test('Only included keys are encrypted.', async () => {
+  const key = await generateEncryptionKey()
+  Store.encryptionKey = key as string
+  const encryptionResult = await encrypt(
+    { first: 'first', second: 'second', third: 'third' },
+    { includeKeys: ['second'] },
+  )
+  expect(encryptionResult && encryptionResult.first).toBe('first')
+  expect(encryptionResult && encryptionResult.second).not.toBe('second')
+  expect(encryptionResult && encryptionResult.third).toBe('third')
+})
+
 test('Will error if a keys maxLength if exceeded.', async () => {
   const key = await generateEncryptionKey()
   Store.encryptionKey = key as string

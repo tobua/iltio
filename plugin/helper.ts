@@ -68,9 +68,11 @@ export const initializePolling = (
   successCallback: (
     name: string,
     token: string,
+    uid: string,
     registration: boolean,
     encrypted: boolean,
     encryptionText?: string,
+    jsonWebToken?: { token: string; expirationDate: string },
   ) => void,
   expiredCallback: () => void,
   registration: boolean,
@@ -78,7 +80,14 @@ export const initializePolling = (
   const submitted = Store.codeToken !== ''
 
   async function checkVerified() {
-    const { error: localError, token: userToken, encrypted, encryptionText } = await poll()
+    const {
+      error: localError,
+      token: userToken,
+      encrypted,
+      encryptionText,
+      jsonWebToken,
+      uid,
+    } = await poll()
 
     if (localError) {
       // Code token expired, start over.
@@ -99,7 +108,15 @@ export const initializePolling = (
       }
 
       if (successCallback) {
-        successCallback(Store.name, userToken, registration, encrypted, encryptionText)
+        successCallback(
+          Store.name,
+          userToken,
+          uid,
+          registration,
+          encrypted,
+          encryptionText,
+          jsonWebToken,
+        )
       }
     }
   }

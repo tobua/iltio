@@ -17,8 +17,8 @@ createRoot(document.body).render(
       <div id="base" style={{ display: 'flex', justifyContent: 'center' }}>
         <Authentication
           configuration={{ token: 'demo' }}
-          onSuccess={(name, token, registration) =>
-            console.log('success', name, token, registration)
+          onSuccess={(name, token, uid, registration) =>
+            console.log('success', name, token, uid, registration)
           }
         />
       </div>
@@ -63,5 +63,5 @@ createRoot(document.body).render(
         />
       </div>
     </div>
-  </div>
+  </div>,
 )

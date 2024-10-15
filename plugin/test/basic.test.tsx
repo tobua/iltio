@@ -74,7 +74,7 @@ test('Can successfully register with a mail address.', async () => {
   expect(onSuccessMock.mock.calls.length).toBe(1)
   expect(onSuccessMock.mock.calls[0][0]).toBe(mailAddress)
   expect(onSuccessMock.mock.calls[0][1]).toBe(userToken)
-  expect(onSuccessMock.mock.calls[0][2]).toBe(true)
+  expect(onSuccessMock.mock.calls[0][3]).toBe(true)
 })
 
 test('Can login with the same mail address.', async () => {

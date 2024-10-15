@@ -142,9 +142,19 @@ export function Authentication({
 
       if (currentEncryptionText === encryptionText) {
         Store.token = userToken
-        Store.jsonWebToken = jsonWebToken
+        if (jsonWebToken) {
+          Store.jsonWebToken = jsonWebToken
+        }
         Store.uid = uid
-        onSuccess(Store.name, Store.token, registration, encrypted)
+        onSuccess(
+          Store.name,
+          Store.token,
+          uid,
+          registration,
+          encrypted,
+          encryptionText,
+          jsonWebToken,
+        )
       } else {
         setEncryptionKeyValid(false)
         setEncryptionError('Wrong encryption key entered.')
@@ -195,9 +205,19 @@ export function Authentication({
             setEncryptionText(localEncryptionText)
           } else if (onSuccess) {
             Store.token = localUserToken
-            Store.jsonWebToken = localJsonWebToken
+            if (localJsonWebToken) {
+              Store.jsonWebToken = localJsonWebToken
+            }
             Store.uid = localUid
-            onSuccess(Store.name, localUserToken, registration, localEncrypted)
+            onSuccess(
+              Store.name,
+              localUserToken,
+              localUid,
+              registration,
+              localEncrypted,
+              localEncryptionText,
+              localJsonWebToken,
+            )
           }
         }
       } else {
@@ -210,16 +230,32 @@ export function Authentication({
   const handlePollingSuccess = useCallback(
     (
       _name: string,
-      token: string,
+      localUserToken: string,
+      localUid: string,
       registration: boolean,
       localEncrypted: boolean,
       localEncryptionText?: string,
+      localJsonWebToken?: { token: string; expirationDate: string },
     ) => {
       if (localEncrypted) {
+        setUid(localUid)
         setEncrypted(localEncrypted)
         setEncryptionText(localEncryptionText)
+        setJsonWebToken(localJsonWebToken)
       } else if (onSuccess) {
-        onSuccess(Store.name, token, registration, localEncrypted)
+        Store.token = localUserToken
+        if (localJsonWebToken) {
+          Store.jsonWebToken = localJsonWebToken
+        }
+        onSuccess(
+          Store.name,
+          localUserToken,
+          localUid,
+          registration,
+          localEncrypted,
+          localEncryptionText,
+          localJsonWebToken,
+        )
       }
     },
     [],

@@ -110,8 +110,10 @@ export function Authentication({
         const {
           error: localError,
           token: userToken,
-          encrypted: localEncrypted,
           uid,
+          encrypted: localEncrypted,
+          encryptionText: localEncryptionText,
+          jsonWebToken: localJsonWebToken,
         } = await confirm(code)
 
         if (localError) {
@@ -132,9 +134,20 @@ export function Authentication({
         if (userToken) {
           Store.token = userToken
           Store.uid = uid
+          if (localJsonWebToken) {
+            Store.jsonWebToken = localJsonWebToken
+          }
           Store.removeCodeToken()
           if (onSuccess) {
-            onSuccess(Store.name, userToken, registration, localEncrypted)
+            onSuccess(
+              Store.name,
+              userToken,
+              uid,
+              registration,
+              localEncrypted,
+              localEncryptionText,
+              localJsonWebToken,
+            )
           }
         }
       } else {

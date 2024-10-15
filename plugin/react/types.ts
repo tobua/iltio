@@ -58,7 +58,15 @@ export interface Props {
   style?: Styles
   allowPhone?: boolean
   allowMail?: boolean
-  onSuccess?: (name: string, token: string, registration: boolean, encrypted: boolean) => void
+  onSuccess?: (
+    name: string,
+    token: string,
+    uid: string,
+    registration: boolean,
+    encrypted: boolean,
+    encryptionText?: string,
+    jsonWebToken?: { token: string; expirationDate: string },
+  ) => void
   initialCountryCode?: string
   Components?: ComponentTypes
   labels?: Labels

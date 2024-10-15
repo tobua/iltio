@@ -101,8 +101,8 @@ const App = () => {
           <p>Regular Form</p>
           <Authentication
             configuration={{ token: 'demo' }}
-            onSuccess={(name, token, registration) => {
-              console.log('success', name, token, registration)
+            onSuccess={(name, token, uid, registration) => {
+              console.log('success', name, token, uid, registration)
               setName(name)
             }}
           />
