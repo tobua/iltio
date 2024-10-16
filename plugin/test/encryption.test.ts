@@ -81,6 +81,18 @@ test('Ignored properties will not be encrypted.', async () => {
   expect(hasEncryptionPrefix(successfulEncryption && successfulEncryption.message)).toBe(true)
 })
 
+test('Proper types for data input and output.', async () => {
+  const key = await generateEncryptionKey()
+  Store.encryptionKey = key as string
+  const successfulEncryption = await encrypt(
+    { id: 2, message: 'Hello World!' },
+    // @ts-expect-error Missing key not available.
+    { ignoreKeys: ['id', 'missing'] },
+  )
+  const anotherId: number | false = successfulEncryption && successfulEncryption.id
+  expect(anotherId).toBe(2)
+})
+
 test('Only included keys are encrypted.', async () => {
   const key = await generateEncryptionKey()
   Store.encryptionKey = key as string

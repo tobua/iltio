@@ -91,12 +91,12 @@ export async function decryptText(text: string) {
   return new TextDecoder().decode(decryptedText)
 }
 
-export async function encrypt<T extends object>(
+export async function encrypt<T extends object, K extends keyof T = never>(
   data: T,
   options: {
-    ignoreKeys?: string[]
-    includeKeys?: string[]
-    keys?: { [key: string]: { maxLength?: number } }
+    ignoreKeys?: K[]
+    includeKeys?: (keyof T)[]
+    keys?: { [key in keyof T]?: { maxLength?: number } }
     allowUnencrypted?: boolean
   } = {
     ignoreKeys: [],
@@ -106,15 +106,16 @@ export async function encrypt<T extends object>(
 ) {
   if (!Store.encryptionKey) {
     if (options.allowUnencrypted) {
-      return data as { [K in keyof T]: string } // TODO convert to string?
+      return data as { [L in keyof T]: L extends K ? T[L] : string } // Types as if converted.
     }
     console.error('iltio: Missing encryption key.')
     return false
   }
 
   for (const [key, value] of Object.entries(data)) {
-    if (Array.isArray(options.ignoreKeys) && options.ignoreKeys.includes(key)) continue
-    if (Array.isArray(options.includeKeys) && !options.includeKeys.includes(key)) continue
+    if (Array.isArray(options.ignoreKeys) && options.ignoreKeys.includes(key as K)) continue
+    if (Array.isArray(options.includeKeys) && !options.includeKeys.includes(key as keyof T))
+      continue
 
     const text = String(value)
     try {
@@ -131,12 +132,24 @@ export async function encrypt<T extends object>(
     }
   }
 
-  return data as { [K in keyof T]: string } // All values serialized to strings.
+  return data as { [L in keyof T]: L extends K ? T[L] : string } // All encrypted values serialized to strings.
 }
 
-export async function decrypt<T extends object>(data: T, ignoreKeys: string[] = []) {
+export async function decrypt<T extends object>(
+  data: T,
+  options: {
+    ignoreKeys?: string[]
+    includeKeys?: string[]
+    allowUnencrypted?: boolean
+  } = {
+    ignoreKeys: [],
+    allowUnencrypted: true,
+  },
+) {
   for (const [key, value] of Object.entries(data)) {
-    if (ignoreKeys.includes(key)) continue
+    if (Array.isArray(options.ignoreKeys) && options.ignoreKeys.includes(key)) continue
+    if (Array.isArray(options.includeKeys) && !options.includeKeys.includes(key)) continue
+
     const text = String(value)
     if (!hasEncryptionPrefix(text)) continue
     try {
