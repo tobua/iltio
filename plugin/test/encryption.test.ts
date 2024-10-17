@@ -2,7 +2,7 @@ import { expect, test, vi, afterEach } from 'vitest'
 import '@testing-library/jest-dom'
 import { mockFetch } from './helper'
 import { generateEncryptionKey, encryptText, decryptText } from '../encrypt'
-import { encrypt, Store, configure } from '../index'
+import { encrypt, Store, configure, decrypt } from '../index'
 import { hasEncryptionPrefix } from '../store'
 
 const { fetchMockCalls, setResponse } = mockFetch()
@@ -131,4 +131,25 @@ test('Can configure the encryption prefix.', async () => {
 
   expect(encryptionResult && encryptionResult.first.startsWith(`${prefix}_`)).toBe(true)
   expect(encryptionResult && encryptionResult.second.startsWith(`${prefix}_`)).toBe(true)
+})
+
+test('Can decrypt encrypted objects.', async () => {
+  const key = await generateEncryptionKey()
+  Store.encryptionKey = key as string
+  const encryptionResult = await encrypt(
+    { first: 'first', second: 'second', unencrypted: 'unencrypted' },
+    { ignoreKeys: ['unencrypted'] },
+  )
+  expect(encryptionResult).not.toBe(false)
+
+  if (encryptionResult) {
+    const decryptionResult = await decrypt({ ...encryptionResult })
+    expect(decryptionResult.first).toBe('first')
+    expect(decryptionResult.first).not.toEqual(encryptionResult.first)
+    // @ts-expect-error Only available with flag.
+    expect(decryptionResult.iltioEncrypted).not.toBeDefined()
+
+    const flaggedDecryptionResult = await decrypt({ ...encryptionResult }, { flagStatus: true })
+    expect(flaggedDecryptionResult.iltioEncrypted).toBe(true)
+  }
 })

@@ -6,7 +6,7 @@
   },
   "type": "module",
   "dependencies": {
-    "@playwright/test": "^1.48.0",
+    "@playwright/test": "^1.48.1",
     "iltio": "*",
     "msw": "^2.4.11",
     "playwright-msw": "^3.0.1"

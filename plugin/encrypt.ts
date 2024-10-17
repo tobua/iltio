@@ -135,17 +135,20 @@ export async function encrypt<T extends object, K extends keyof T = never>(
   return data as { [L in keyof T]: L extends K ? T[L] : string } // All encrypted values serialized to strings.
 }
 
-export async function decrypt<T extends object>(
+export async function decrypt<T extends object, F extends boolean = false>(
   data: T,
   options: {
     ignoreKeys?: string[]
     includeKeys?: string[]
     allowUnencrypted?: boolean
+    flagStatus?: F
   } = {
     ignoreKeys: [],
     allowUnencrypted: true,
   },
 ) {
+  let isEncrypted = false
+
   for (const [key, value] of Object.entries(data)) {
     if (Array.isArray(options.ignoreKeys) && options.ignoreKeys.includes(key)) continue
     if (Array.isArray(options.includeKeys) && !options.includeKeys.includes(key)) continue
@@ -154,12 +157,17 @@ export async function decrypt<T extends object>(
     if (!hasEncryptionPrefix(text)) continue
     try {
       data[key] = await decryptText(removeEncryptionPrefix(text))
+      isEncrypted = true
     } catch (error) {
       console.error('iltio: Error decrypting data:', error)
     }
   }
 
-  return data // TODO transform types?
+  if (options.flagStatus) {
+    data['iltioEncrypted'] = isEncrypted
+  }
+
+  return data as T & (F extends true ? { iltioEncrypted: boolean } : {})
 }
 
 async function importKeyFromString(keyString: string) {
