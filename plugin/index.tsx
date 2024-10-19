@@ -1,4 +1,4 @@
-export { configure, Store, MemoryStorage, CookieStorage, app, reset } from './store'
+export { configure, Store, MemoryStorage, CookieStorage, app, reset, isEncrypted } from './store'
 export {
   authenticate,
   poll,

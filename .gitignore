@@ -1,5 +1,6 @@
 bun.lockb
 node_modules
+demo/*/dist
 demo/frameworks/*/dist
 demo/frameworks/*/build
 demo/frameworks/*/.svelte-kit

@@ -70,6 +70,8 @@ export const reset = () => {
   Object.assign(app, getInitialConfiguration())
 }
 
+export const isEncrypted = () => Store.encryptionKey !== ''
+
 export const Store = {
   get token() {
     return app.storage.getItem(app.tokenStorageKey) ?? ''
