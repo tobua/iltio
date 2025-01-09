@@ -21,6 +21,7 @@ export {
   filterCountries,
   initializePolling,
   stopPolling,
+  getInitialName,
 } from './helper'
 export { countries } from './data/countries'
 export { Label, Text } from './text'

@@ -139,3 +139,21 @@ export const stopPolling = () => {
     app.pollInterval = 0
   }
 }
+
+export function getInitialName(type: 'mail' | 'phone', allowMail: boolean, allowPhone: boolean) {
+  const existingValue = Store.name
+
+  if (!existingValue) {
+    return ''
+  }
+
+  if (type === 'mail' && allowMail && validateEmail(existingValue)) {
+    return existingValue
+  }
+
+  if (type === 'phone' && allowPhone && validatePhone(existingValue)) {
+    return existingValue
+  }
+
+  return ''
+}

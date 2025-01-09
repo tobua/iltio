@@ -6,7 +6,6 @@ export const Label = {
   tabWrapper: 'authentication-tab-wrapper',
   inputMail: 'authentication-input-mail',
   inputPhone: 'authentication-input-phone',
-  inputEncryptionKey: 'encryption-input-key',
   submit: 'authentication-submit',
   phoneCountry: 'authentication-phone-country',
   resendCode: 'authentication-resend-code',
@@ -23,6 +22,7 @@ export const Label = {
   encryptionDisable: 'encryption-disable',
   encryptionDone: 'encryption-done',
   encryptionEnterKey: 'encryption-enter-key',
+  encryptionInputKey: 'encryption-input-key',
   encryptionKeySubmit: 'encryption-submit-key',
   encryptionError: 'encryption-error',
 }

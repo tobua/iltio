@@ -1,4 +1,4 @@
-import {
+import React, {
   FunctionComponent,
   CSSProperties,
   DetailedHTMLProps,
@@ -12,7 +12,7 @@ export type InputProps = { valid: boolean; style: CSSProperties; variables: Vari
 export type ButtonProps = { children: string; style: CSSProperties; variables: Variables }
 export type FormProps = {
   style: CSSProperties
-  children: JSX.Element | JSX.Element[]
+  children: React.JSX.Element | React.JSX.Element[]
   variables: Variables
 }
 export type TabWrapperProps = { style: CSSProperties; variables: Variables }

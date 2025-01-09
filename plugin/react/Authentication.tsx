@@ -15,6 +15,7 @@ import {
   stopPolling,
   encryptText,
   removeCryptoKey,
+  getInitialName,
 } from 'iltio'
 import { Phone } from './Phone'
 import { components } from './components'
@@ -37,8 +38,8 @@ export function Authentication({
   isReactNative = false,
 }: Props) {
   const [tab, setTab] = useState(allowMail ? 'mail' : 'phone')
-  const [mail, setMail] = useState('')
-  const [phone, setPhone] = useState('')
+  const [mail, setMail] = useState(getInitialName('mail', allowMail, allowPhone))
+  const [phone, setPhone] = useState(getInitialName('phone', allowMail, allowPhone))
   const [countryCode, setCountryCode] = useState(initialCountryCode.toLowerCase())
   const [mailValid, setMailValid] = useState(true)
   const [phoneValid, setPhoneValid] = useState(true)
@@ -292,7 +293,7 @@ export function Authentication({
           {Text.EncryptionEnterKey}
         </Components.Message>
         <Components.Input
-          aria-label={Label.inputEncryptionKey}
+          aria-label={Label.encryptionInputKey}
           aria-invalid={!encryptionKeyValid}
           autoFocus
           value={encryptionKey}
