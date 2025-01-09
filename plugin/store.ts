@@ -150,6 +150,14 @@ export const Store = {
   removeUid() {
     app.storage.removeItem(app.uidStorageKey)
   },
+  reset() {
+    Store.removeCodeToken()
+    Store.removeEncryptionKey()
+    Store.removeJsonWebToken()
+    Store.removeName()
+    Store.removeToken()
+    Store.removeUid()
+  },
 }
 
 export const addEncryptionPrefix = (text: string) => `${app.encryptionPrefix}_${text}`

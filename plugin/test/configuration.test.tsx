@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 import styled from 'styled-components'
 // Ensures same configuration used as regular implementation.
-import { MemoryStorage, configure, reset } from 'iltio'
+import { MemoryStorage, configure, reset, Store } from 'iltio'
 import { Authentication } from '../react/Authentication'
 import { Label } from '../text'
 import { mockFetch, mockInterval, wait } from './helper'
@@ -143,6 +143,8 @@ test('Polling interval can be configured.', async () => {
   // Poll every 200ms, reset previously changed storage.
   configure({ pollDuration: 200, token: 'test', storage: MemoryStorage })
 
+  Store.reset()
+
   render(<Authentication onSuccess={onSuccessMock} />)
 
   await userEvent.type(screen.getByLabelText(Label.inputMail), mailAddress)
@@ -192,6 +194,8 @@ test('Polling interval can be configured.', async () => {
 test('Can configure the token on the JSX tag as well.', async () => {
   const mailAddress = 'some@person.com'
   const appTokenModified = 'test-token-modified'
+
+  Store.reset()
 
   render(<Authentication configuration={{ token: appTokenModified }} />)
 

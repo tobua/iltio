@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react'
 import { expect, test, vi, afterEach } from 'vitest'
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
-import { authenticate, stopPolling } from '../index'
+import { authenticate, stopPolling, Store } from 'iltio'
 import { Authentication } from '../react/Authentication'
 import { Label } from '../text'
 import { mockFetch, wait } from './helper'
@@ -80,6 +80,8 @@ test('Can successfully register with a mail address.', async () => {
 test('Can login with the same mail address.', async () => {
   const mailAddress = 'some@person.com'
   const onSuccessMock = vi.fn()
+
+  Store.reset()
 
   render(<Authentication allowPhone={false} onSuccess={onSuccessMock} />)
 
