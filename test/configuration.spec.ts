@@ -1,6 +1,6 @@
 import { Label } from 'iltio'
 import { test, expect } from './setup.js'
-import { Page } from '@playwright/test'
+import type { Page } from '@playwright/test'
 
 const wait = (duration: number) =>
   new Promise((done) => {

@@ -17,16 +17,16 @@
   },
   "dependencies": {
     "@types/cookie": "^1.0.0",
-    "@types/node": "^22.10.5",
-    "@types/react": "^19.0.4",
-    "@types/react-dom": "^19.0.2",
+    "@types/node": "^22.14.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.2",
     "cookie": "^1.0.2",
-    "cookies-next": "^5.0.2",
-    "eslint-config-next": "^15.1.4",
+    "cookies-next": "^5.1.0",
+    "eslint-config-next": "^15.3.0",
     "iltio": "*",
-    "next": "^15.1.4",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "typescript": "^5.7.3"
+    "next": "^15.3.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "typescript": "^5.8.3"
   }
 }

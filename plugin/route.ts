@@ -16,14 +16,15 @@ async function fetchWithError(url: string, options?: RequestInit) {
   }
 }
 
-export const authenticate = async (name: string) => {
+export const authenticate = async (name: string, referer?: string) => {
   const baseUrl = app.authenticateUrl || joinUrl('/authenticate')
   const isReactNative = typeof navigator !== 'undefined' && navigator.product === 'ReactNative'
-  const fetchConfiguration = isReactNative
-    ? {
-        headers: { referer: 'https://iltio.com' },
-      }
-    : {}
+  const fetchConfiguration =
+    isReactNative || referer
+      ? {
+          headers: { referer: referer ?? 'https://iltio.com' },
+        }
+      : {}
 
   const response = await fetchWithError(
     `${baseUrl}?name=${encodeURIComponent(name)}${app.apiToken ? `&token=${app.apiToken}` : ''}`,
