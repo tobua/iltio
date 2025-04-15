@@ -8,7 +8,7 @@
   "dependencies": {
     "@playwright/test": "^1.51.1",
     "iltio": "*",
-    "msw": "^2.7.3",
+    "msw": "^2.7.4",
     "playwright-msw": "^3.0.1"
   },
   "prettier": {

@@ -17,8 +17,8 @@
   },
   "dependencies": {
     "@types/cookie": "^1.0.0",
-    "@types/node": "^22.14.0",
-    "@types/react": "^19.1.0",
+    "@types/node": "^22.14.1",
+    "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "cookie": "^1.0.2",
     "cookies-next": "^5.1.0",

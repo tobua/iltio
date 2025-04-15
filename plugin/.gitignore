@@ -2,6 +2,7 @@ node_modules
 package-lock.json
 dist
 app
+AuthenticationApp
 tsconfig.json
 !frameworks/*/tsconfig.json
 *.tgz

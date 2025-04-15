@@ -68,6 +68,30 @@ export function Authentication({
   // eslint-disable-next-line no-param-reassign
   style = { phoneCountry: {}, phoneCountryOption: {}, ...style }
 
+  function resetState() {
+    setTab(allowMail ? 'mail' : 'phone')
+    setMail(getInitialName('mail', allowMail, allowPhone))
+    setPhone(getInitialName('phone', allowMail, allowPhone))
+    setCountryCode(initialCountryCode.toLowerCase())
+    setMailValid(true)
+    setPhoneValid(true)
+    setLoading(false)
+    Store.codeToken = ''
+    setSubmitted(false)
+    setRegistration(false)
+    setError('')
+    setCodeValid(true)
+    setValidatingCode(false)
+    setUserToken('')
+    setJsonWebToken({ token: '', expirationDate: '' })
+    setUid('')
+    setEncrypted(false)
+    setEncryptionKey('')
+    setEncryptionKeyValid(true)
+    setEncryptionText('')
+    setEncryptionError('')
+  }
+
   const handleSubmit = useCallback<FormEventHandler<HTMLFormElement>>(
     async (event) => {
       event.preventDefault()
@@ -156,6 +180,7 @@ export function Authentication({
           encryptionText,
           jsonWebToken,
         )
+        resetState()
       } else {
         setEncryptionKeyValid(false)
         setEncryptionError('Wrong encryption key entered.')
@@ -219,6 +244,7 @@ export function Authentication({
               localEncryptionText,
               localJsonWebToken,
             )
+            resetState()
           }
         }
       } else {
@@ -257,6 +283,7 @@ export function Authentication({
           localEncryptionText,
           localJsonWebToken,
         )
+        resetState()
       }
     },
     [],
