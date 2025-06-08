@@ -84,6 +84,7 @@ export const components = {
         fontSize: variables.fontSize,
         fontFamily: variables.fontFamily,
         backgroundColor: 'inherit',
+        color: variables.textColor,
         ...style,
       }}
       {...props}
@@ -112,6 +113,7 @@ export const components = {
         borderRadius: variables.borderRadius,
         fontSize: variables.fontSize,
         fontFamily: variables.fontFamily,
+        color: variables.textColor,
         ...style,
       }}
       {...props}
@@ -174,7 +176,12 @@ export const components = {
         {flag}
       </span>
       <span
-        style={{ fontSize: variables.fontSize, fontFamily: variables.fontFamily, ...style.prefix }}
+        style={{
+          fontSize: variables.fontSize,
+          fontFamily: variables.fontFamily,
+          color: variables.textColor,
+          ...style.prefix,
+        }}
       >
         {prefix}
       </span>
@@ -199,6 +206,7 @@ export const components = {
         fontSize: variables.fontSize,
         fontFamily: variables.fontFamily,
         borderColor: valid ? variables.color : variables.colorError,
+        color: variables.textColor,
         ...style,
       }}
       {...props}

@@ -24,7 +24,6 @@ const state: { cryptoKey: CryptoKey; initializationVector: Uint8Array } = {
 
 export const removeCryptoKey = () => {
   state.cryptoKey = null
-  console.log(state.cryptoKey, Store.encryptionKey)
 }
 
 const getCryptoKey = async () => {

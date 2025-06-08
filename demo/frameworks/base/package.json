@@ -4,8 +4,8 @@
     "title": "iltio React Demo"
   },
   "dependencies": {
-    "@types/react": "^19.1.2",
-    "@types/react-dom": "^19.1.2",
+    "@types/react": "^19.1.6",
+    "@types/react-dom": "^19.1.6",
     "iltio": "*",
     "papua": "^6.0.2",
     "react": "^19.1.0",

@@ -153,6 +153,22 @@ const App = () => {
             onSuccess={setName}
           />
         </div>
+        <div
+          id="dark-mode"
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            backgroundColor: 'black',
+            padding: 10,
+          }}
+        >
+          <p style={{ color: 'white' }}>Dark Mode</p>
+          <Authentication
+            variables={{ textColor: 'orange', color: 'white', contrast: 'blue' }}
+            onSuccess={setName}
+          />
+        </div>
       </div>
       <p style={{ margin: 0 }}>
         Enter an email address or phone number above to register or login to the demo application.
