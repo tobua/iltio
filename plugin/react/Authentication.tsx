@@ -54,7 +54,7 @@ export function Authentication({
   const [jsonWebToken, setJsonWebToken] = useState({ token: '', expirationDate: '' })
   const [uid, setUid] = useState('')
   const [encrypted, setEncrypted] = useState(false)
-  const [encryptionKey, setEncryptionKey] = useState('')
+  const [encryptionKey, setEncryptionKey] = useState(Store.encryptionKey || '')
   const [encryptionKeyValid, setEncryptionKeyValid] = useState(true)
   const [encryptionText, setEncryptionText] = useState('')
   const [encryptionError, setEncryptionError] = useState('')
